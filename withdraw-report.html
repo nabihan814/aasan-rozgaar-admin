@@ -324,10 +324,8 @@ th{
 <div class="sidebar" id="sidebar">
 
     <div class="sidebar-header">
-
         <i class="fa fa-wallet"></i>
         Payment App
-
     </div>
 
     <ul class="sidebar-menu">
@@ -387,18 +385,15 @@ th{
          onclick="toggleDropdown()">
 
         <span class="user-profile">
-
             Welcome <span id="adminName">Admin</span>
-
             <i class="fa fa-caret-down"></i>
-
         </span>
 
         <div class="dropdown-menu"
              id="dropdownMenu">
 
             <a href="./index.html"
-               onclick="adminPanelLogout()">
+               onclick="adminPanelLogout(event)">
 
                 <i class="fa fa-power-off"></i>
                 Logout
@@ -612,27 +607,118 @@ let withdrawData = [];
 
 
 /* =========================
+   ADMIN AUTH HEADERS
+========================= */
+
+function adminHeaders(includeCsrf = false){
+
+    const token =
+        sessionStorage.getItem(
+            "adminSessionToken"
+        );
+
+    const csrfToken =
+        sessionStorage.getItem(
+            "adminCsrfToken"
+        );
+
+    const headers = {
+        "Accept":"application/json"
+    };
+
+    if(token){
+
+        headers["Authorization"] =
+            "Bearer " + token;
+
+    }
+
+    if(
+        includeCsrf &&
+        csrfToken
+    ){
+
+        headers["X-CSRF-Token"] =
+            csrfToken;
+
+    }
+
+    return headers;
+
+}
+
+
+/* =========================
+   REDIRECT TO LOGIN
+========================= */
+
+function redirectToLogin(){
+
+    sessionStorage.removeItem(
+        "adminSessionToken"
+    );
+
+    sessionStorage.removeItem(
+        "adminCsrfToken"
+    );
+
+    sessionStorage.removeItem(
+        "adminPanelUsername"
+    );
+
+    localStorage.removeItem(
+        "adminPanelLoggedIn"
+    );
+
+    localStorage.removeItem(
+        "adminPanelUsername"
+    );
+
+    window.location.href =
+        "./index.html";
+
+}
+
+
+/* =========================
    ADMIN SESSION CHECK
 ========================= */
 
 async function checkAdminSession(){
 
+    const token =
+        sessionStorage.getItem(
+            "adminSessionToken"
+        );
+
+    if(!token){
+
+        redirectToLogin();
+
+        return false;
+
+    }
+
     try{
 
-        const response = await fetch(
-            API_URL + "/api/admin/me",
-            {
-                method:"GET",
-                credentials:"include"
-            }
-        );
+        const response =
+            await fetch(
+                API_URL + "/api/admin/me",
+                {
+                    method:"GET",
+                    credentials:"include",
+                    headers:adminHeaders(),
+                    cache:"no-store"
+                }
+            );
 
         if(
             response.status === 401 ||
             response.status === 403
         ){
 
-            window.location.href="./index.html";
+            redirectToLogin();
+
             return false;
 
         }
@@ -648,18 +734,37 @@ async function checkAdminSession(){
         const data =
             await response.json();
 
+        if(
+            data.success === false ||
+            data.authenticated === false
+        ){
+
+            redirectToLogin();
+
+            return false;
+
+        }
+
         document.getElementById(
             "adminName"
         ).textContent =
-            data.username || "Admin";
+            data.username ||
+            data.admin?.username ||
+            sessionStorage.getItem(
+                "adminPanelUsername"
+            ) ||
+            "Admin";
 
         return true;
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            "Admin session error:",
+            error
+        );
 
-        window.location.href="./index.html";
+        redirectToLogin();
 
         return false;
 
@@ -700,7 +805,13 @@ function toggleDropdown(){
    LOGOUT
 ========================= */
 
-async function adminPanelLogout(){
+async function adminPanelLogout(event){
+
+    if(event){
+
+        event.preventDefault();
+
+    }
 
     try{
 
@@ -709,21 +820,20 @@ async function adminPanelLogout(){
             {
                 method:"POST",
                 credentials:"include",
-                headers:{
-                    "Content-Type":"application/json"
-                }
+                headers:adminHeaders(true)
             }
         );
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            "Logout error:",
+            error
+        );
 
     }
 
-    sessionStorage.removeItem(
-        "adminCsrfToken"
-    );
+    redirectToLogin();
 
 }
 
@@ -733,6 +843,19 @@ async function adminPanelLogout(){
 ========================= */
 
 async function loadWithdrawReport(){
+
+    const token =
+        sessionStorage.getItem(
+            "adminSessionToken"
+        );
+
+    if(!token){
+
+        redirectToLogin();
+
+        return;
+
+    }
 
     const tbody =
         document.getElementById(
@@ -749,23 +872,24 @@ async function loadWithdrawReport(){
 
     try{
 
-        const response = await fetch(
-            API_URL + "/api/admin/withdrawals",
-            {
-                method:"GET",
-                credentials:"include",
-                headers:{
-                    "Accept":"application/json"
+        const response =
+            await fetch(
+                API_URL + "/api/admin/withdrawals",
+                {
+                    method:"GET",
+                    credentials:"include",
+                    headers:adminHeaders(),
+                    cache:"no-store"
                 }
-            }
-        );
+            );
 
         if(
             response.status === 401 ||
             response.status === 403
         ){
 
-            window.location.href="./index.html";
+            redirectToLogin();
+
             return;
 
         }
@@ -784,7 +908,9 @@ async function loadWithdrawReport(){
         withdrawData =
             Array.isArray(data)
                 ? data
-                : Array.isArray(data.withdrawals)
+                : Array.isArray(
+                    data.withdrawals
+                )
                     ? data.withdrawals
                     : [];
 
@@ -854,11 +980,6 @@ function renderWithdrawReport(){
                         item.status
                     );
 
-
-                /*
-                  Report mein sirf final
-                  Approved / Rejected requests.
-                */
 
                 if(
                     status !== "Approved" &&
@@ -932,10 +1053,6 @@ function renderWithdrawReport(){
             }
         );
 
-
-    /*
-      Newest first
-    */
 
     reports.sort(
         function(a,b){
@@ -1193,19 +1310,28 @@ function normalizeStatus(status){
             status || "Pending"
         ).trim().toLowerCase();
 
-    if(value === "reject" || value === "rejected"){
+    if(
+        value === "reject" ||
+        value === "rejected"
+    ){
 
         return "Rejected";
 
     }
 
-    if(value === "approve" || value === "approved"){
+    if(
+        value === "approve" ||
+        value === "approved"
+    ){
 
         return "Approved";
 
     }
 
-    if(value === "inprocess" || value === "in_process"){
+    if(
+        value === "inprocess" ||
+        value === "in_process"
+    ){
 
         return "Inprocess";
 
@@ -1440,7 +1566,16 @@ window.addEventListener(
 setInterval(
     function(){
 
-        loadWithdrawReport();
+        const token =
+            sessionStorage.getItem(
+                "adminSessionToken"
+            );
+
+        if(token){
+
+            loadWithdrawReport();
+
+        }
 
     },
     15000
