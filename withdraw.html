@@ -394,7 +394,7 @@ th{
                 Change Password
             </a>
 
-            <a href="./login.html"
+            <a href="./index.html"
                onclick="logoutAdmin(event)">
                 <i class="fa fa-power-off"></i>
                 Logout
@@ -506,7 +506,7 @@ th{
             <input type="text"
                    id="searchInput"
                    placeholder="Search..."
-                   oninput="renderRequests">
+                   oninput="renderRequests()">
 
         </div>
 
@@ -568,10 +568,6 @@ th{
 
 
 <script>
-
-/* =========================================
-   BACKEND
-========================================= */
 
 const API_URL =
     "https://aasan-rozgaar-backend.onrender.com";
@@ -673,7 +669,7 @@ function redirectToLogin(){
     );
 
     window.location.href =
-        "./login.html";
+        "./index.html";
 
 }
 
@@ -745,7 +741,7 @@ async function logoutAdmin(event){
 
 
     window.location.href =
-        "./login.html";
+        "./index.html";
 
 }
 
@@ -893,12 +889,6 @@ async function loadRequests(){
             await response.json();
 
 
-        /*
-         * Backend normally returns:
-         * { success:true, withdrawals:[...] }
-         * This also supports a direct array.
-         */
-
         if(Array.isArray(data)){
 
             withdrawalRequests =
@@ -991,12 +981,6 @@ function renderRequests(){
         ? [...withdrawalRequests]
         : [];
 
-
-    /*
-     * Backend uses created_at.
-     * Old frontend names are also supported
-     * just in case.
-     */
 
     requests.sort(
         function(a,b){
@@ -1133,7 +1117,6 @@ function renderRequests(){
 
             }
 
-
             else if(status==="Inprocess"){
 
                 action=`
@@ -1165,7 +1148,6 @@ function renderRequests(){
                 `;
 
             }
-
 
             else{
 
@@ -1626,11 +1608,6 @@ window.addEventListener(
 
 setInterval(
     async function(){
-
-        /*
-         * Only refresh from backend.
-         * No localStorage request data is used.
-         */
 
         if(
             document.visibilityState ===
