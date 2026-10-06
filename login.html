@@ -1,0 +1,284 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment App - Admin Login</title><style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #0f9d58, #087f3e);
+        padding: 20px;
+    }
+
+    .login-box {
+        width: 100%;
+        max-width: 400px;
+        background: #fff;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 15px 40px rgba(0,0,0,.2);
+    }
+
+    .logo {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 15px;
+        border-radius: 50%;
+        background: #0f9d58;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+        font-weight: bold;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 7px;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 13px;
+        margin-bottom: 18px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+    }
+
+    button {
+        width: 100%;
+        padding: 14px;
+        border: 0;
+        border-radius: 8px;
+        background: #0f9d58;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    button:disabled {
+        opacity: .6;
+        cursor: not-allowed;
+    }
+
+    #message {
+        display: none;
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .error {
+        display: block !important;
+        background: #ffe5e5;
+        color: #b00020;
+    }
+
+    .success {
+        display: block !important;
+        background: #e5f7eb;
+        color: #087f3e;
+    }
+</style>
+
+</head><body><div class="login-box"><div class="logo">AR</div>
+
+<h2>Admin Panel Login</h2>
+
+<div id="message"></div>
+
+<form id="loginForm">
+
+    <label for="username">Username</label>
+
+    <input
+        type="text"
+        id="username"
+        placeholder="Enter admin username"
+        autocomplete="username"
+        maxlength="50"
+        required
+    >
+
+    <label for="password">Password</label>
+
+    <input
+        type="password"
+        id="password"
+        placeholder="Enter admin password"
+        autocomplete="current-password"
+        required
+    >
+
+    <button type="submit" id="loginButton">
+        Login
+    </button>
+
+</form>
+
+</div><script>
+
+const BACKEND_URL =
+    "https://aasan-rozgaar-backend.onrender.com";
+
+const form =
+    document.getElementById("loginForm");
+
+const usernameInput =
+    document.getElementById("username");
+
+const passwordInput =
+    document.getElementById("password");
+
+const loginButton =
+    document.getElementById("loginButton");
+
+const message =
+    document.getElementById("message");
+
+
+function showMessage(text, type) {
+
+    message.textContent = text;
+    message.className = type;
+}
+
+
+form.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    loginButton.disabled = true;
+    message.className = "";
+
+    const username =
+        usernameInput.value.trim();
+
+    const password =
+        passwordInput.value;
+
+    try {
+
+        const response = await fetch(
+            BACKEND_URL + "/api/admin/login",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                credentials: "include",
+
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            }
+        );
+
+
+        let data = {};
+
+        try {
+            data = await response.json();
+        } catch (_) {
+            data = {};
+        }
+
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.message || "Login failed"
+            );
+        }
+
+
+        /*
+         * CSRF token sirf browser session
+         * ke liye store hoga.
+         *
+         * Actual admin authentication
+         * HttpOnly session cookie se hogi.
+         */
+
+        if (!data.csrfToken) {
+
+            throw new Error(
+                "Security token was not received."
+            );
+        }
+
+
+        sessionStorage.setItem(
+            "adminCsrfToken",
+            data.csrfToken
+        );
+
+
+        /*
+         * Username sirf display/compatibility
+         * ke liye sessionStorage mein.
+         *
+         * Authentication ke liye is par
+         * bharosa nahi kiya jayega.
+         */
+
+        sessionStorage.setItem(
+            "adminPanelUsername",
+            data.username || username
+        );
+
+
+        showMessage(
+            "Login successful!",
+            "success"
+        );
+
+
+        setTimeout(function() {
+
+            window.location.href =
+                "dashboard.html";
+
+        }, 500);
+
+
+    } catch (error) {
+
+        console.error("Admin login error:", error);
+
+        showMessage(
+            error.message ||
+            "Server connection failed.",
+            "error"
+        );
+
+    } finally {
+
+        loginButton.disabled = false;
+    }
+
+});
+
+</script></body>
+</html>

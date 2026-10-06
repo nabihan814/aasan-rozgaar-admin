@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment App - Withdraw Requests</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+.navbar{
+    background:#fff;
+    padding:12px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 2px 5px rgba(0,0,0,.05);
+    position:sticky;
+    top:0;
+    z-index:999;
+}
+
+.menu-toggle{
+    font-size:20px;
+    cursor:pointer;
+    color:#333;
+}
+
+.user-dropdown-container{
+    position:relative;
+    cursor:pointer;
+}
+
+.user-profile{
+    font-weight:bold;
+    color:#333;
+    font-size:14px;
+}
+
+.dropdown-menu{
+    position:absolute;
+    right:0;
+    top:35px;
+    background:#fff;
+    box-shadow:0 4px 10px rgba(0,0,0,.15);
+    border-radius:4px;
+    width:160px;
+    display:none;
+    z-index:1001;
+}
+
+.dropdown-menu.active{
+    display:block;
+}
+
+.dropdown-menu a{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 15px;
+    text-decoration:none;
+    color:#333;
+    font-size:14px;
+    border-bottom:1px solid #f1f1f1;
+}
+
+.sidebar{
+    position:fixed;
+    left:-260px;
+    top:0;
+    width:260px;
+    height:100%;
+    background:#343a40;
+    color:#fff;
+    transition:.3s;
+    z-index:1002;
+    overflow-y:auto;
+}
+
+.sidebar.active{
+    left:0;
+}
+
+.sidebar-header{
+    padding:15px 20px;
+    background:#212529;
+    font-size:16px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.sidebar-menu{
+    list-style:none;
+    padding:5px 0;
+}
+
+.sidebar-menu li{
+    color:#c2c7d0;
+    font-size:14px;
+}
+
+.sidebar-menu li a{
+    color:inherit;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:12px 20px;
+    width:100%;
+}
+
+.sidebar-menu li:hover,
+.sidebar-menu li.active{
+    background:#007bff;
+    color:#fff;
+}
+
+.main-content{
+    padding:15px;
+}
+
+.breadcrumb-title h2{
+    color:#333;
+    font-size:20px;
+    text-transform:uppercase;
+    margin-bottom:5px;
+}
+
+.breadcrumb-title span{
+    color:#666;
+    font-size:13px;
+}
+
+.card-box{
+    background:#fff;
+    padding:15px;
+    border-radius:4px;
+    margin-top:15px;
+    box-shadow:0 1px 3px rgba(0,0,0,.1);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.card-box select{
+    padding:8px 12px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    outline:none;
+    width:200px;
+}
+
+.action-btns{
+    display:flex;
+    gap:8px;
+}
+
+.btn-refresh,
+.btn-excel,
+.btn-pdf{
+    color:#fff;
+    border:none;
+    padding:8px 12px;
+    border-radius:4px;
+    cursor:pointer;
+}
+
+.btn-refresh{
+    background:#007bff;
+}
+
+.btn-excel{
+    background:#28a745;
+}
+
+.btn-pdf{
+    background:#dc3545;
+}
+
+.table-controls{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:15px 0;
+    font-size:14px;
+    color:#333;
+    flex-wrap:wrap;
+    gap:10px;
+    background:#fff;
+    padding:12px;
+    border-radius:4px;
+    box-shadow:0 1px 3px rgba(0,0,0,.1);
+}
+
+.table-controls select,
+.table-controls input{
+    padding:6px 10px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    outline:none;
+}
+
+.table-controls input{
+    width:180px;
+}
+
+.table-responsive{
+    overflow-x:auto;
+    background:#fff;
+    border-radius:4px;
+    box-shadow:0 1px 3px rgba(0,0,0,.1);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    text-align:left;
+    font-size:14px;
+}
+
+th,td{
+    padding:12px 10px;
+    border-bottom:1px solid #eee;
+    color:#333;
+    white-space:nowrap;
+}
+
+th{
+    background:#f8f9fa;
+}
+
+.no-data{
+    text-align:center;
+    padding:25px;
+    color:#666;
+    font-size:15px;
+}
+
+.status{
+    font-weight:bold;
+}
+
+.username-cell{
+    font-weight:bold;
+    color:#007bff;
+}
+
+.account-name{
+    font-weight:bold;
+}
+
+.account-number{
+    color:#666;
+    font-size:12px;
+}
+
+.action-btn-group{
+    display:flex;
+    gap:4px;
+}
+
+.action-btn-group button{
+    border:none;
+    padding:5px 10px;
+    border-radius:3px;
+    cursor:pointer;
+    color:#fff;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.action-btn-group button:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.footer{
+    text-align:center;
+    padding:20px;
+    color:#666;
+    font-size:13px;
+}
+
+.footer span{
+    color:#007bff;
+    font-weight:bold;
+}
+
+.loading{
+    text-align:center;
+    padding:25px;
+    color:#007bff;
+}
+
+.error-message{
+    text-align:center;
+    padding:25px;
+    color:#dc3545;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar" id="sidebar">
+
+    <div class="sidebar-header">
+        <i class="fa fa-wallet"></i>
+        Payment App
+    </div>
+
+    <ul class="sidebar-menu">
+
+        <li>
+            <a href="./dashboard.html">
+                <i class="fa fa-tachometer-alt"></i>
+                Dashboard
+            </a>
+        </li>
+
+        <li class="active">
+            <a href="./withdraw.html">
+                <i class="fa fa-file-invoice-dollar"></i>
+                Withdraw Requests
+            </a>
+        </li>
+
+        <li>
+            <a href="./deposit.html">
+                <i class="fa fa-money-bill-wave"></i>
+                Deposite Requests
+            </a>
+        </li>
+
+        <li>
+            <a href="./deposit-type.html">
+                <i class="fa fa-list"></i>
+                Deposite Type List
+            </a>
+        </li>
+
+        <li>
+            <a href="./deposit-report.html">
+                <i class="fa fa-chart-bar"></i>
+                Deposit Report
+            </a>
+        </li>
+
+        <li>
+            <a href="./withdraw-report.html">
+                <i class="fa fa-chart-line"></i>
+                Withdraw Report
+            </a>
+        </li>
+
+    </ul>
+</div>
+
+
+<div class="navbar">
+
+    <i class="fa fa-bars menu-toggle"
+       onclick="toggleSidebar()"></i>
+
+    <div class="user-dropdown-container"
+         onclick="toggleDropdown()">
+
+        <span class="user-profile">
+            Welcome <span id="adminName">Admin</span>
+            <i class="fa fa-caret-down"></i>
+        </span>
+
+        <div class="dropdown-menu"
+             id="dropdownMenu">
+
+            <a href="#">
+                <i class="fa fa-wallet"></i>
+                Change Password
+            </a>
+
+            <a href="./login.html"
+               onclick="logoutAdmin(event)">
+                <i class="fa fa-power-off"></i>
+                Logout
+            </a>
+
+        </div>
+    </div>
+
+</div>
+
+
+<div class="main-content">
+
+    <div class="breadcrumb-title">
+
+        <h2>Withdraw Requests</h2>
+
+        <span>
+            Home / Withdraw Requests
+        </span>
+
+    </div>
+
+
+    <div class="card-box">
+
+        <select id="statusFilter"
+                onchange="renderRequests()">
+
+            <option value="All">
+                All Status
+            </option>
+
+            <option value="Pending" selected>
+                Pending
+            </option>
+
+            <option value="Inprocess">
+                In Process
+            </option>
+
+            <option value="Approved">
+                Approved
+            </option>
+
+            <option value="Rejected">
+                Rejected
+            </option>
+
+        </select>
+
+
+        <div class="action-btns">
+
+            <button class="btn-refresh"
+                    onclick="loadRequests()">
+
+                <i class="fa fa-sync-alt"></i>
+                Refresh
+
+            </button>
+
+            <button class="btn-excel"
+                    type="button"
+                    title="Excel export coming later">
+
+                <i class="fa fa-file-excel"></i>
+
+            </button>
+
+            <button class="btn-pdf"
+                    type="button"
+                    title="PDF export coming later">
+
+                <i class="fa fa-file-pdf"></i>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-controls">
+
+        <div>
+
+            Show
+
+            <select id="entriesCount"
+                    onchange="renderRequests()">
+
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+
+            </select>
+
+            entries
+
+        </div>
+
+
+        <div>
+
+            Search:
+
+            <input type="text"
+                   id="searchInput"
+                   placeholder="Search..."
+                   oninput="renderRequests">
+
+        </div>
+
+    </div>
+
+
+    <div class="table-responsive">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>S.No.</th>
+                    <th>User Name</th>
+                    <th>Amount</th>
+                    <th>Method</th>
+                    <th>Account Details</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="withdrawTableBody">
+
+                <tr>
+
+                    <td colspan="8"
+                        class="loading">
+
+                        Loading withdrawal requests...
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<div class="footer">
+
+    Copyright © 2022-2026
+
+    <span>DW.</span>
+
+    All rights reserved.
+
+</div>
+
+
+<script>
+
+/* =========================================
+   BACKEND
+========================================= */
+
+const API_URL =
+    "https://aasan-rozgaar-backend.onrender.com";
+
+
+let withdrawalRequests = [];
+let adminSession = null;
+
+
+/* =========================================
+   ADMIN SESSION
+========================================= */
+
+async function checkAdminSession(){
+
+    try{
+
+        const response =
+            await fetch(
+                API_URL + "/api/admin/me",
+                {
+                    method:"GET",
+                    credentials:"include",
+                    headers:{
+                        "Accept":"application/json"
+                    },
+                    cache:"no-store"
+                }
+            );
+
+
+        if(!response.ok){
+
+            return false;
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if(
+            data.success === false ||
+            data.authenticated === false
+        ){
+
+            return false;
+
+        }
+
+
+        adminSession = data;
+
+
+        const username =
+            data.username ||
+            data.admin?.username ||
+            "Admin";
+
+
+        document.getElementById(
+            "adminName"
+        ).textContent = username;
+
+
+        return true;
+
+    }catch(error){
+
+        console.error(
+            "Admin session error:",
+            error
+        );
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================
+   SESSION EXPIRED
+========================================= */
+
+function redirectToLogin(){
+
+    sessionStorage.removeItem(
+        "adminCsrfToken"
+    );
+
+    localStorage.removeItem(
+        "adminPanelLoggedIn"
+    );
+
+    localStorage.removeItem(
+        "adminPanelUsername"
+    );
+
+    window.location.href =
+        "./login.html";
+
+}
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+async function logoutAdmin(event){
+
+    if(event){
+
+        event.preventDefault();
+
+    }
+
+
+    try{
+
+        const csrfToken =
+            sessionStorage.getItem(
+                "adminCsrfToken"
+            );
+
+
+        const headers={
+            "Accept":"application/json"
+        };
+
+
+        if(csrfToken){
+
+            headers["X-CSRF-Token"] =
+                csrfToken;
+
+        }
+
+
+        await fetch(
+            API_URL + "/api/admin/logout",
+            {
+                method:"POST",
+                credentials:"include",
+                headers:headers
+            }
+        );
+
+    }catch(error){
+
+        console.error(
+            "Logout error:",
+            error
+        );
+
+    }
+
+
+    sessionStorage.removeItem(
+        "adminCsrfToken"
+    );
+
+    localStorage.removeItem(
+        "adminPanelLoggedIn"
+    );
+
+    localStorage.removeItem(
+        "adminPanelUsername"
+    );
+
+
+    window.location.href =
+        "./login.html";
+
+}
+
+
+/* =========================================
+   SIDEBAR
+========================================= */
+
+function toggleSidebar(){
+
+    document
+    .getElementById("sidebar")
+    .classList
+    .toggle("active");
+
+}
+
+
+/* =========================================
+   DROPDOWN
+========================================= */
+
+function toggleDropdown(){
+
+    document
+    .getElementById("dropdownMenu")
+    .classList
+    .toggle("active");
+
+}
+
+
+window.onclick=function(event){
+
+    if(
+        !event.target.closest(
+            ".user-dropdown-container"
+        )
+    ){
+
+        document
+        .getElementById("dropdownMenu")
+        .classList
+        .remove("active");
+
+    }
+
+};
+
+
+/* =========================================
+   GET WITHDRAWAL REQUESTS
+========================================= */
+
+async function loadRequests(){
+
+    const tbody =
+        document.getElementById(
+            "withdrawTableBody"
+        );
+
+
+    tbody.innerHTML=`
+
+        <tr>
+
+            <td colspan="8"
+                class="loading">
+
+                Loading withdrawal requests...
+
+            </td>
+
+        </tr>
+
+    `;
+
+
+    try{
+
+        const sessionOK =
+            await checkAdminSession();
+
+
+        if(!sessionOK){
+
+            redirectToLogin();
+
+            return;
+
+        }
+
+
+        const response =
+            await fetch(
+                API_URL + "/api/admin/withdrawals",
+                {
+                    method:"GET",
+                    credentials:"include",
+                    headers:{
+                        "Accept":"application/json"
+                    },
+                    cache:"no-store"
+                }
+            );
+
+
+        if(
+            response.status===401 ||
+            response.status===403
+        ){
+
+            redirectToLogin();
+
+            return;
+
+        }
+
+
+        if(!response.ok){
+
+            let message =
+                "Unable to load withdrawal requests.";
+
+
+            try{
+
+                const errorData =
+                    await response.json();
+
+                message =
+                    errorData.message ||
+                    errorData.error ||
+                    message;
+
+            }catch(e){}
+
+
+            throw new Error(message);
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        /*
+         * Backend normally returns:
+         * { success:true, withdrawals:[...] }
+         * This also supports a direct array.
+         */
+
+        if(Array.isArray(data)){
+
+            withdrawalRequests =
+                data;
+
+        }else{
+
+            withdrawalRequests =
+                Array.isArray(
+                    data.withdrawals
+                )
+                ? data.withdrawals
+                : [];
+
+        }
+
+
+        renderRequests();
+
+
+    }catch(error){
+
+        console.error(
+            "Withdraw load error:",
+            error
+        );
+
+
+        tbody.innerHTML=`
+
+            <tr>
+
+                <td colspan="8"
+                    class="error-message">
+
+                    ${escapeHtml(
+                        error.message ||
+                        "Unable to load withdrawal requests."
+                    )}
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================
+   RENDER REQUESTS
+========================================= */
+
+function renderRequests(){
+
+    const tbody =
+        document.getElementById(
+            "withdrawTableBody"
+        );
+
+
+    const statusFilter =
+        document.getElementById(
+            "statusFilter"
+        ).value;
+
+
+    const searchQuery =
+        document.getElementById(
+            "searchInput"
+        ).value
+        .toLowerCase()
+        .trim();
+
+
+    const entries =
+        parseInt(
+            document.getElementById(
+                "entriesCount"
+            ).value
+        ) || 10;
+
+
+    let requests =
+        Array.isArray(
+            withdrawalRequests
+        )
+        ? [...withdrawalRequests]
+        : [];
+
+
+    /*
+     * Backend uses created_at.
+     * Old frontend names are also supported
+     * just in case.
+     */
+
+    requests.sort(
+        function(a,b){
+
+            const dateA =
+                new Date(
+                    a.created_at ||
+                    a.createdAt ||
+                    a.date ||
+                    0
+                ).getTime();
+
+
+            const dateB =
+                new Date(
+                    b.created_at ||
+                    b.createdAt ||
+                    b.date ||
+                    0
+                ).getTime();
+
+
+            return dateB - dateA;
+
+        }
+    );
+
+
+    const filtered =
+        requests.filter(
+            function(req){
+
+                const status =
+                    req.status || "Pending";
+
+
+                const statusMatch =
+                    statusFilter==="All" ||
+                    status===statusFilter;
+
+
+                const searchable=[
+
+                    req.username || "",
+                    req.account_name || "",
+                    req.accountName || "",
+                    req.account_number || "",
+                    req.accountNumber || "",
+                    req.method || "",
+                    req.id || "",
+                    req.created_at || "",
+                    req.createdAt || ""
+
+                ]
+                .join(" ")
+                .toLowerCase();
+
+
+                const searchMatch =
+                    !searchQuery ||
+                    searchable.includes(
+                        searchQuery
+                    );
+
+
+                return statusMatch &&
+                       searchMatch;
+
+            }
+        );
+
+
+    if(filtered.length===0){
+
+        tbody.innerHTML=`
+
+            <tr>
+
+                <td colspan="8"
+                    class="no-data">
+
+                    No data available!
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML="";
+
+
+    filtered
+    .slice(0,entries)
+    .forEach(
+        function(req,index){
+
+            const status =
+                req.status || "Pending";
+
+
+            let action="";
+
+
+            if(status==="Pending"){
+
+                action=`
+
+                    <button
+                        onclick="updateStatus(
+                            '${escapeJs(req.id)}',
+                            'Inprocess'
+                        )"
+                        style="
+                            background:#17a2b8;
+                            border:none;
+                            color:white;
+                            padding:5px 12px;
+                            border-radius:3px;
+                            cursor:pointer;
+                            font-size:12px;
+                            font-weight:bold;
+                        "
+                    >
+                        In Process
+                    </button>
+
+                `;
+
+            }
+
+
+            else if(status==="Inprocess"){
+
+                action=`
+
+                    <div class="action-btn-group">
+
+                        <button
+                            style="background:#28a745;"
+                            onclick="updateStatus(
+                                '${escapeJs(req.id)}',
+                                'Approved'
+                            )"
+                        >
+                            Approve
+                        </button>
+
+                        <button
+                            style="background:#dc3545;"
+                            onclick="updateStatus(
+                                '${escapeJs(req.id)}',
+                                'Rejected'
+                            )"
+                        >
+                            Reject
+                        </button>
+
+                    </div>
+
+                `;
+
+            }
+
+
+            else{
+
+                action=`
+
+                    <span
+                        style="
+                            color:#666;
+                            font-size:12px;
+                            font-weight:bold;
+                        "
+                    >
+                        Completed
+                    </span>
+
+                `;
+
+            }
+
+
+            const accountName =
+                req.account_name ||
+                req.accountName ||
+                "N/A";
+
+
+            const accountNumber =
+                req.account_number ||
+                req.accountNumber ||
+                "N/A";
+
+
+            const createdDate =
+                req.created_at ||
+                req.createdAt ||
+                req.date ||
+                "-";
+
+
+            const formattedDate =
+                formatDate(createdDate);
+
+
+            const row =
+                document.createElement("tr");
+
+
+            row.innerHTML=`
+
+                <td>
+                    ${index+1}
+                </td>
+
+                <td>
+                    <span class="username-cell">
+                        ${escapeHtml(
+                            req.username || "User"
+                        )}
+                    </span>
+                </td>
+
+                <td>
+                    <b>
+                        Rs ${
+                            Number(
+                                req.amount || 0
+                            ).toLocaleString(
+                                "en-PK",
+                                {
+                                    minimumFractionDigits:2,
+                                    maximumFractionDigits:2
+                                }
+                            )
+                        }
+                    </b>
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        req.method || "-"
+                    )}
+                </td>
+
+                <td>
+
+                    <div class="account-name">
+                        ${escapeHtml(
+                            accountName
+                        )}
+                    </div>
+
+                    <div class="account-number">
+                        ${escapeHtml(
+                            accountNumber
+                        )}
+                    </div>
+
+                </td>
+
+                <td>
+
+                    <span
+                        class="status"
+                        style="
+                            color:${getStatusColor(
+                                status
+                            )}
+                        "
+                    >
+                        ${escapeHtml(status)}
+                    </span>
+
+                </td>
+
+                <td
+                    style="
+                        font-size:12px;
+                        color:#555;
+                    "
+                >
+                    ${escapeHtml(
+                        formattedDate
+                    )}
+                </td>
+
+                <td>
+                    ${action}
+                </td>
+
+            `;
+
+
+            tbody.appendChild(row);
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   FORMAT DATE
+========================================= */
+
+function formatDate(value){
+
+    if(!value){
+
+        return "-";
+
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if(
+        Number.isNaN(
+            date.getTime()
+        )
+    ){
+
+        return String(value);
+
+    }
+
+
+    return date.toLocaleString(
+        "en-PK",
+        {
+            day:"2-digit",
+            month:"2-digit",
+            year:"numeric",
+            hour:"2-digit",
+            minute:"2-digit",
+            second:"2-digit",
+            hour12:true
+        }
+    );
+
+}
+
+
+/* =========================================
+   STATUS COLOR
+========================================= */
+
+function getStatusColor(status){
+
+    if(status==="Pending"){
+
+        return "#ff9800";
+
+    }
+
+
+    if(status==="Inprocess"){
+
+        return "#17a2b8";
+
+    }
+
+
+    if(status==="Approved"){
+
+        return "#28a745";
+
+    }
+
+
+    if(status==="Rejected"){
+
+        return "#dc3545";
+
+    }
+
+
+    return "#333";
+
+}
+
+
+/* =========================================
+   UPDATE STATUS
+========================================= */
+
+async function updateStatus(id,newStatus){
+
+    try{
+
+        if(
+            newStatus!=="Inprocess" &&
+            newStatus!=="Approved" &&
+            newStatus!=="Rejected"
+        ){
+
+            return;
+
+        }
+
+
+        const csrfToken =
+            sessionStorage.getItem(
+                "adminCsrfToken"
+            );
+
+
+        if(!csrfToken){
+
+            alert(
+                "Admin session expired. Please login again."
+            );
+
+            redirectToLogin();
+
+            return;
+
+        }
+
+
+        const confirmed =
+            confirm(
+                "Are you sure you want to change this request to " +
+                newStatus +
+                "?"
+            );
+
+
+        if(!confirmed){
+
+            return;
+
+        }
+
+
+        const response =
+            await fetch(
+                API_URL +
+                "/api/admin/withdrawals/" +
+                encodeURIComponent(id) +
+                "/status",
+                {
+                    method:"PATCH",
+                    credentials:"include",
+                    headers:{
+                        "Content-Type":
+                            "application/json",
+                        "Accept":
+                            "application/json",
+                        "X-CSRF-Token":
+                            csrfToken
+                    },
+                    body:JSON.stringify({
+                        status:newStatus
+                    })
+                }
+            );
+
+
+        if(
+            response.status===401 ||
+            response.status===403
+        ){
+
+            alert(
+                "Admin session expired. Please login again."
+            );
+
+            redirectToLogin();
+
+            return;
+
+        }
+
+
+        const data =
+            await response.json()
+            .catch(
+                function(){
+
+                    return {};
+
+                }
+            );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                data.error ||
+                "Unable to update withdrawal status."
+            );
+
+        }
+
+
+        alert(
+            data.message ||
+            "Withdrawal status updated successfully."
+        );
+
+
+        await loadRequests();
+
+
+    }catch(error){
+
+        console.error(
+            "Status update error:",
+            error
+        );
+
+
+        alert(
+            error.message ||
+            "Something went wrong. Please try again."
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   ESCAPE HTML
+========================================= */
+
+function escapeHtml(text){
+
+    const map={
+
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+
+    };
+
+
+    return String(text)
+        .replace(
+            /[&<>"']/g,
+            function(m){
+
+                return map[m];
+
+            }
+        );
+
+}
+
+
+/* =========================================
+   ESCAPE JS
+========================================= */
+
+function escapeJs(text){
+
+    return String(text)
+        .replace(/\\/g,"\\\\")
+        .replace(/'/g,"\\'")
+        .replace(/"/g,'\\"')
+        .replace(/\n/g,"\\n")
+        .replace(/\r/g,"\\r");
+
+}
+
+
+/* =========================================
+   SEARCH
+========================================= */
+
+document
+.getElementById("searchInput")
+.addEventListener(
+    "input",
+    function(){
+
+        renderRequests();
+
+    }
+);
+
+
+/* =========================================
+   PAGE LOAD
+========================================= */
+
+window.addEventListener(
+    "DOMContentLoaded",
+    async function(){
+
+        const sessionOK =
+            await checkAdminSession();
+
+
+        if(!sessionOK){
+
+            redirectToLogin();
+
+            return;
+
+        }
+
+
+        await loadRequests();
+
+    }
+);
+
+
+/* =========================================
+   AUTO REFRESH
+========================================= */
+
+setInterval(
+    async function(){
+
+        /*
+         * Only refresh from backend.
+         * No localStorage request data is used.
+         */
+
+        if(
+            document.visibilityState ===
+            "visible"
+        ){
+
+            await loadRequests();
+
+        }
+
+    },
+    10000
+);
+
+</script>
+
+</body>
+</html>

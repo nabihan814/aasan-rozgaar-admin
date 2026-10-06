@@ -1,0 +1,1702 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin Dashboard</title><link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+    color:#333;
+}
+
+.navbar{
+    background:#fff;
+    padding:12px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 2px 5px rgba(0,0,0,.05);
+    position:sticky;
+    top:0;
+    z-index:999;
+}
+
+.menu-toggle{
+    font-size:20px;
+    cursor:pointer;
+}
+
+.user-dropdown-container{
+    position:relative;
+    cursor:pointer;
+}
+
+.user-profile{
+    font-weight:bold;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
+.dropdown-menu{
+    position:absolute;
+    right:0;
+    top:35px;
+    width:160px;
+    background:#fff;
+    box-shadow:0 4px 10px rgba(0,0,0,.15);
+    border-radius:4px;
+    display:none;
+    z-index:1001;
+}
+
+.dropdown-menu.active{
+    display:block;
+}
+
+.dropdown-menu a{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 15px;
+    text-decoration:none;
+    color:#333;
+    font-size:14px;
+    border-bottom:1px solid #f1f1f1;
+}
+
+.dropdown-menu a:hover{
+    background:#f8f9fa;
+}
+
+.sidebar{
+    position:fixed;
+    left:-260px;
+    top:0;
+    width:260px;
+    height:100%;
+    background:#343a40;
+    color:#fff;
+    transition:.3s;
+    z-index:1002;
+    overflow-y:auto;
+}
+
+.sidebar.active{
+    left:0;
+}
+
+.sidebar-header{
+    padding:15px 20px;
+    background:#212529;
+    font-size:16px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:bold;
+}
+
+.sidebar-menu{
+    list-style:none;
+    padding:5px 0;
+}
+
+.sidebar-menu li{
+    cursor:pointer;
+    color:#c2c7d0;
+    font-size:14px;
+}
+
+.sidebar-menu li a{
+    color:inherit;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:12px 20px;
+    width:100%;
+}
+
+.sidebar-menu li:hover,
+.sidebar-menu li.active{
+    background:#007bff;
+    color:#fff;
+}
+
+.main-content{
+    padding:20px;
+}
+
+.dashboard-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+    gap:10px;
+    background:#fff;
+    padding:15px;
+    border-radius:8px;
+    box-shadow:0 2px 4px rgba(0,0,0,.02);
+}
+
+.breadcrumb-title h2{
+    color:#333;
+    font-size:20px;
+    text-transform:uppercase;
+    margin-bottom:3px;
+}
+
+.breadcrumb-title span{
+    color:#666;
+    font-size:13px;
+}
+
+.live-datetime{
+    background:#e9ecef;
+    padding:8px 15px;
+    border-radius:6px;
+    font-size:13px;
+    color:#495057;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.filter-box{
+    background:#fff;
+    padding:15px;
+    border-radius:8px;
+    margin-bottom:20px;
+    box-shadow:0 2px 4px rgba(0,0,0,.02);
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+}
+
+.filter-box input,
+.filter-box select{
+    padding:8px 12px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    font-size:13px;
+    outline:none;
+}
+
+.btn{
+    border:0;
+    padding:8px 15px;
+    border-radius:4px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.btn-search{
+    background:#007bff;
+    color:#fff;
+}
+
+.btn-search:hover{
+    background:#0056b3;
+}
+
+.btn-clear{
+    background:#6c757d;
+    color:#fff;
+}
+
+.today-box{
+    background:#fff;
+    padding:12px 15px;
+    border-radius:8px;
+    margin-bottom:20px;
+    box-shadow:0 2px 4px rgba(0,0,0,.02);
+    font-size:14px;
+}
+
+.today-box b{
+    color:#007bff;
+}
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:20px;
+}
+
+.stat-card{
+    padding:20px;
+    border-radius:8px;
+    color:#fff;
+    box-shadow:0 4px 6px rgba(0,0,0,.1);
+    position:relative;
+    overflow:hidden;
+}
+
+.stat-card h3{
+    font-size:27px;
+    margin-bottom:5px;
+}
+
+.stat-card p{
+    font-size:14px;
+    opacity:.9;
+    text-transform:uppercase;
+}
+
+.stat-card i{
+    position:absolute;
+    right:15px;
+    bottom:15px;
+    font-size:45px;
+    opacity:.2;
+}
+
+.bg-deposit{
+    background:linear-gradient(135deg,#17a2b8,#117a8b);
+}
+
+.bg-withdraw{
+    background:linear-gradient(135deg,#ffc107,#d39e00);
+    color:#212529;
+}
+
+.bg-users{
+    background:linear-gradient(135deg,#28a745,#1e7e34);
+}
+
+.result-box{
+    background:#fff;
+    padding:15px;
+    border-radius:8px;
+    margin-bottom:20px;
+    box-shadow:0 2px 4px rgba(0,0,0,.05);
+    display:none;
+}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:10px;
+    margin-top:12px;
+}
+
+.result-card{
+    border:1px solid #eee;
+    background:#fafafa;
+    padding:12px;
+    border-radius:6px;
+}
+
+.result-card strong{
+    display:block;
+    font-size:18px;
+    margin-top:5px;
+}
+
+.record{
+    border-top:1px solid #eee;
+    padding:10px 0;
+    line-height:1.7;
+}
+
+.approved{
+    color:#28a745;
+    font-weight:bold;
+}
+
+.error-box{
+    background:#ffe5e5;
+    color:#b00020;
+    padding:12px;
+    border-radius:7px;
+    margin-bottom:20px;
+    display:none;
+}
+
+.footer{
+    text-align:center;
+    padding:20px;
+    color:#666;
+    font-size:13px;
+    margin-top:40px;
+    border-top:1px solid #dee2e6;
+}
+
+.footer span{
+    color:#007bff;
+    font-weight:bold;
+}
+</style></head><body><div class="sidebar" id="sidebar"><div class="sidebar-header">
+    <i class="fa fa-wallet"></i>
+    Payment App
+</div>
+
+<ul class="sidebar-menu">
+
+    <li class="active">
+        <a href="./dashboard.html">
+            <i class="fa fa-tachometer-alt"></i>
+            Dashboard
+        </a>
+    </li>
+
+    <li>
+        <a href="./withdraw.html">
+            <i class="fa fa-file-invoice-dollar"></i>
+            Withdraw Requests
+        </a>
+    </li>
+
+    <li>
+        <a href="./deposit.html">
+            <i class="fa fa-money-bill-wave"></i>
+            Deposit Requests
+        </a>
+    </li>
+
+    <li>
+        <a href="./deposit-type.html">
+            <i class="fa fa-list"></i>
+            Deposit Type List
+        </a>
+    </li>
+
+    <li>
+        <a href="./deposit-report.html">
+            <i class="fa fa-chart-bar"></i>
+            Deposit Report
+        </a>
+    </li>
+
+    <li>
+        <a href="./withdraw-report.html">
+            <i class="fa fa-chart-line"></i>
+            Withdraw Report
+        </a>
+    </li>
+
+</ul>
+
+</div><div class="navbar"><i class="fa fa-bars menu-toggle"
+   onclick="toggleSidebar()"></i>
+
+<div class="user-dropdown-container"
+     onclick="toggleDropdown()">
+
+    <span class="user-profile">
+        Welcome <span id="adminName">Admin</span>
+        <i class="fa fa-caret-down"></i>
+    </span>
+
+    <div class="dropdown-menu" id="dropdownMenu">
+
+        <a href="#" onclick="return false;">
+            <i class="fa fa-key"></i>
+            Change Password
+        </a>
+
+        <a href="./login.html"
+           onclick="logoutAdmin(event)">
+            <i class="fa fa-power-off"></i>
+            Logout
+        </a>
+
+    </div>
+</div>
+
+</div><div class="main-content"><div class="dashboard-header">
+
+    <div class="breadcrumb-title">
+
+        <h2>Dashboard</h2>
+
+        <span>
+            Home / Dashboard
+        </span>
+
+    </div>
+
+    <div class="live-datetime"
+         id="liveClock">
+
+        <i class="fa fa-clock"></i>
+        <span id="clockText">Loading...</span>
+
+    </div>
+
+</div>
+
+<div class="today-box">
+
+    <i class="fa fa-calendar-day"></i>
+
+    Today:
+
+    <b id="todayText">
+        Loading...
+    </b>
+
+    <span style="color:#666;margin-left:8px;">
+        Only admin-approved transactions are counted.
+    </span>
+
+</div>
+
+<div class="error-box" id="errorBox"></div>
+
+<div class="filter-box">
+
+    <b>
+        <i class="fa fa-calendar-alt"></i>
+        History:
+    </b>
+
+    <input
+        type="date"
+        id="filterDate"
+    >
+
+    <select id="filterMonth">
+
+        <option value="">Select Month</option>
+
+        <option value="01">January</option>
+        <option value="02">February</option>
+        <option value="03">March</option>
+        <option value="04">April</option>
+        <option value="05">May</option>
+        <option value="06">June</option>
+        <option value="07">July</option>
+        <option value="08">August</option>
+        <option value="09">September</option>
+        <option value="10">October</option>
+        <option value="11">November</option>
+        <option value="12">December</option>
+
+    </select>
+
+    <input
+        type="number"
+        id="filterYear"
+        placeholder="Year e.g. 2026"
+        style="width:140px;"
+    >
+
+    <button
+        class="btn btn-search"
+        onclick="searchRecords()">
+
+        <i class="fa fa-search"></i>
+        Search
+
+    </button>
+
+    <button
+        class="btn btn-clear"
+        onclick="clearSearch()">
+
+        Clear
+
+    </button>
+
+</div>
+
+<div
+    class="result-box"
+    id="resultBox">
+</div>
+
+<div class="stats-grid">
+
+    <div class="stat-card bg-deposit">
+
+        <h3 id="depositAmount">
+            Rs 0
+        </h3>
+
+        <p>
+            Today's Approved Deposit
+        </p>
+
+        <i class="fa fa-wallet"></i>
+
+    </div>
+
+    <div class="stat-card bg-withdraw">
+
+        <h3 id="withdrawAmount">
+            Rs 0
+        </h3>
+
+        <p>
+            Today's Approved Withdraw
+        </p>
+
+        <i class="fa fa-file-invoice-dollar"></i>
+
+    </div>
+
+    <div class="stat-card bg-users">
+
+        <h3 id="approvedCount">
+            0
+        </h3>
+
+        <p>
+            Today's Approved Transactions
+        </p>
+
+        <i class="fa fa-check-circle"></i>
+
+    </div>
+
+</div>
+
+</div><div class="footer">Copyright © 2022-2026
+
+<span>DW.</span>
+
+All rights reserved.
+
+</div><script>
+
+const BACKEND_URL =
+    "https://aasan-rozgaar-backend.onrender.com";
+
+let allDeposits = [];
+let allWithdrawals = [];
+
+
+/* =========================
+   AUTH CHECK
+========================= */
+
+async function checkAdminSession(){
+
+    try{
+
+        const response =
+            await fetch(
+                BACKEND_URL + "/api/admin/me",
+                {
+                    method:"GET",
+                    credentials:"include"
+                }
+            );
+
+        if(!response.ok){
+
+            window.location.href =
+                "./login.html";
+
+            return false;
+        }
+
+        const data =
+            await response.json();
+
+        if(!data.success){
+
+            window.location.href =
+                "./login.html";
+
+            return false;
+        }
+
+        const adminName =
+            data.username || "Admin";
+
+        document.getElementById(
+            "adminName"
+        ).innerText = adminName;
+
+        sessionStorage.setItem(
+            "adminPanelUsername",
+            adminName
+        );
+
+        return true;
+
+    }catch(error){
+
+        console.error(
+            "Admin session error:",
+            error
+        );
+
+        window.location.href =
+            "./login.html";
+
+        return false;
+    }
+}
+
+
+/* =========================
+   SIDEBAR
+========================= */
+
+function toggleSidebar(){
+
+    document
+        .getElementById("sidebar")
+        .classList
+        .toggle("active");
+}
+
+
+/* =========================
+   DROPDOWN
+========================= */
+
+function toggleDropdown(){
+
+    document
+        .getElementById("dropdownMenu")
+        .classList
+        .toggle("active");
+}
+
+
+window.addEventListener(
+    "click",
+    function(e){
+
+        if(
+            !e.target.closest(
+                ".user-dropdown-container"
+            )
+        ){
+
+            document
+                .getElementById(
+                    "dropdownMenu"
+                )
+                .classList
+                .remove("active");
+
+        }
+    }
+);
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+async function logoutAdmin(event){
+
+    if(event){
+        event.preventDefault();
+    }
+
+    try{
+
+        const csrfToken =
+            sessionStorage.getItem(
+                "adminCsrfToken"
+            );
+
+        await fetch(
+            BACKEND_URL +
+            "/api/admin/logout",
+            {
+                method:"POST",
+
+                headers:{
+                    "X-CSRF-Token":
+                        csrfToken || ""
+                },
+
+                credentials:"include"
+            }
+        );
+
+    }catch(error){
+
+        console.error(
+            "Logout error:",
+            error
+        );
+
+    }finally{
+
+        sessionStorage.removeItem(
+            "adminCsrfToken"
+        );
+
+        sessionStorage.removeItem(
+            "adminPanelUsername"
+        );
+
+        window.location.href =
+            "./login.html";
+    }
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+function showError(message){
+
+    const box =
+        document.getElementById(
+            "errorBox"
+        );
+
+    box.textContent = message;
+
+    box.style.display = "block";
+}
+
+
+function hideError(){
+
+    const box =
+        document.getElementById(
+            "errorBox"
+        );
+
+    box.style.display = "none";
+    box.textContent = "";
+}
+
+
+/* =========================
+   FETCH JSON
+========================= */
+
+async function fetchAdminData(url){
+
+    const response =
+        await fetch(
+            BACKEND_URL + url,
+            {
+                method:"GET",
+                credentials:"include"
+            }
+        );
+
+    if(
+        response.status === 401 ||
+        response.status === 403
+    ){
+
+        window.location.href =
+            "./login.html";
+
+        throw new Error(
+            "Admin session expired."
+        );
+    }
+
+
+    let data = {};
+
+    try{
+        data = await response.json();
+    }catch(error){
+        data = {};
+    }
+
+
+    if(!response.ok){
+
+        throw new Error(
+            data.message ||
+            "Unable to load data."
+        );
+    }
+
+
+    return data;
+}
+
+
+/* =========================
+   LOAD DATABASE RECORDS
+========================= */
+
+async function loadDatabaseRecords(){
+
+    hideError();
+
+    try{
+
+        const results =
+            await Promise.all([
+
+                fetchAdminData(
+                    "/api/admin/deposits"
+                ),
+
+                fetchAdminData(
+                    "/api/admin/withdrawals"
+                )
+
+            ]);
+
+
+        const depositData =
+            results[0];
+
+        const withdrawData =
+            results[1];
+
+
+        /*
+         * Backend response array ko support
+         * karta hai aur {success,data} format
+         * ko bhi.
+         */
+
+        allDeposits =
+            Array.isArray(depositData)
+                ? depositData
+                : (
+                    Array.isArray(
+                        depositData.data
+                    )
+                    ? depositData.data
+                    : (
+                        Array.isArray(
+                            depositData.deposits
+                        )
+                        ? depositData.deposits
+                        : []
+                    )
+                );
+
+
+        allWithdrawals =
+            Array.isArray(withdrawData)
+                ? withdrawData
+                : (
+                    Array.isArray(
+                        withdrawData.data
+                    )
+                    ? withdrawData.data
+                    : (
+                        Array.isArray(
+                            withdrawData.withdrawals
+                        )
+                        ? withdrawData.withdrawals
+                        : []
+                    )
+                );
+
+
+        loadDashboard();
+
+    }catch(error){
+
+        console.error(
+            "Database loading error:",
+            error
+        );
+
+        showError(
+            error.message ||
+            "Database data load nahi ho saka."
+        );
+
+    }
+}
+
+
+/* =========================
+   DATE PARSER
+========================= */
+
+function parseRecordDate(value){
+
+    if(
+        value === undefined ||
+        value === null ||
+        value === ""
+    ){
+        return null;
+    }
+
+
+    if(value instanceof Date){
+
+        return isNaN(
+            value.getTime()
+        )
+        ? null
+        : value;
+    }
+
+
+    if(typeof value === "number"){
+
+        const d =
+            new Date(value);
+
+        return isNaN(
+            d.getTime()
+        )
+        ? null
+        : d;
+    }
+
+
+    const d =
+        new Date(
+            String(value)
+        );
+
+
+    if(!isNaN(d.getTime())){
+        return d;
+    }
+
+
+    return null;
+}
+
+
+/* =========================
+   RECORD DATE
+========================= */
+
+function getRecordDate(record){
+
+    if(!record){
+        return null;
+    }
+
+
+    const possibleDates = [
+
+        record.updatedAt,
+        record.approvedAt,
+        record.createdAt,
+        record.created_at,
+        record.timestamp,
+        record.date
+
+    ];
+
+
+    for(
+        let i = 0;
+        i < possibleDates.length;
+        i++
+    ){
+
+        const d =
+            parseRecordDate(
+                possibleDates[i]
+            );
+
+        if(d){
+            return d;
+        }
+    }
+
+
+    return null;
+}
+
+
+/* =========================
+   DATE KEY
+========================= */
+
+function dateKey(date){
+
+    if(!date){
+        return "";
+    }
+
+
+    return (
+        date.getFullYear() +
+        "-" +
+        String(
+            date.getMonth() + 1
+        ).padStart(2,"0") +
+        "-" +
+        String(
+            date.getDate()
+        ).padStart(2,"0")
+    );
+}
+
+
+/* =========================
+   TODAY
+========================= */
+
+function todayKey(){
+
+    return dateKey(
+        new Date()
+    );
+}
+
+
+/* =========================
+   MONEY
+========================= */
+
+function money(amount){
+
+    const number =
+        Number(amount || 0);
+
+    return number.toLocaleString(
+        "en-PK",
+        {
+            maximumFractionDigits:2
+        }
+    );
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+function isApproved(record){
+
+    return String(
+        record.status || ""
+    )
+    .trim()
+    .toLowerCase()
+    === "approved";
+}
+
+
+/* =========================
+   APPROVED RECORDS
+========================= */
+
+function getApprovedDeposits(){
+
+    return allDeposits.filter(
+        isApproved
+    );
+}
+
+
+function getApprovedWithdrawals(){
+
+    return allWithdrawals.filter(
+        isApproved
+    );
+}
+
+
+/* =========================
+   LOAD DASHBOARD
+========================= */
+
+function loadDashboard(){
+
+    const today =
+        todayKey();
+
+
+    const deposits =
+        getApprovedDeposits();
+
+
+    const withdrawals =
+        getApprovedWithdrawals();
+
+
+    let depositTotal = 0;
+    let withdrawTotal = 0;
+
+    let depositCount = 0;
+    let withdrawCount = 0;
+
+
+    deposits.forEach(
+        function(item){
+
+            const d =
+                getRecordDate(item);
+
+            if(
+                d &&
+                dateKey(d) === today
+            ){
+
+                depositTotal +=
+                    Number(
+                        item.amount || 0
+                    );
+
+                depositCount++;
+            }
+        }
+    );
+
+
+    withdrawals.forEach(
+        function(item){
+
+            const d =
+                getRecordDate(item);
+
+            if(
+                d &&
+                dateKey(d) === today
+            ){
+
+                withdrawTotal +=
+                    Number(
+                        item.amount || 0
+                    );
+
+                withdrawCount++;
+            }
+        }
+    );
+
+
+    document.getElementById(
+        "depositAmount"
+    ).innerText =
+        "Rs " +
+        money(depositTotal);
+
+
+    document.getElementById(
+        "withdrawAmount"
+    ).innerText =
+        "Rs " +
+        money(withdrawTotal);
+
+
+    document.getElementById(
+        "approvedCount"
+    ).innerText =
+        depositCount +
+        withdrawCount;
+
+
+    document.getElementById(
+        "todayText"
+    ).innerText =
+        new Date().toLocaleDateString(
+            "en-PK",
+            {
+                weekday:"long",
+                day:"2-digit",
+                month:"long",
+                year:"numeric"
+            }
+        );
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+function searchRecords(){
+
+    const date =
+        document.getElementById(
+            "filterDate"
+        ).value;
+
+
+    const month =
+        document.getElementById(
+            "filterMonth"
+        ).value;
+
+
+    const year =
+        document.getElementById(
+            "filterYear"
+        ).value.trim();
+
+
+    const deposits =
+        getApprovedDeposits();
+
+
+    const withdrawals =
+        getApprovedWithdrawals();
+
+
+    function match(item){
+
+        const d =
+            getRecordDate(item);
+
+
+        if(!d){
+            return false;
+        }
+
+
+        if(date){
+
+            if(
+                dateKey(d) !== date
+            ){
+                return false;
+            }
+        }
+
+
+        if(month){
+
+            const m =
+                String(
+                    d.getMonth() + 1
+                ).padStart(2,"0");
+
+
+            if(m !== month){
+                return false;
+            }
+        }
+
+
+        if(year){
+
+            if(
+                String(
+                    d.getFullYear()
+                ) !== String(year)
+            ){
+                return false;
+            }
+        }
+
+
+        return true;
+    }
+
+
+    const foundDeposits =
+        deposits.filter(match);
+
+
+    const foundWithdrawals =
+        withdrawals.filter(match);
+
+
+    let depositTotal = 0;
+    let withdrawTotal = 0;
+
+
+    foundDeposits.forEach(
+        function(item){
+
+            depositTotal +=
+                Number(
+                    item.amount || 0
+                );
+        }
+    );
+
+
+    foundWithdrawals.forEach(
+        function(item){
+
+            withdrawTotal +=
+                Number(
+                    item.amount || 0
+                );
+        }
+    );
+
+
+    const result =
+        document.getElementById(
+            "resultBox"
+        );
+
+
+    result.style.display =
+        "block";
+
+
+    if(
+        foundDeposits.length === 0 &&
+        foundWithdrawals.length === 0
+    ){
+
+        result.innerHTML = `
+
+            <b>
+                <i class="fa fa-history"></i>
+                No approved records found.
+            </b>
+
+        `;
+
+        return;
+    }
+
+
+    let html = `
+
+        <b>
+            <i class="fa fa-history"></i>
+            Admin Approved Records
+        </b>
+
+        <div class="result-grid">
+
+            <div class="result-card">
+
+                Approved Deposits
+
+                <strong
+                    style="color:#17a2b8;">
+                    Rs ${money(depositTotal)}
+                </strong>
+
+            </div>
+
+
+            <div class="result-card">
+
+                Approved Withdraws
+
+                <strong
+                    style="color:#d39e00;">
+                    Rs ${money(withdrawTotal)}
+                </strong>
+
+            </div>
+
+
+            <div class="result-card">
+
+                Total Transactions
+
+                <strong>
+
+                    ${
+                        foundDeposits.length +
+                        foundWithdrawals.length
+                    }
+
+                </strong>
+
+            </div>
+
+        </div>
+
+        <div style="margin-top:15px;">
+
+    `;
+
+
+    foundDeposits.forEach(
+        function(item){
+
+            const d =
+                getRecordDate(item);
+
+
+            html += `
+
+                <div class="record">
+
+                    <span class="approved">
+                        DEPOSIT APPROVED
+                    </span>
+
+                    <br>
+
+                    User:
+                    <b>
+                        ${safe(
+                            item.username || "-"
+                        )}
+                    </b>
+
+                    <br>
+
+                    Amount:
+                    <b>
+                        Rs ${money(
+                            item.amount
+                        )}
+                    </b>
+
+                    <br>
+
+                    Method:
+                    ${safe(
+                        item.method || "-"
+                    )}
+
+                    <br>
+
+                    Transaction ID:
+                    ${safe(
+                        item.transactionId ||
+                        item.transaction_id ||
+                        item.trxid ||
+                        item.id ||
+                        "-"
+                    )}
+
+                    <br>
+
+                    Date:
+                    ${
+                        d
+                        ? formatDate(d)
+                        : "-"
+                    }
+
+                </div>
+
+            `;
+        }
+    );
+
+
+    foundWithdrawals.forEach(
+        function(item){
+
+            const d =
+                getRecordDate(item);
+
+
+            html += `
+
+                <div class="record">
+
+                    <span class="approved">
+                        WITHDRAW APPROVED
+                    </span>
+
+                    <br>
+
+                    User:
+                    <b>
+                        ${safe(
+                            item.username || "-"
+                        )}
+                    </b>
+
+                    <br>
+
+                    Amount:
+                    <b>
+                        Rs ${money(
+                            item.amount
+                        )}
+                    </b>
+
+                    <br>
+
+                    Method:
+                    ${safe(
+                        item.method || "-"
+                    )}
+
+                    <br>
+
+                    Account Holder:
+                    ${safe(
+                        item.accountName ||
+                        "-"
+                    )}
+
+                    <br>
+
+                    Account / Mobile:
+                    ${safe(
+                        item.accountNumber ||
+                        "-"
+                    )}
+
+                    <br>
+
+                    Date:
+                    ${
+                        d
+                        ? formatDate(d)
+                        : "-"
+                    }
+
+                </div>
+
+            `;
+        }
+    );
+
+
+    html += "</div>";
+
+    result.innerHTML =
+        html;
+}
+
+
+/* =========================
+   DATE FORMAT
+========================= */
+
+function formatDate(date){
+
+    return date.toLocaleString(
+        "en-PK",
+        {
+            day:"2-digit",
+            month:"2-digit",
+            year:"numeric",
+            hour:"2-digit",
+            minute:"2-digit",
+            second:"2-digit",
+            hour12:true
+        }
+    );
+}
+
+
+/* =========================
+   SAFE HTML
+========================= */
+
+function safe(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+/* =========================
+   CLEAR SEARCH
+========================= */
+
+function clearSearch(){
+
+    document.getElementById(
+        "filterDate"
+    ).value = "";
+
+
+    document.getElementById(
+        "filterMonth"
+    ).value = "";
+
+
+    document.getElementById(
+        "filterYear"
+    ).value = "";
+
+
+    document.getElementById(
+        "resultBox"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "resultBox"
+    ).innerHTML = "";
+}
+
+
+/* =========================
+   LIVE CLOCK
+========================= */
+
+function updateClock(){
+
+    const now =
+        new Date();
+
+
+    document.getElementById(
+        "clockText"
+    ).innerText =
+        now.toLocaleString(
+            "en-PK",
+            {
+                weekday:"short",
+                day:"2-digit",
+                month:"short",
+                year:"numeric",
+                hour:"2-digit",
+                minute:"2-digit",
+                second:"2-digit",
+                hour12:true
+            }
+        );
+}
+
+
+/* =========================
+   INIT
+========================= */
+
+async function init(){
+
+    const loggedIn =
+        await checkAdminSession();
+
+
+    if(!loggedIn){
+        return;
+    }
+
+
+    updateClock();
+
+    setInterval(
+        updateClock,
+        1000
+    );
+
+
+    await loadDatabaseRecords();
+
+
+    /*
+     * Database se fresh records
+     * har 15 seconds baad.
+     */
+
+    setInterval(
+        loadDatabaseRecords,
+        15000
+    );
+}
+
+
+/* =========================
+   START
+========================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    init
+);
+
+</script></body>
+</html>

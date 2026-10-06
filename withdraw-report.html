@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Payment App - Withdraw Report</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+.navbar{
+    background:#fff;
+    padding:12px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 2px 5px rgba(0,0,0,.05);
+    position:sticky;
+    top:0;
+    z-index:999;
+}
+
+.menu-toggle{
+    font-size:20px;
+    cursor:pointer;
+    color:#333;
+}
+
+.user-dropdown-container{
+    position:relative;
+    cursor:pointer;
+}
+
+.user-profile{
+    font-weight:bold;
+    color:#333;
+    font-size:14px;
+}
+
+.dropdown-menu{
+    position:absolute;
+    right:0;
+    top:35px;
+    background:white;
+    box-shadow:0 4px 10px rgba(0,0,0,.15);
+    border-radius:4px;
+    width:160px;
+    display:none;
+    z-index:1001;
+}
+
+.dropdown-menu.active{
+    display:block;
+}
+
+.dropdown-menu a{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 15px;
+    text-decoration:none;
+    color:#333;
+    font-size:14px;
+    border-bottom:1px solid #f1f1f1;
+}
+
+.sidebar{
+    position:fixed;
+    left:-260px;
+    top:0;
+    width:260px;
+    height:100%;
+    background:#343a40;
+    color:white;
+    transition:.3s;
+    z-index:1002;
+    overflow-y:auto;
+}
+
+.sidebar.active{
+    left:0;
+}
+
+.sidebar-header{
+    padding:15px 20px;
+    background:#212529;
+    font-size:16px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.sidebar-menu{
+    list-style:none;
+    padding:5px 0;
+}
+
+.sidebar-menu li{
+    color:#c2c7d0;
+    font-size:14px;
+}
+
+.sidebar-menu li a{
+    color:inherit;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:12px 20px;
+    width:100%;
+}
+
+.sidebar-menu li:hover,
+.sidebar-menu li.active{
+    background:#007bff;
+    color:white;
+}
+
+.main-content{
+    padding:15px;
+}
+
+.breadcrumb-title h2{
+    color:#333;
+    font-size:20px;
+    text-transform:uppercase;
+    margin-bottom:5px;
+}
+
+.breadcrumb-title span{
+    color:#666;
+    font-size:13px;
+}
+
+.filter-card{
+    background:white;
+    padding:15px;
+    border-radius:4px;
+    margin-top:15px;
+    box-shadow:0 1px 3px rgba(0,0,0,.1);
+}
+
+.filter-row{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    align-items:flex-end;
+    margin-bottom:15px;
+}
+
+.form-group{
+    flex:1;
+    min-width:200px;
+}
+
+.form-group label{
+    display:block;
+    font-size:13px;
+    color:#333;
+    margin-bottom:5px;
+    font-weight:bold;
+}
+
+.form-control{
+    width:100%;
+    padding:8px 10px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    outline:none;
+    font-size:14px;
+}
+
+.filter-btns{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.btn-load,
+.btn-reset,
+.btn-excel,
+.btn-pdf{
+    border:none;
+    color:white;
+    border-radius:4px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.btn-load{
+    background:#007bff;
+    padding:8px 20px;
+}
+
+.btn-reset{
+    background:#6c757d;
+    padding:8px 15px;
+}
+
+.btn-excel{
+    background:#28a745;
+    padding:8px 12px;
+}
+
+.btn-pdf{
+    background:#dc3545;
+    padding:8px 12px;
+}
+
+.table-controls{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:15px 0;
+    font-size:14px;
+    color:#333;
+    flex-wrap:wrap;
+    gap:10px;
+    background:white;
+    padding:12px;
+    border-radius:4px;
+    box-shadow:0 1px 3px rgba(0,0,0,.1);
+}
+
+.table-controls select,
+.table-controls input{
+    padding:6px 10px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    outline:none;
+}
+
+.table-controls input{
+    width:180px;
+}
+
+.table-responsive{
+    overflow-x:auto;
+    background:white;
+    border-radius:4px;
+    box-shadow:0 1px 3px rgba(0,0,0,.1);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    text-align:left;
+    font-size:13px;
+    white-space:nowrap;
+}
+
+th,td{
+    padding:12px 10px;
+    border-bottom:1px solid #eee;
+    color:#333;
+    vertical-align:middle;
+}
+
+th{
+    background:#f8f9fa;
+}
+
+.no-data{
+    text-align:center;
+    padding:25px;
+    color:#666;
+    font-size:15px;
+}
+
+.status-approved{
+    color:#28a745;
+    font-weight:bold;
+}
+
+.status-rejected{
+    color:#dc3545;
+    font-weight:bold;
+}
+
+.status-inprocess{
+    color:#0dcaf0;
+    font-weight:bold;
+}
+
+.status-pending{
+    color:#856404;
+    font-weight:bold;
+}
+
+.footer{
+    text-align:center;
+    padding:20px;
+    color:#666;
+    font-size:13px;
+}
+
+.footer span{
+    color:#007bff;
+    font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="sidebar" id="sidebar">
+
+    <div class="sidebar-header">
+
+        <i class="fa fa-wallet"></i>
+        Payment App
+
+    </div>
+
+    <ul class="sidebar-menu">
+
+        <li>
+            <a href="./dashboard.html">
+                <i class="fa fa-tachometer-alt"></i>
+                Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="./withdraw.html">
+                <i class="fa fa-file-invoice-dollar"></i>
+                Withdraw Requests
+            </a>
+        </li>
+
+        <li>
+            <a href="./deposit.html">
+                <i class="fa fa-money-bill-wave"></i>
+                Deposit Requests
+            </a>
+        </li>
+
+        <li>
+            <a href="./deposit-type.html">
+                <i class="fa fa-list"></i>
+                Deposit Type List
+            </a>
+        </li>
+
+        <li>
+            <a href="./deposit-report.html">
+                <i class="fa fa-chart-bar"></i>
+                Deposit Report
+            </a>
+        </li>
+
+        <li class="active">
+            <a href="./withdraw-report.html">
+                <i class="fa fa-chart-line"></i>
+                Withdraw Report
+            </a>
+        </li>
+
+    </ul>
+
+</div>
+
+<div class="navbar">
+
+    <i class="fa fa-bars menu-toggle"
+       onclick="toggleSidebar()"></i>
+
+    <div class="user-dropdown-container"
+         onclick="toggleDropdown()">
+
+        <span class="user-profile">
+
+            Welcome <span id="adminName">Admin</span>
+
+            <i class="fa fa-caret-down"></i>
+
+        </span>
+
+        <div class="dropdown-menu"
+             id="dropdownMenu">
+
+            <a href="./login.html"
+               onclick="adminPanelLogout()">
+
+                <i class="fa fa-power-off"></i>
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="main-content">
+
+    <div class="breadcrumb-title">
+
+        <h2>
+            Withdraw Report
+        </h2>
+
+        <span>
+            Home / Withdraw Report
+        </span>
+
+    </div>
+
+    <div class="filter-card">
+
+        <div class="filter-row">
+
+            <div class="form-group">
+
+                <label>
+                    Select Date
+                </label>
+
+                <input
+                    type="date"
+                    id="dateFilter"
+                    class="form-control">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Type
+                </label>
+
+                <select
+                    id="withdrawTypeFilter"
+                    class="form-control">
+
+                    <option value="All">
+                        All
+                    </option>
+
+                    <option value="Approved">
+                        Approved
+                    </option>
+
+                    <option value="Rejected">
+                        Rejected
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="filter-btns">
+
+            <button
+                class="btn-load"
+                onclick="loadWithdrawReport()">
+
+                <i class="fa fa-sync"></i>
+                Load
+
+            </button>
+
+            <button
+                class="btn-reset"
+                onclick="resetReport()">
+
+                Reset
+
+            </button>
+
+            <button
+                class="btn-excel"
+                type="button"
+                onclick="exportExcel()">
+
+                <i class="fa fa-file-excel"></i>
+
+            </button>
+
+            <button
+                class="btn-pdf"
+                type="button"
+                onclick="window.print()">
+
+                <i class="fa fa-file-pdf"></i>
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="table-controls">
+
+        <div>
+
+            Show
+
+            <select
+                id="entriesCount"
+                onchange="renderWithdrawReport()">
+
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+
+            </select>
+
+            entries
+
+        </div>
+
+        <div>
+
+            Search:
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search..."
+                oninput="renderWithdrawReport()">
+
+        </div>
+
+    </div>
+
+    <div class="table-responsive">
+
+        <table id="withdrawReportTable">
+
+            <thead>
+
+                <tr>
+
+                    <th>S.No.</th>
+                    <th>User Name</th>
+                    <th>Method</th>
+                    <th>Account Details</th>
+                    <th>Amount</th>
+                    <th>Transaction ID</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Approved By</th>
+                    <th>Approval Date</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="withdrawReportTableBody">
+
+                <tr>
+
+                    <td
+                        colspan="10"
+                        class="no-data">
+
+                        Loading...
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<div class="footer">
+
+    Copyright © 2022-2026
+
+    <span>
+        DW.
+    </span>
+
+    All rights reserved.
+
+</div>
+
+<script>
+
+const API_URL =
+    "https://aasan-rozgaar-backend.onrender.com";
+
+let withdrawData = [];
+
+
+/* =========================
+   ADMIN SESSION CHECK
+========================= */
+
+async function checkAdminSession(){
+
+    try{
+
+        const response = await fetch(
+            API_URL + "/api/admin/me",
+            {
+                method:"GET",
+                credentials:"include"
+            }
+        );
+
+        if(
+            response.status === 401 ||
+            response.status === 403
+        ){
+
+            window.location.href="./login.html";
+            return false;
+
+        }
+
+        if(!response.ok){
+
+            throw new Error(
+                "Admin session check failed"
+            );
+
+        }
+
+        const data =
+            await response.json();
+
+        document.getElementById(
+            "adminName"
+        ).textContent =
+            data.username || "Admin";
+
+        return true;
+
+    }catch(error){
+
+        console.error(error);
+
+        window.location.href="./login.html";
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================
+   SIDEBAR
+========================= */
+
+function toggleSidebar(){
+
+    document
+        .getElementById("sidebar")
+        .classList
+        .toggle("active");
+
+}
+
+
+/* =========================
+   DROPDOWN
+========================= */
+
+function toggleDropdown(){
+
+    document
+        .getElementById("dropdownMenu")
+        .classList
+        .toggle("active");
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+async function adminPanelLogout(){
+
+    try{
+
+        await fetch(
+            API_URL + "/api/admin/logout",
+            {
+                method:"POST",
+                credentials:"include",
+                headers:{
+                    "Content-Type":"application/json"
+                }
+            }
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+    sessionStorage.removeItem(
+        "adminCsrfToken"
+    );
+
+}
+
+
+/* =========================
+   LOAD WITHDRAWALS
+========================= */
+
+async function loadWithdrawReport(){
+
+    const tbody =
+        document.getElementById(
+            "withdrawReportTableBody"
+        );
+
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="10" class="no-data">
+                Loading...
+            </td>
+        </tr>
+    `;
+
+    try{
+
+        const response = await fetch(
+            API_URL + "/api/admin/withdrawals",
+            {
+                method:"GET",
+                credentials:"include",
+                headers:{
+                    "Accept":"application/json"
+                }
+            }
+        );
+
+        if(
+            response.status === 401 ||
+            response.status === 403
+        ){
+
+            window.location.href="./login.html";
+            return;
+
+        }
+
+        if(!response.ok){
+
+            throw new Error(
+                "Failed to load withdrawals"
+            );
+
+        }
+
+        const data =
+            await response.json();
+
+        withdrawData =
+            Array.isArray(data)
+                ? data
+                : Array.isArray(data.withdrawals)
+                    ? data.withdrawals
+                    : [];
+
+        renderWithdrawReport();
+
+    }catch(error){
+
+        console.error(error);
+
+        withdrawData = [];
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="10" class="no-data">
+                    Unable to load withdrawal report!
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+
+/* =========================
+   RENDER REPORT
+========================= */
+
+function renderWithdrawReport(){
+
+    const tbody =
+        document.getElementById(
+            "withdrawReportTableBody"
+        );
+
+    const type =
+        document.getElementById(
+            "withdrawTypeFilter"
+        ).value;
+
+    const search =
+        document.getElementById(
+            "searchInput"
+        ).value
+        .toLowerCase()
+        .trim();
+
+    const selectedDate =
+        document.getElementById(
+            "dateFilter"
+        ).value;
+
+    const limit =
+        parseInt(
+            document.getElementById(
+                "entriesCount"
+            ).value
+        ) || 10;
+
+
+    let reports =
+        withdrawData.filter(
+            function(item){
+
+                const status =
+                    normalizeStatus(
+                        item.status
+                    );
+
+
+                /*
+                  Report mein sirf final
+                  Approved / Rejected requests.
+                */
+
+                if(
+                    status !== "Approved" &&
+                    status !== "Rejected"
+                ){
+
+                    return false;
+
+                }
+
+
+                if(
+                    type !== "All" &&
+                    status !== type
+                ){
+
+                    return false;
+
+                }
+
+
+                if(selectedDate){
+
+                    if(
+                        getDateOnly(item) !==
+                        selectedDate
+                    ){
+
+                        return false;
+
+                    }
+
+                }
+
+
+                const searchable = [
+
+                    item.username || "",
+                    item.account_name || "",
+                    item.accountName || "",
+                    item.account_number || "",
+                    item.accountNumber || "",
+                    item.method || "",
+                    item.amount || "",
+                    item.id || "",
+                    item.transaction_id || "",
+                    item.transactionId || "",
+                    item.trxid || "",
+                    item.approved_by || "",
+                    item.approvedBy || "",
+                    item.created_at || "",
+                    item.createdAt || ""
+
+                ]
+                .join(" ")
+                .toLowerCase();
+
+
+                if(
+                    search &&
+                    !searchable.includes(search)
+                ){
+
+                    return false;
+
+                }
+
+
+                return true;
+
+            }
+        );
+
+
+    /*
+      Newest first
+    */
+
+    reports.sort(
+        function(a,b){
+
+            const aTime =
+                new Date(
+                    a.approved_at ||
+                    a.approvedAt ||
+                    a.updated_at ||
+                    a.updatedAt ||
+                    a.created_at ||
+                    a.createdAt ||
+                    0
+                ).getTime() || 0;
+
+            const bTime =
+                new Date(
+                    b.approved_at ||
+                    b.approvedAt ||
+                    b.updated_at ||
+                    b.updatedAt ||
+                    b.created_at ||
+                    b.createdAt ||
+                    0
+                ).getTime() || 0;
+
+            return bTime - aTime;
+
+        }
+    );
+
+
+    if(reports.length === 0){
+
+        tbody.innerHTML = `
+            <tr>
+                <td
+                    colspan="10"
+                    class="no-data">
+
+                    No data available!
+
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    let html = "";
+
+
+    reports
+        .slice(0,limit)
+        .forEach(
+            function(item,index){
+
+                const status =
+                    normalizeStatus(
+                        item.status
+                    );
+
+                let statusClass =
+                    "status-pending";
+
+                if(
+                    status === "Approved"
+                ){
+
+                    statusClass =
+                        "status-approved";
+
+                }else if(
+                    status === "Rejected"
+                ){
+
+                    statusClass =
+                        "status-rejected";
+
+                }
+
+
+                const method =
+                    item.method || "-";
+
+
+                const accountName =
+                    item.account_name ||
+                    item.accountName ||
+                    "-";
+
+
+                const accountNumber =
+                    item.account_number ||
+                    item.accountNumber ||
+                    "-";
+
+
+                const amount =
+                    Number(
+                        item.amount || 0
+                    );
+
+
+                const transactionId =
+                    item.transaction_id ||
+                    item.transactionId ||
+                    item.trxid ||
+                    item.id ||
+                    "-";
+
+
+                const requestDate =
+                    item.created_at ||
+                    item.createdAt ||
+                    "-";
+
+
+                const approvalDate =
+                    item.approved_at ||
+                    item.approvedAt ||
+                    "-";
+
+
+                const approvedBy =
+                    item.approved_by ||
+                    item.approvedBy ||
+                    "-";
+
+
+                html += `
+
+                    <tr>
+
+                        <td>
+                            ${index + 1}
+                        </td>
+
+                        <td>
+                            <b>
+                                ${escapeHtml(
+                                    item.username || "-"
+                                )}
+                            </b>
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                method
+                            )}
+                        </td>
+
+                        <td>
+
+                            <b>
+                                ${escapeHtml(
+                                    accountName
+                                )}
+                            </b>
+
+                            <br>
+
+                            <span
+                                style="
+                                    color:#666;
+                                    font-size:12px;
+                                "
+                            >
+                                ${escapeHtml(
+                                    accountNumber
+                                )}
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <b>
+                                Rs ${
+                                    amount.toLocaleString(
+                                        "en-PK",
+                                        {
+                                            minimumFractionDigits:2,
+                                            maximumFractionDigits:2
+                                        }
+                                    )
+                                }
+                            </b>
+
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                transactionId
+                            )}
+                        </td>
+
+                        <td>
+
+                            <span
+                                class="${statusClass}"
+                            >
+                                ${escapeHtml(
+                                    status
+                                )}
+                            </span>
+
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                formatDateTime(
+                                    requestDate
+                                )
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                approvedBy
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                formatDateTime(
+                                    approvalDate
+                                )
+                            )}
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        );
+
+
+    tbody.innerHTML = html;
+
+}
+
+
+/* =========================
+   NORMALIZE STATUS
+========================= */
+
+function normalizeStatus(status){
+
+    const value =
+        String(
+            status || "Pending"
+        );
+
+    if(value === "Reject"){
+
+        return "Rejected";
+
+    }
+
+    return value;
+
+}
+
+
+/* =========================
+   FORMAT DATE
+========================= */
+
+function formatDateTime(value){
+
+    if(!value){
+
+        return "-";
+
+    }
+
+    const d =
+        new Date(value);
+
+    if(
+        isNaN(
+            d.getTime()
+        )
+    ){
+
+        return String(value);
+
+    }
+
+    return d.toLocaleString(
+        "en-PK",
+        {
+            day:"2-digit",
+            month:"2-digit",
+            year:"numeric",
+            hour:"2-digit",
+            minute:"2-digit",
+            second:"2-digit",
+            hour12:true
+        }
+    );
+
+}
+
+
+/* =========================
+   DATE ONLY
+========================= */
+
+function getDateOnly(item){
+
+    const value =
+        item.approved_at ||
+        item.approvedAt ||
+        item.updated_at ||
+        item.updatedAt ||
+        item.created_at ||
+        item.createdAt;
+
+    if(!value){
+
+        return "";
+
+    }
+
+    const d =
+        new Date(value);
+
+    if(
+        isNaN(
+            d.getTime()
+        )
+    ){
+
+        return "";
+
+    }
+
+    return d
+        .toISOString()
+        .slice(0,10);
+
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+function resetReport(){
+
+    document.getElementById(
+        "withdrawTypeFilter"
+    ).value = "All";
+
+    document.getElementById(
+        "searchInput"
+    ).value = "";
+
+    document.getElementById(
+        "dateFilter"
+    ).value = "";
+
+    document.getElementById(
+        "entriesCount"
+    ).value = "10";
+
+    renderWithdrawReport();
+
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHtml(text){
+
+    const map = {
+
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+
+    };
+
+    return String(
+        text == null ? "" : text
+    ).replace(
+        /[&<>"']/g,
+        function(m){
+
+            return map[m];
+
+        }
+    );
+
+}
+
+
+/* =========================
+   EXCEL BUTTON
+========================= */
+
+function exportExcel(){
+
+    const table =
+        document.getElementById(
+            "withdrawReportTable"
+        );
+
+    const html =
+        table.outerHTML;
+
+    const blob =
+        new Blob(
+            [
+                "\ufeff",
+                html
+            ],
+            {
+                type:
+                "application/vnd.ms-excel"
+            }
+        );
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+    const a =
+        document.createElement("a");
+
+    a.href = url;
+
+    a.download =
+        "withdraw-report.xls";
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+/* =========================
+   PAGE LOAD
+========================= */
+
+window.addEventListener(
+    "DOMContentLoaded",
+    async function(){
+
+        const loggedIn =
+            await checkAdminSession();
+
+        if(loggedIn){
+
+            await loadWithdrawReport();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   AUTO REFRESH
+========================= */
+
+setInterval(
+    function(){
+
+        loadWithdrawReport();
+
+    },
+    15000
+);
+
+
+/* =========================
+   CLOSE DROPDOWN
+========================= */
+
+window.addEventListener(
+    "click",
+    function(event){
+
+        if(
+            !event.target.closest(
+                ".user-dropdown-container"
+            )
+        ){
+
+            document
+                .getElementById(
+                    "dropdownMenu"
+                )
+                .classList
+                .remove("active");
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>

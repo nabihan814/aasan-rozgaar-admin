@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Payment App - Deposit Report</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif
+}
+
+body{background:#f4f6f9}
+
+.navbar{
+    background:#fff;
+    padding:12px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 2px 5px rgba(0,0,0,.05);
+    position:sticky;
+    top:0;
+    z-index:999
+}
+
+.menu-toggle{
+    font-size:20px;
+    cursor:pointer;
+    color:#333
+}
+
+.user-dropdown-container{
+    position:relative;
+    cursor:pointer
+}
+
+.user-profile{
+    font-weight:bold;
+    color:#333;
+    font-size:14px
+}
+
+.dropdown-menu{
+    position:absolute;
+    right:0;
+    top:35px;
+    background:#fff;
+    box-shadow:0 4px 10px rgba(0,0,0,.15);
+    border-radius:4px;
+    width:160px;
+    display:none;
+    z-index:1001
+}
+
+.dropdown-menu.active{display:block}
+
+.dropdown-menu a{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 15px;
+    text-decoration:none;
+    color:#333;
+    font-size:14px
+}
+
+.sidebar{
+    position:fixed;
+    left:-260px;
+    top:0;
+    width:260px;
+    height:100%;
+    background:#343a40;
+    color:#fff;
+    transition:.3s;
+    z-index:1002;
+    overflow-y:auto
+}
+
+.sidebar.active{left:0}
+
+.sidebar-header{
+    padding:15px 20px;
+    background:#212529;
+    font-size:16px
+}
+
+.sidebar-menu{
+    list-style:none;
+    padding:5px 0
+}
+
+.sidebar-menu li a{
+    color:#c2c7d0;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:12px 20px
+}
+
+.sidebar-menu li:hover,
+.sidebar-menu li.active{
+    background:#007bff
+}
+
+.main-content{padding:15px}
+
+.breadcrumb-title h2{
+    color:#333;
+    font-size:20px;
+    text-transform:uppercase;
+    margin-bottom:5px
+}
+
+.breadcrumb-title span{
+    color:#666;
+    font-size:13px
+}
+
+.filter-card{
+    background:white;
+    padding:15px;
+    border-radius:4px;
+    margin-top:15px;
+    box-shadow:0 1px 3px rgba(0,0,0,.1)
+}
+
+.filter-row{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    align-items:flex-end;
+    margin-bottom:15px
+}
+
+.form-group{
+    flex:1;
+    min-width:200px
+}
+
+.form-group label{
+    display:block;
+    font-size:13px;
+    color:#333;
+    margin-bottom:5px;
+    font-weight:bold
+}
+
+.form-control{
+    width:100%;
+    padding:8px 10px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    outline:none;
+    font-size:14px
+}
+
+.filter-btns{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    flex-wrap:wrap
+}
+
+.btn-load{
+    background:#007bff;
+    color:white;
+    border:none;
+    padding:8px 20px;
+    border-radius:4px;
+    cursor:pointer;
+    font-weight:bold
+}
+
+.btn-reset{
+    background:#6c757d;
+    color:white;
+    border:none;
+    padding:8px 15px;
+    border-radius:4px;
+    cursor:pointer;
+    font-weight:bold
+}
+
+.table-controls{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:15px 0;
+    font-size:14px;
+    color:#333;
+    flex-wrap:wrap;
+    gap:10px;
+    background:white;
+    padding:12px;
+    border-radius:4px;
+    box-shadow:0 1px 3px rgba(0,0,0,.1)
+}
+
+.table-controls select,
+.table-controls input{
+    padding:6px 10px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    outline:none
+}
+
+.table-responsive{
+    overflow-x:auto;
+    background:white;
+    border-radius:4px;
+    box-shadow:0 1px 3px rgba(0,0,0,.1)
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    text-align:left;
+    font-size:13px;
+    white-space:nowrap
+}
+
+th,td{
+    padding:12px 10px;
+    border-bottom:1px solid #eee;
+    color:#333;
+    vertical-align:middle
+}
+
+th{background:#f8f9fa}
+
+.no-data{
+    text-align:center;
+    padding:25px;
+    color:#666;
+    font-size:15px
+}
+
+.status-badge{
+    padding:4px 8px;
+    border-radius:4px;
+    font-size:11px;
+    font-weight:bold
+}
+
+.status-approved{
+    background:#d1e7dd;
+    color:#0b6623
+}
+
+.status-rejected{
+    background:#f8d7da;
+    color:#842029
+}
+
+.status-inprocess{
+    background:#cff4fc;
+    color:#055160
+}
+
+.status-pending{
+    background:#fff3cd;
+    color:#664d03
+}
+
+.screenshot-thumb{
+    width:50px;
+    height:50px;
+    object-fit:cover;
+    border-radius:6px;
+    border:1px solid #ccc;
+    cursor:pointer
+}
+
+.view-btn{
+    display:block;
+    margin-top:3px;
+    background:#007bff;
+    color:#fff;
+    border:0;
+    padding:3px 6px;
+    border-radius:3px;
+    cursor:pointer;
+    font-size:10px
+}
+
+.modal{
+    display:none;
+    position:fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.82);
+    z-index:5000;
+    align-items:center;
+    justify-content:center;
+    padding:20px
+}
+
+.modal.active{display:flex}
+
+.modal-content{
+    position:relative;
+    max-width:95vw;
+    max-height:90vh
+}
+
+.modal-content img{
+    max-width:95vw;
+    max-height:85vh;
+    object-fit:contain;
+    background:#fff;
+    border-radius:6px
+}
+
+.modal-close{
+    position:absolute;
+    right:-10px;
+    top:-45px;
+    width:35px;
+    height:35px;
+    border:0;
+    border-radius:50%;
+    background:#dc3545;
+    color:#fff;
+    font-size:20px;
+    cursor:pointer
+}
+
+.footer{
+    text-align:center;
+    padding:20px;
+    color:#666;
+    font-size:13px
+}
+
+.footer span{
+    color:#007bff;
+    font-weight:bold
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar" id="sidebar">
+
+    <div class="sidebar-header">
+        <i class="fa fa-wallet"></i> Payment App
+    </div>
+
+    <ul class="sidebar-menu">
+
+        <li>
+            <a href="./dashboard.html">
+                <i class="fa fa-tachometer-alt"></i>
+                Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="./withdraw.html">
+                <i class="fa fa-file-invoice-dollar"></i>
+                Withdraw Requests
+            </a>
+        </li>
+
+        <li>
+            <a href="./deposit.html">
+                <i class="fa fa-money-bill-wave"></i>
+                Deposit Requests
+            </a>
+        </li>
+
+        <li>
+            <a href="./deposit-type.html">
+                <i class="fa fa-list"></i>
+                Deposit Type List
+            </a>
+        </li>
+
+        <li class="active">
+            <a href="./deposit-report.html">
+                <i class="fa fa-chart-bar"></i>
+                Deposit Report
+            </a>
+        </li>
+
+        <li>
+            <a href="./withdraw-report.html">
+                <i class="fa fa-chart-line"></i>
+                Withdraw Report
+            </a>
+        </li>
+
+    </ul>
+
+</div>
+
+<div class="navbar">
+
+    <i class="fa fa-bars menu-toggle"
+       onclick="toggleSidebar()"></i>
+
+    <div class="user-dropdown-container"
+         onclick="toggleDropdown()">
+
+        <span class="user-profile">
+            Welcome <span id="adminName">Admin</span>
+            <i class="fa fa-caret-down"></i>
+        </span>
+
+        <div class="dropdown-menu" id="dropdownMenu">
+
+            <a href="./login.html"
+               onclick="adminPanelLogout()">
+
+                <i class="fa fa-power-off"></i>
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="main-content">
+
+    <div class="breadcrumb-title">
+
+        <h2>Deposit Report</h2>
+
+        <span>
+            Home / Deposit Report
+        </span>
+
+    </div>
+
+    <div class="filter-card">
+
+        <div class="filter-row">
+
+            <div class="form-group">
+
+                <label>Date</label>
+
+                <input
+                    type="date"
+                    id="dateFilter"
+                    class="form-control">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Type</label>
+
+                <select
+                    id="reportTypeFilter"
+                    class="form-control">
+
+                    <option value="All">All</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Inprocess">Inprocess</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="filter-btns">
+
+            <button
+                class="btn-load"
+                onclick="loadReportData()">
+
+                <i class="fa fa-sync"></i>
+                Load
+
+            </button>
+
+            <button
+                class="btn-reset"
+                onclick="resetReport()">
+
+                Reset
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="table-controls">
+
+        <div>
+
+            Show
+
+            <select id="entriesCount"
+                    onchange="renderReport()">
+
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+
+            </select>
+
+            entries
+
+        </div>
+
+        <div>
+
+            Search:
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search..."
+                oninput="renderReport()">
+
+        </div>
+
+    </div>
+
+    <div class="table-responsive">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>S.No.</th>
+                    <th>User Name</th>
+                    <th>Payment Details</th>
+                    <th>Order Amount</th>
+                    <th>Screenshot</th>
+                    <th>Status</th>
+                    <th>Date & Time</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="reportTableBody">
+
+                <tr>
+                    <td colspan="7" class="no-data">
+                        Loading...
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<div class="footer">
+
+    Copyright © 2022-2026
+    <span>DW.</span>
+    All rights reserved.
+
+</div>
+
+<div class="modal"
+     id="imageModal"
+     onclick="closeImageModal(event)">
+
+    <div class="modal-content">
+
+        <button
+            class="modal-close"
+            onclick="closeImageModal()">
+            ×
+        </button>
+
+        <img
+            id="modalImage"
+            src=""
+            alt="Deposit Screenshot">
+
+    </div>
+
+</div>
+
+<script>
+
+const API_URL =
+    "https://aasan-rozgaar-backend.onrender.com";
+
+let depositData = [];
+
+
+/* =========================
+   ADMIN SESSION CHECK
+========================= */
+
+async function checkAdminSession(){
+
+    try{
+
+        const response = await fetch(
+            API_URL + "/api/admin/me",
+            {
+                method:"GET",
+                credentials:"include"
+            }
+        );
+
+        if(!response.ok){
+
+            window.location.href="./login.html";
+            return false;
+
+        }
+
+        const data = await response.json();
+
+        document.getElementById("adminName").textContent =
+            data.username || "Admin";
+
+        return true;
+
+    }catch(error){
+
+        console.error(error);
+
+        window.location.href="./login.html";
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================
+   SIDEBAR
+========================= */
+
+function toggleSidebar(){
+
+    document
+        .getElementById("sidebar")
+        .classList
+        .toggle("active");
+
+}
+
+
+/* =========================
+   DROPDOWN
+========================= */
+
+function toggleDropdown(){
+
+    document
+        .getElementById("dropdownMenu")
+        .classList
+        .toggle("active");
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+async function adminPanelLogout(){
+
+    try{
+
+        await fetch(
+            API_URL + "/api/admin/logout",
+            {
+                method:"POST",
+                credentials:"include",
+                headers:{
+                    "Content-Type":"application/json"
+                }
+            }
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+    sessionStorage.removeItem("adminCsrfToken");
+
+}
+
+
+/* =========================
+   LOAD DEPOSITS FROM BACKEND
+========================= */
+
+async function loadReportData(){
+
+    const tbody =
+        document.getElementById("reportTableBody");
+
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="7" class="no-data">
+                Loading...
+            </td>
+        </tr>
+    `;
+
+    try{
+
+        const response = await fetch(
+            API_URL + "/api/admin/deposits",
+            {
+                method:"GET",
+                credentials:"include",
+                headers:{
+                    "Accept":"application/json"
+                }
+            }
+        );
+
+        if(response.status === 401 ||
+           response.status === 403){
+
+            window.location.href="./login.html";
+            return;
+
+        }
+
+        if(!response.ok){
+
+            throw new Error(
+                "Failed to load deposit reports"
+            );
+
+        }
+
+        const data = await response.json();
+
+        depositData =
+            Array.isArray(data)
+                ? data
+                : Array.isArray(data.deposits)
+                    ? data.deposits
+                    : [];
+
+        renderReport();
+
+    }catch(error){
+
+        console.error(error);
+
+        depositData = [];
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" class="no-data">
+                    Unable to load report data!
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+
+/* =========================
+   RENDER REPORT
+========================= */
+
+function renderReport(){
+
+    const tbody =
+        document.getElementById("reportTableBody");
+
+    const selectedType =
+        document.getElementById("reportTypeFilter").value;
+
+    const selectedDate =
+        document.getElementById("dateFilter").value;
+
+    const searchVal =
+        document.getElementById("searchInput")
+        .value
+        .toLowerCase()
+        .trim();
+
+    const limit =
+        parseInt(
+            document.getElementById("entriesCount").value
+        ) || 10;
+
+
+    let filtered = depositData.filter(function(item){
+
+        const status =
+            normalizeStatus(item.status);
+
+        if(selectedType !== "All"){
+
+            if(
+                selectedType === "Rejected"
+            ){
+
+                if(status !== "Rejected"){
+                    return false;
+                }
+
+            }else if(status !== selectedType){
+
+                return false;
+
+            }
+
+        }
+
+
+        if(selectedDate){
+
+            const itemDate =
+                getDateOnly(item);
+
+            if(itemDate !== selectedDate){
+                return false;
+            }
+
+        }
+
+
+        if(searchVal){
+
+            const username =
+                String(
+                    item.username || ""
+                ).toLowerCase();
+
+            const method =
+                String(
+                    item.method || ""
+                ).toLowerCase();
+
+            const transactionId =
+                String(
+                    item.transaction_id ||
+                    item.transactionId ||
+                    item.trxid ||
+                    ""
+                ).toLowerCase();
+
+            const details =
+                String(
+                    item.details ||
+                    item.account_number ||
+                    ""
+                ).toLowerCase();
+
+
+            if(
+                !username.includes(searchVal) &&
+                !method.includes(searchVal) &&
+                !transactionId.includes(searchVal) &&
+                !details.includes(searchVal)
+            ){
+
+                return false;
+
+            }
+
+        }
+
+        return true;
+
+    });
+
+
+    filtered =
+        filtered.slice(0,limit);
+
+
+    if(filtered.length === 0){
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" class="no-data">
+                    No data available in report!
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    let html = "";
+
+
+    filtered.forEach(function(item,index){
+
+        const status =
+            normalizeStatus(item.status);
+
+        let statusClass =
+            "status-pending";
+
+        if(status === "Approved"){
+
+            statusClass =
+                "status-approved";
+
+        }else if(status === "Rejected"){
+
+            statusClass =
+                "status-rejected";
+
+        }else if(status === "Inprocess"){
+
+            statusClass =
+                "status-inprocess";
+
+        }
+
+
+        const method =
+            item.method || "-";
+
+        const transactionId =
+            item.transaction_id ||
+            item.transactionId ||
+            item.trxid ||
+            "-";
+
+        const details =
+            item.details ||
+            item.account_number ||
+            "-";
+
+        const amount =
+            Number(item.amount || 0);
+
+
+        let imageHTML =
+            "No Image";
+
+
+        if(
+            item.screenshot &&
+            String(item.screenshot).trim() !== ""
+        ){
+
+            const image =
+                String(item.screenshot);
+
+            imageHTML = `
+
+                <img
+                    src="${escapeHTML(image)}"
+                    class="screenshot-thumb"
+                    onclick="openImageModal('${escapeJS(image)}')"
+                    alt="Screenshot">
+
+                <button
+                    class="view-btn"
+                    onclick="openImageModal('${escapeJS(image)}')">
+
+                    View
+
+                </button>
+
+            `;
+
+        }
+
+
+        const dateTime =
+            item.created_at ||
+            item.createdAt ||
+            item.updated_at ||
+            item.updatedAt ||
+            "-";
+
+
+        html += `
+
+            <tr>
+
+                <td>${index + 1}</td>
+
+                <td>
+                    <b>
+                        ${escapeHTML(
+                            item.username || "N/A"
+                        )}
+                    </b>
+                </td>
+
+                <td>
+
+                    <b>
+                        ${escapeHTML(method)}
+                    </b>
+
+                    <br>
+
+                    ${escapeHTML(details)}
+
+                    <br>
+
+                    <small>
+                        TID:
+                        ${escapeHTML(transactionId)}
+                    </small>
+
+                </td>
+
+                <td>
+
+                    <b>
+                        Rs.
+                        ${amount.toLocaleString()}
+                    </b>
+
+                </td>
+
+                <td>
+                    ${imageHTML}
+                </td>
+
+                <td>
+
+                    <span class="status-badge ${statusClass}">
+                        ${escapeHTML(status)}
+                    </span>
+
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        formatDateTime(dateTime)
+                    )}
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+
+    tbody.innerHTML = html;
+
+}
+
+
+/* =========================
+   STATUS NORMALIZE
+========================= */
+
+function normalizeStatus(status){
+
+    const value =
+        String(status || "Pending");
+
+    if(value === "Reject"){
+        return "Rejected";
+    }
+
+    return value;
+
+}
+
+
+/* =========================
+   DATE ONLY
+========================= */
+
+function getDateOnly(item){
+
+    const value =
+        item.created_at ||
+        item.createdAt ||
+        item.updated_at ||
+        item.updatedAt;
+
+    if(!value){
+        return "";
+    }
+
+    const d = new Date(value);
+
+    if(isNaN(d.getTime())){
+        return "";
+    }
+
+    return d.toISOString().slice(0,10);
+
+}
+
+
+/* =========================
+   DATE FORMAT
+========================= */
+
+function formatDateTime(value){
+
+    if(!value){
+        return "-";
+    }
+
+    const d = new Date(value);
+
+    if(isNaN(d.getTime())){
+        return String(value);
+    }
+
+    return d.toLocaleString();
+
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+function resetReport(){
+
+    document.getElementById("dateFilter").value = "";
+
+    document.getElementById("reportTypeFilter").value =
+        "All";
+
+    document.getElementById("searchInput").value = "";
+
+    document.getElementById("entriesCount").value =
+        "10";
+
+    renderReport();
+
+}
+
+
+/* =========================
+   IMAGE MODAL
+========================= */
+
+function openImageModal(image){
+
+    document.getElementById("modalImage").src =
+        image;
+
+    document
+        .getElementById("imageModal")
+        .classList
+        .add("active");
+
+}
+
+
+function closeImageModal(event){
+
+    if(
+        event &&
+        event.target &&
+        event.target.id !== "imageModal"
+    ){
+
+        return;
+
+    }
+
+    document
+        .getElementById("imageModal")
+        .classList
+        .remove("active");
+
+    document.getElementById("modalImage").src = "";
+
+}
+
+
+/* =========================
+   ESC KEY
+========================= */
+
+document.addEventListener(
+    "keydown",
+    function(e){
+
+        if(e.key === "Escape"){
+            closeImageModal();
+        }
+
+    }
+);
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(value){
+
+    return String(
+        value == null ? "" : value
+    )
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   ESCAPE JS
+========================= */
+
+function escapeJS(value){
+
+    return String(
+        value == null ? "" : value
+    )
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'");
+
+}
+
+
+/* =========================
+   AUTO REFRESH
+========================= */
+
+setInterval(
+    loadReportData,
+    15000
+);
+
+
+/* =========================
+   PAGE LOAD
+========================= */
+
+window.addEventListener(
+    "load",
+    async function(){
+
+        const loggedIn =
+            await checkAdminSession();
+
+        if(loggedIn){
+
+            await loadReportData();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   CLOSE DROPDOWN
+========================= */
+
+window.addEventListener(
+    "click",
+    function(event){
+
+        if(
+            !event.target.closest(
+                ".user-dropdown-container"
+            )
+        ){
+
+            document
+                .getElementById("dropdownMenu")
+                .classList
+                .remove("active");
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
