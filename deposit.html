@@ -398,7 +398,7 @@ th{
     <div class="dropdown-menu"
          id="dropdownMenu">
 
-        <a href="./login.html"
+        <a href="./index.html"
            onclick="logoutAdmin(event)">
 
             <i class="fa fa-power-off"></i>
@@ -637,7 +637,7 @@ function redirectToLogin(){
     );
 
     window.location.href =
-        "./login.html";
+        "./index.html";
 }
 
 
@@ -658,10 +658,6 @@ async function initAdminDeposit(){
 
     await loadDepositTable(true);
 
-
-    /*
-     * Database se fresh requests.
-     */
 
     setInterval(
         function(){
@@ -767,11 +763,6 @@ async function loadDepositTable(
             );
         }
 
-
-        /*
-         * Backend ke possible response
-         * formats ko support karta hai.
-         */
 
         if(
             Array.isArray(data)
@@ -1024,10 +1015,6 @@ function renderCurrentTable(){
                 );
 
 
-            /* =====================
-               SCREENSHOT
-            ===================== */
-
             let imageHTML = "";
 
 
@@ -1092,10 +1079,6 @@ function renderCurrentTable(){
 
             }
 
-
-            /* =====================
-               STATUS
-            ===================== */
 
             let badge = "";
 
@@ -1178,10 +1161,6 @@ function renderCurrentTable(){
             }
 
 
-            /* =====================
-               AMOUNT
-            ===================== */
-
             let amountHTML = `
 
                 <b>
@@ -1203,12 +1182,6 @@ function renderCurrentTable(){
             `;
 
 
-            /*
-             * Amount editing abhi backend
-             * route ke baghair nahi ki jayegi.
-             * Isliye fake local save nahi hai.
-             */
-
             if(
                 reqStatus === "Pending" ||
                 reqStatus === "Inprocess"
@@ -1229,10 +1202,6 @@ function renderCurrentTable(){
 
             }
 
-
-            /* =====================
-               ACTIONS
-            ===================== */
 
             let actions = "";
 
@@ -1297,10 +1266,6 @@ function renderCurrentTable(){
 
             }
 
-
-            /* =====================
-               DATE
-            ===================== */
 
             const createdDate =
                 req.createdAt ||
@@ -1368,10 +1333,6 @@ function renderCurrentTable(){
 
             }
 
-
-            /* =====================
-               TRANSACTION ID
-            ===================== */
 
             const transactionId =
                 req.transactionId ||
@@ -1826,7 +1787,7 @@ async function logoutAdmin(event){
 
 
         window.location.href =
-            "./login.html";
+            "./index.html";
     }
 }
 
