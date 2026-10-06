@@ -614,47 +614,141 @@ let depositData = [];
 
 
 /* =========================
+   ADMIN HEADERS
+========================= */
+
+function adminHeaders(includeCsrf = false){
+
+    const token =
+        sessionStorage.getItem(
+            "adminSessionToken"
+        );
+
+    const csrfToken =
+        sessionStorage.getItem(
+            "adminCsrfToken"
+        );
+
+    const headers = {
+        "Accept":"application/json"
+    };
+
+    if(token){
+
+        headers["Authorization"] =
+            "Bearer " + token;
+
+    }
+
+    if(includeCsrf && csrfToken){
+
+        headers["X-CSRF-Token"] =
+            csrfToken;
+
+    }
+
+    return headers;
+
+}
+
+
+/* =========================
+   REDIRECT LOGIN
+========================= */
+
+function redirectToLogin(){
+
+    sessionStorage.removeItem(
+        "adminSessionToken"
+    );
+
+    sessionStorage.removeItem(
+        "adminCsrfToken"
+    );
+
+    sessionStorage.removeItem(
+        "adminPanelUsername"
+    );
+
+    localStorage.removeItem(
+        "adminPanelLoggedIn"
+    );
+
+    localStorage.removeItem(
+        "adminPanelUsername"
+    );
+
+    window.location.href =
+        "./index.html";
+
+}
+
+
+/* =========================
    ADMIN SESSION CHECK
 ========================= */
 
 async function checkAdminSession(){
 
-    try{
-
-        const response = await fetch(
-            API_URL + "/api/admin/me",
-            {
-                method:"GET",
-                credentials:"include",
-                headers:{
-                    "Accept":"application/json"
-                },
-                cache:"no-store"
-            }
+    const token =
+        sessionStorage.getItem(
+            "adminSessionToken"
         );
 
-        if(!response.ok){
+    if(!token){
 
-            window.location.href="./index.html";
+        return false;
+
+    }
+
+    try{
+
+        const response =
+            await fetch(
+                API_URL + "/api/admin/me",
+                {
+                    method:"GET",
+                    credentials:"include",
+                    headers:adminHeaders(),
+                    cache:"no-store"
+                }
+            );
+
+        if(
+            response.status === 401 ||
+            response.status === 403
+        ){
+
             return false;
 
         }
 
-        const data = await response.json();
+        if(!response.ok){
+
+            return false;
+
+        }
+
+        const data =
+            await response.json();
 
         if(
             data.success === false ||
             data.authenticated === false
         ){
 
-            window.location.href="./index.html";
             return false;
 
         }
 
-        document.getElementById("adminName").textContent =
+        document.getElementById(
+            "adminName"
+        ).textContent =
             data.username ||
             data.admin?.username ||
+            sessionStorage.getItem(
+                "adminPanelUsername"
+            ) ||
             "Admin";
 
         return true;
@@ -665,8 +759,6 @@ async function checkAdminSession(){
             "Admin session error:",
             error
         );
-
-        window.location.href="./index.html";
 
         return false;
 
@@ -717,28 +809,12 @@ async function adminPanelLogout(event){
 
     try{
 
-        const csrfToken =
-            sessionStorage.getItem(
-                "adminCsrfToken"
-            );
-
-        const headers={
-            "Accept":"application/json"
-        };
-
-        if(csrfToken){
-
-            headers["X-CSRF-Token"] =
-                csrfToken;
-
-        }
-
         await fetch(
             API_URL + "/api/admin/logout",
             {
                 method:"POST",
                 credentials:"include",
-                headers:headers
+                headers:adminHeaders(true)
             }
         );
 
@@ -751,19 +827,7 @@ async function adminPanelLogout(event){
 
     }
 
-    sessionStorage.removeItem(
-        "adminCsrfToken"
-    );
-
-    localStorage.removeItem(
-        "adminPanelLoggedIn"
-    );
-
-    localStorage.removeItem(
-        "adminPanelUsername"
-    );
-
-    window.location.href="./index.html";
+    redirectToLogin();
 
 }
 
@@ -775,7 +839,9 @@ async function adminPanelLogout(event){
 async function loadReportData(){
 
     const tbody =
-        document.getElementById("reportTableBody");
+        document.getElementById(
+            "reportTableBody"
+        );
 
     tbody.innerHTML = `
         <tr>
@@ -792,28 +858,30 @@ async function loadReportData(){
 
         if(!sessionOK){
 
+            redirectToLogin();
+
             return;
 
         }
 
-        const response = await fetch(
-            API_URL + "/api/admin/deposits",
-            {
-                method:"GET",
-                credentials:"include",
-                headers:{
-                    "Accept":"application/json"
-                },
-                cache:"no-store"
-            }
-        );
+        const response =
+            await fetch(
+                API_URL + "/api/admin/deposits",
+                {
+                    method:"GET",
+                    credentials:"include",
+                    headers:adminHeaders(),
+                    cache:"no-store"
+                }
+            );
 
         if(
             response.status === 401 ||
             response.status === 403
         ){
 
-            window.location.href="./index.html";
+            redirectToLogin();
+
             return;
 
         }
@@ -826,7 +894,8 @@ async function loadReportData(){
 
         }
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
         depositData =
             Array.isArray(data)
@@ -866,110 +935,141 @@ async function loadReportData(){
 function renderReport(){
 
     const tbody =
-        document.getElementById("reportTableBody");
+        document.getElementById(
+            "reportTableBody"
+        );
 
     const selectedType =
-        document.getElementById("reportTypeFilter").value;
+        document.getElementById(
+            "reportTypeFilter"
+        ).value;
 
     const selectedDate =
-        document.getElementById("dateFilter").value;
+        document.getElementById(
+            "dateFilter"
+        ).value;
 
     const searchVal =
-        document.getElementById("searchInput")
+        document.getElementById(
+            "searchInput"
+        )
         .value
         .toLowerCase()
         .trim();
 
     const limit =
         parseInt(
-            document.getElementById("entriesCount").value
+            document.getElementById(
+                "entriesCount"
+            ).value
         ) || 10;
 
 
-    let filtered = depositData.filter(function(item){
+    let filtered =
+        depositData.filter(
+            function(item){
 
-        const status =
-            normalizeStatus(item.status);
+                const status =
+                    normalizeStatus(
+                        item.status
+                    );
 
-        if(selectedType !== "All"){
+                if(
+                    selectedType !== "All"
+                ){
 
-            if(
-                selectedType === "Rejected"
-            ){
+                    if(
+                        status !== selectedType
+                    ){
 
-                if(status !== "Rejected"){
-                    return false;
+                        return false;
+
+                    }
+
                 }
 
-            }else if(status !== selectedType){
 
-                return false;
+                if(selectedDate){
+
+                    const itemDate =
+                        getDateOnly(item);
+
+                    if(
+                        itemDate !==
+                        selectedDate
+                    ){
+
+                        return false;
+
+                    }
+
+                }
+
+
+                if(searchVal){
+
+                    const username =
+                        String(
+                            item.username || ""
+                        ).toLowerCase();
+
+                    const method =
+                        String(
+                            item.method || ""
+                        ).toLowerCase();
+
+                    const transactionId =
+                        String(
+                            item.transaction_id ||
+                            item.transactionId ||
+                            item.trxid ||
+                            ""
+                        ).toLowerCase();
+
+                    const details =
+                        String(
+                            item.details ||
+                            item.account_number ||
+                            ""
+                        ).toLowerCase();
+
+
+                    if(
+                        !username.includes(
+                            searchVal
+                        ) &&
+                        !method.includes(
+                            searchVal
+                        ) &&
+                        !transactionId.includes(
+                            searchVal
+                        ) &&
+                        !details.includes(
+                            searchVal
+                        )
+                    ){
+
+                        return false;
+
+                    }
+
+                }
+
+                return true;
 
             }
-
-        }
-
-
-        if(selectedDate){
-
-            const itemDate =
-                getDateOnly(item);
-
-            if(itemDate !== selectedDate){
-                return false;
-            }
-
-        }
+        );
 
 
-        if(searchVal){
-
-            const username =
-                String(
-                    item.username || ""
-                ).toLowerCase();
-
-            const method =
-                String(
-                    item.method || ""
-                ).toLowerCase();
-
-            const transactionId =
-                String(
-                    item.transaction_id ||
-                    item.transactionId ||
-                    item.trxid ||
-                    ""
-                ).toLowerCase();
-
-            const details =
-                String(
-                    item.details ||
-                    item.account_number ||
-                    ""
-                ).toLowerCase();
-
-
-            if(
-                !username.includes(searchVal) &&
-                !method.includes(searchVal) &&
-                !transactionId.includes(searchVal) &&
-                !details.includes(searchVal)
-            ){
-
-                return false;
-
-            }
-
-        }
-
-        return true;
-
-    });
+    const totalFiltered =
+        filtered.length;
 
 
     filtered =
-        filtered.slice(0,limit);
+        filtered.slice(
+            0,
+            limit
+        );
 
 
     if(filtered.length === 0){
@@ -990,159 +1090,192 @@ function renderReport(){
     let html = "";
 
 
-    filtered.forEach(function(item,index){
+    filtered.forEach(
+        function(item,index){
 
-        const status =
-            normalizeStatus(item.status);
-
-        let statusClass =
-            "status-pending";
-
-        if(status === "Approved"){
-
-            statusClass =
-                "status-approved";
-
-        }else if(status === "Rejected"){
-
-            statusClass =
-                "status-rejected";
-
-        }else if(status === "Inprocess"){
-
-            statusClass =
-                "status-inprocess";
-
-        }
+            const status =
+                normalizeStatus(
+                    item.status
+                );
 
 
-        const method =
-            item.method || "-";
-
-        const transactionId =
-            item.transaction_id ||
-            item.transactionId ||
-            item.trxid ||
-            "-";
-
-        const details =
-            item.details ||
-            item.account_number ||
-            "-";
-
-        const amount =
-            Number(item.amount || 0);
+            let statusClass =
+                "status-pending";
 
 
-        let imageHTML =
-            "No Image";
+            if(status === "Approved"){
+
+                statusClass =
+                    "status-approved";
+
+            }else if(status === "Rejected"){
+
+                statusClass =
+                    "status-rejected";
+
+            }else if(status === "Inprocess"){
+
+                statusClass =
+                    "status-inprocess";
+
+            }
 
 
-        if(
-            item.screenshot &&
-            String(item.screenshot).trim() !== ""
-        ){
+            const method =
+                item.method || "-";
 
-            const image =
-                String(item.screenshot);
 
-            imageHTML = `
+            const transactionId =
+                item.transaction_id ||
+                item.transactionId ||
+                item.trxid ||
+                "-";
 
-                <img
-                    src="${escapeHTML(image)}"
-                    class="screenshot-thumb"
-                    onclick="openImageModal('${escapeJS(image)}')"
-                    alt="Screenshot">
 
-                <button
-                    class="view-btn"
-                    onclick="openImageModal('${escapeJS(image)}')">
+            const details =
+                item.details ||
+                item.account_number ||
+                "-";
 
-                    View
 
-                </button>
+            const amount =
+                Number(
+                    item.amount || 0
+                );
+
+
+            let imageHTML =
+                "No Image";
+
+
+            if(
+                item.screenshot &&
+                String(
+                    item.screenshot
+                ).trim() !== ""
+            ){
+
+                const image =
+                    String(
+                        item.screenshot
+                    );
+
+
+                imageHTML = `
+
+                    <img
+                        src="${escapeHTML(image)}"
+                        class="screenshot-thumb"
+                        onclick="openImageModal('${escapeJS(image)}')"
+                        alt="Screenshot">
+
+                    <button
+                        class="view-btn"
+                        onclick="openImageModal('${escapeJS(image)}')">
+
+                        View
+
+                    </button>
+
+                `;
+
+            }
+
+
+            const dateTime =
+                item.created_at ||
+                item.createdAt ||
+                item.updated_at ||
+                item.updatedAt ||
+                "-";
+
+
+            html += `
+
+                <tr>
+
+                    <td>
+                        ${index + 1}
+                    </td>
+
+                    <td>
+                        <b>
+                            ${escapeHTML(
+                                item.username ||
+                                "N/A"
+                            )}
+                        </b>
+                    </td>
+
+                    <td>
+
+                        <b>
+                            ${escapeHTML(
+                                method
+                            )}
+                        </b>
+
+                        <br>
+
+                        ${escapeHTML(
+                            details
+                        )}
+
+                        <br>
+
+                        <small>
+                            TID:
+                            ${escapeHTML(
+                                transactionId
+                            )}
+                        </small>
+
+                    </td>
+
+                    <td>
+
+                        <b>
+                            Rs.
+                            ${amount.toLocaleString()}
+                        </b>
+
+                    </td>
+
+                    <td>
+                        ${imageHTML}
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="status-badge ${statusClass}">
+
+                            ${escapeHTML(
+                                status
+                            )}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            formatDateTime(
+                                dateTime
+                            )
+                        )}
+                    </td>
+
+                </tr>
 
             `;
 
         }
+    );
 
 
-        const dateTime =
-            item.created_at ||
-            item.createdAt ||
-            item.updated_at ||
-            item.updatedAt ||
-            "-";
-
-
-        html += `
-
-            <tr>
-
-                <td>${index + 1}</td>
-
-                <td>
-                    <b>
-                        ${escapeHTML(
-                            item.username || "N/A"
-                        )}
-                    </b>
-                </td>
-
-                <td>
-
-                    <b>
-                        ${escapeHTML(method)}
-                    </b>
-
-                    <br>
-
-                    ${escapeHTML(details)}
-
-                    <br>
-
-                    <small>
-                        TID:
-                        ${escapeHTML(transactionId)}
-                    </small>
-
-                </td>
-
-                <td>
-
-                    <b>
-                        Rs.
-                        ${amount.toLocaleString()}
-                    </b>
-
-                </td>
-
-                <td>
-                    ${imageHTML}
-                </td>
-
-                <td>
-
-                    <span class="status-badge ${statusClass}">
-                        ${escapeHTML(status)}
-                    </span>
-
-                </td>
-
-                <td>
-                    ${escapeHTML(
-                        formatDateTime(dateTime)
-                    )}
-                </td>
-
-            </tr>
-
-        `;
-
-    });
-
-
-    tbody.innerHTML = html;
+    tbody.innerHTML =
+        html;
 
 }
 
@@ -1154,45 +1287,37 @@ function renderReport(){
 function normalizeStatus(status){
 
     const value =
-        String(status || "Pending");
+        String(
+            status || "Pending"
+        );
+
+    const lower =
+        value.toLowerCase();
 
     if(
-        value.toLowerCase() === "reject"
+        lower === "reject" ||
+        lower === "rejected"
     ){
 
         return "Rejected";
 
     }
 
-    if(
-        value.toLowerCase() === "approved"
-    ){
+    if(lower === "approved"){
 
         return "Approved";
 
     }
 
-    if(
-        value.toLowerCase() === "pending"
-    ){
+    if(lower === "pending"){
 
         return "Pending";
 
     }
 
-    if(
-        value.toLowerCase() === "inprocess"
-    ){
+    if(lower === "inprocess"){
 
         return "Inprocess";
-
-    }
-
-    if(
-        value.toLowerCase() === "rejected"
-    ){
-
-        return "Rejected";
 
     }
 
@@ -1214,16 +1339,27 @@ function getDateOnly(item){
         item.updatedAt;
 
     if(!value){
+
         return "";
+
     }
 
-    const d = new Date(value);
+    const d =
+        new Date(value);
 
-    if(isNaN(d.getTime())){
+    if(
+        isNaN(
+            d.getTime()
+        )
+    ){
+
         return "";
+
     }
 
-    return d.toISOString().slice(0,10);
+    return d
+        .toISOString()
+        .slice(0,10);
 
 }
 
@@ -1235,13 +1371,22 @@ function getDateOnly(item){
 function formatDateTime(value){
 
     if(!value){
+
         return "-";
+
     }
 
-    const d = new Date(value);
+    const d =
+        new Date(value);
 
-    if(isNaN(d.getTime())){
+    if(
+        isNaN(
+            d.getTime()
+        )
+    ){
+
         return String(value);
+
     }
 
     return d.toLocaleString();
@@ -1255,15 +1400,21 @@ function formatDateTime(value){
 
 function resetReport(){
 
-    document.getElementById("dateFilter").value = "";
+    document.getElementById(
+        "dateFilter"
+    ).value = "";
 
-    document.getElementById("reportTypeFilter").value =
-        "All";
+    document.getElementById(
+        "reportTypeFilter"
+    ).value = "All";
 
-    document.getElementById("searchInput").value = "";
+    document.getElementById(
+        "searchInput"
+    ).value = "";
 
-    document.getElementById("entriesCount").value =
-        "10";
+    document.getElementById(
+        "entriesCount"
+    ).value = "10";
 
     renderReport();
 
@@ -1276,8 +1427,9 @@ function resetReport(){
 
 function openImageModal(image){
 
-    document.getElementById("modalImage").src =
-        image;
+    document.getElementById(
+        "modalImage"
+    ).src = image;
 
     document
         .getElementById("imageModal")
@@ -1304,7 +1456,9 @@ function closeImageModal(event){
         .classList
         .remove("active");
 
-    document.getElementById("modalImage").src = "";
+    document.getElementById(
+        "modalImage"
+    ).src = "";
 
 }
 
@@ -1320,7 +1474,9 @@ document.addEventListener(
         if(e.key === "Escape"){
 
             document
-                .getElementById("imageModal")
+                .getElementById(
+                    "imageModal"
+                )
                 .classList
                 .remove("active");
 
@@ -1343,11 +1499,26 @@ function escapeHTML(value){
     return String(
         value == null ? "" : value
     )
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
 
 }
 
@@ -1361,8 +1532,14 @@ function escapeJS(value){
     return String(
         value == null ? "" : value
     )
-    .replace(/\\/g,"\\\\")
-    .replace(/'/g,"\\'");
+    .replace(
+        /\\/g,
+        "\\\\"
+    )
+    .replace(
+        /'/g,
+        "\\'"
+    );
 
 }
 
@@ -1372,7 +1549,27 @@ function escapeJS(value){
 ========================= */
 
 setInterval(
-    loadReportData,
+    async function(){
+
+        if(
+            document.visibilityState ===
+            "visible"
+        ){
+
+            const token =
+                sessionStorage.getItem(
+                    "adminSessionToken"
+                );
+
+            if(token){
+
+                await loadReportData();
+
+            }
+
+        }
+
+    },
     15000
 );
 
@@ -1382,17 +1579,21 @@ setInterval(
 ========================= */
 
 window.addEventListener(
-    "load",
+    "DOMContentLoaded",
     async function(){
 
         const loggedIn =
             await checkAdminSession();
 
-        if(loggedIn){
+        if(!loggedIn){
 
-            await loadReportData();
+            redirectToLogin();
+
+            return;
 
         }
+
+        await loadReportData();
 
     }
 );
@@ -1413,7 +1614,9 @@ window.addEventListener(
         ){
 
             document
-                .getElementById("dropdownMenu")
+                .getElementById(
+                    "dropdownMenu"
+                )
                 .classList
                 .remove("active");
 
