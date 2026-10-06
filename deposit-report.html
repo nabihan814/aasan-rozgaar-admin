@@ -424,8 +424,8 @@ th{background:#f8f9fa}
 
         <div class="dropdown-menu" id="dropdownMenu">
 
-            <a href="./login.html"
-               onclick="adminPanelLogout()">
+            <a href="./index.html"
+               onclick="adminPanelLogout(event)">
 
                 <i class="fa fa-power-off"></i>
                 Logout
@@ -625,29 +625,48 @@ async function checkAdminSession(){
             API_URL + "/api/admin/me",
             {
                 method:"GET",
-                credentials:"include"
+                credentials:"include",
+                headers:{
+                    "Accept":"application/json"
+                },
+                cache:"no-store"
             }
         );
 
         if(!response.ok){
 
-            window.location.href="./login.html";
+            window.location.href="./index.html";
             return false;
 
         }
 
         const data = await response.json();
 
+        if(
+            data.success === false ||
+            data.authenticated === false
+        ){
+
+            window.location.href="./index.html";
+            return false;
+
+        }
+
         document.getElementById("adminName").textContent =
-            data.username || "Admin";
+            data.username ||
+            data.admin?.username ||
+            "Admin";
 
         return true;
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            "Admin session error:",
+            error
+        );
 
-        window.location.href="./login.html";
+        window.location.href="./index.html";
 
         return false;
 
@@ -688,28 +707,63 @@ function toggleDropdown(){
    LOGOUT
 ========================= */
 
-async function adminPanelLogout(){
+async function adminPanelLogout(event){
+
+    if(event){
+
+        event.preventDefault();
+
+    }
 
     try{
+
+        const csrfToken =
+            sessionStorage.getItem(
+                "adminCsrfToken"
+            );
+
+        const headers={
+            "Accept":"application/json"
+        };
+
+        if(csrfToken){
+
+            headers["X-CSRF-Token"] =
+                csrfToken;
+
+        }
 
         await fetch(
             API_URL + "/api/admin/logout",
             {
                 method:"POST",
                 credentials:"include",
-                headers:{
-                    "Content-Type":"application/json"
-                }
+                headers:headers
             }
         );
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            "Logout error:",
+            error
+        );
 
     }
 
-    sessionStorage.removeItem("adminCsrfToken");
+    sessionStorage.removeItem(
+        "adminCsrfToken"
+    );
+
+    localStorage.removeItem(
+        "adminPanelLoggedIn"
+    );
+
+    localStorage.removeItem(
+        "adminPanelUsername"
+    );
+
+    window.location.href="./index.html";
 
 }
 
@@ -733,6 +787,15 @@ async function loadReportData(){
 
     try{
 
+        const sessionOK =
+            await checkAdminSession();
+
+        if(!sessionOK){
+
+            return;
+
+        }
+
         const response = await fetch(
             API_URL + "/api/admin/deposits",
             {
@@ -740,14 +803,17 @@ async function loadReportData(){
                 credentials:"include",
                 headers:{
                     "Accept":"application/json"
-                }
+                },
+                cache:"no-store"
             }
         );
 
-        if(response.status === 401 ||
-           response.status === 403){
+        if(
+            response.status === 401 ||
+            response.status === 403
+        ){
 
-            window.location.href="./login.html";
+            window.location.href="./index.html";
             return;
 
         }
@@ -773,7 +839,10 @@ async function loadReportData(){
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            "Deposit report error:",
+            error
+        );
 
         depositData = [];
 
@@ -1087,8 +1156,44 @@ function normalizeStatus(status){
     const value =
         String(status || "Pending");
 
-    if(value === "Reject"){
+    if(
+        value.toLowerCase() === "reject"
+    ){
+
         return "Rejected";
+
+    }
+
+    if(
+        value.toLowerCase() === "approved"
+    ){
+
+        return "Approved";
+
+    }
+
+    if(
+        value.toLowerCase() === "pending"
+    ){
+
+        return "Pending";
+
+    }
+
+    if(
+        value.toLowerCase() === "inprocess"
+    ){
+
+        return "Inprocess";
+
+    }
+
+    if(
+        value.toLowerCase() === "rejected"
+    ){
+
+        return "Rejected";
+
     }
 
     return value;
@@ -1213,7 +1318,16 @@ document.addEventListener(
     function(e){
 
         if(e.key === "Escape"){
-            closeImageModal();
+
+            document
+                .getElementById("imageModal")
+                .classList
+                .remove("active");
+
+            document.getElementById(
+                "modalImage"
+            ).src = "";
+
         }
 
     }
