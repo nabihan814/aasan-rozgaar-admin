@@ -2,8 +2,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Payment App - Deposit Requests</title><link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>
+<title>Payment App - Deposit Requests</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>
 *{
     margin:0;
     padding:0;
@@ -227,6 +227,38 @@ th{
     background:#dc3545
 }
 
+.btn-save-amount{
+    background:#007bff;
+    color:#fff;
+    border:0;
+    padding:5px 8px;
+    border-radius:4px;
+    cursor:pointer;
+    font-size:11px;
+    font-weight:bold;
+    margin-top:4px
+}
+
+.btn-save-amount:disabled{
+    opacity:.6;
+    cursor:not-allowed
+}
+
+.amount-input{
+    width:105px;
+    padding:6px 7px;
+    border:1px solid #007bff;
+    border-radius:4px;
+    font-size:13px;
+    font-weight:bold;
+    outline:none
+}
+
+.amount-input:focus{
+    border-color:#0056b3;
+    box-shadow:0 0 0 2px rgba(0,123,255,.12)
+}
+
 .screenshot-thumb{
     width:55px;
     height:55px;
@@ -309,8 +341,9 @@ th{
     color:#007bff;
     font-weight:bold
 }
-</style></head><body><div class="sidebar" id="sidebar"><div class="sidebar-header">
-    <i class="fa fa-wallet"></i> Payment App
+</style></head><body><div class="sidebar" id="sidebar">
+<div class="sidebar-header">
+<i class="fa fa-wallet"></i> Payment App
 </div><ul class="sidebar-menu"><li>
 <a href="./dashboard.html">
 <i class="fa fa-tachometer-alt"></i>
@@ -375,13 +408,12 @@ Refresh
 
 </button></div><div class="table-controls"><div>
 Deposit Requests
-</div><div>Search:
-
-<input
+</div><div>
+Search:<input
 type="text"
 id="searchInput"
 placeholder="Search username/TID..."
-oninput="renderCurrentTable()">
+oninput="renderCurrentTable">
 
 </div></div><div class="table-responsive"><table><thead><tr>
 <th>S.No.</th>
@@ -398,10 +430,10 @@ oninput="renderCurrentTable()">
 Checking admin session...
 </td>
 </tr></tbody></table></div>
-</div><div class="footer">Copyright © 2022-2026
+</div><div class="footer">
+Copyright © 2022-2026
 <span>DW.</span>
 All rights reserved.
-
 </div><div class="modal"
 id="imageModal"
 onclick="closeImageModal(event)"><div class="modal-content"><button class="modal-close"
@@ -420,11 +452,6 @@ const API_URL =
 "https://aasan-rozgaar-backend.onrender.com";
 
 let depositRequests = [];
-
-
-/* =========================
-   ADMIN AUTH HEADERS
-========================= */
 
 function adminHeaders(includeCsrf = false){
 
@@ -460,11 +487,6 @@ function adminHeaders(includeCsrf = false){
     return headers;
 }
 
-
-/* =========================
-   REDIRECT
-========================= */
-
 function redirectToLogin(){
 
     sessionStorage.removeItem(
@@ -482,11 +504,6 @@ function redirectToLogin(){
     window.location.href =
         "./index.html";
 }
-
-
-/* =========================
-   ADMIN SESSION
-========================= */
 
 async function checkAdminSession(){
 
@@ -516,7 +533,6 @@ async function checkAdminSession(){
                 }
             );
 
-
         if(
             response.status === 401 ||
             response.status === 403
@@ -527,10 +543,8 @@ async function checkAdminSession(){
             return false;
         }
 
-
         const data =
             await response.json();
-
 
         if(
             !response.ok ||
@@ -542,21 +556,17 @@ async function checkAdminSession(){
             return false;
         }
 
-
         document.getElementById(
             "adminName"
         ).textContent =
             data.username || "Admin";
-
 
         sessionStorage.setItem(
             "adminPanelUsername",
             data.username || "Admin"
         );
 
-
         return true;
-
 
     }catch(error){
 
@@ -571,24 +581,16 @@ async function checkAdminSession(){
     }
 }
 
-
-/* =========================
-   INITIALIZE
-========================= */
-
 async function initAdminDeposit(){
 
     const loggedIn =
         await checkAdminSession();
 
-
     if(!loggedIn){
         return;
     }
 
-
     await loadDepositTable(true);
-
 
     setInterval(
         function(){
@@ -599,11 +601,6 @@ async function initAdminDeposit(){
         10000
     );
 }
-
-
-/* =========================
-   LOAD DATABASE
-========================= */
 
 async function loadDepositTable(
     showLoading = false
@@ -619,25 +616,18 @@ async function loadDepositTable(
             "refreshButton"
         );
 
-
     if(showLoading){
 
         tbody.innerHTML = `
-
 <tr>
-<td colspan="9"
-class="no-data">
-
+<td colspan="9" class="no-data">
 Loading deposit requests...
-
 </td>
 </tr>
-
 `;
 
         refreshButton.disabled = true;
     }
-
 
     try{
 
@@ -647,14 +637,11 @@ Loading deposit requests...
                 "/api/admin/deposits",
                 {
                     method:"GET",
-
                     headers:
                         adminHeaders(false),
-
                     cache:"no-store"
                 }
             );
-
 
         if(
             response.status === 401 ||
@@ -666,9 +653,7 @@ Loading deposit requests...
             return;
         }
 
-
         let data = {};
-
 
         try{
 
@@ -681,7 +666,6 @@ Loading deposit requests...
 
         }
 
-
         if(!response.ok){
 
             throw new Error(
@@ -689,7 +673,6 @@ Loading deposit requests...
                 "Failed to load deposit requests."
             );
         }
-
 
         if(
             Array.isArray(data)
@@ -717,9 +700,7 @@ Loading deposit requests...
 
         }
 
-
         renderCurrentTable();
-
 
     }catch(error){
 
@@ -728,9 +709,7 @@ Loading deposit requests...
             error
         );
 
-
         tbody.innerHTML = `
-
 <tr>
 <td colspan="9"
 class="no-data"
@@ -749,7 +728,6 @@ ${escapeHTML(
 
 </td>
 </tr>
-
 `;
 
     }finally{
@@ -758,11 +736,6 @@ ${escapeHTML(
 
     }
 }
-
-
-/* =========================
-   RENDER
-========================= */
 
 function renderCurrentTable(){
 
@@ -783,7 +756,6 @@ function renderCurrentTable(){
         .toLowerCase()
         .trim();
 
-
     const filtered =
         depositRequests.filter(
             function(req){
@@ -794,9 +766,7 @@ function renderCurrentTable(){
                         "Pending"
                     );
 
-
                 let statusMatch = true;
-
 
                 if(status !== "All"){
 
@@ -815,11 +785,9 @@ function renderCurrentTable(){
 
                 }
 
-
                 if(!statusMatch){
                     return false;
                 }
-
 
                 if(search){
 
@@ -827,7 +795,6 @@ function renderCurrentTable(){
                         String(
                             req.username || ""
                         ).toLowerCase();
-
 
                     const transactionId =
                         String(
@@ -837,18 +804,15 @@ function renderCurrentTable(){
                             ""
                         ).toLowerCase();
 
-
                     const method =
                         String(
                             req.method || ""
                         ).toLowerCase();
 
-
                     const details =
                         String(
                             req.details || ""
                         ).toLowerCase();
-
 
                     if(
                         !username.includes(search) &&
@@ -862,12 +826,10 @@ function renderCurrentTable(){
                     }
                 }
 
-
                 return true;
 
             }
         );
-
 
     filtered.sort(
         function(a,b){
@@ -879,7 +841,6 @@ function renderCurrentTable(){
                     0
                 ).getTime();
 
-
             const dateB =
                 new Date(
                     b.createdAt ||
@@ -887,34 +848,25 @@ function renderCurrentTable(){
                     0
                 ).getTime();
 
-
             return dateB - dateA;
 
         }
     );
 
-
     if(filtered.length === 0){
 
         tbody.innerHTML = `
-
 <tr>
-<td colspan="9"
-class="no-data">
-
+<td colspan="9" class="no-data">
 No deposit requests found!
-
 </td>
 </tr>
-
 `;
 
         return;
     }
 
-
     let html = "";
-
 
     filtered.forEach(
         function(req,index){
@@ -924,20 +876,16 @@ No deposit requests found!
                     req.id || ""
                 );
 
-
             const reqStatus =
                 String(
                     req.status ||
                     "Pending"
                 );
 
-
             let imageHTML = "";
-
 
             const screenshot =
                 req.screenshot;
-
 
             if(
                 screenshot &&
@@ -949,15 +897,12 @@ No deposit requests found!
                         screenshot
                     );
 
-
                 const imageJS =
                     escapeJS(
                         screenshot
                     );
 
-
                 imageHTML = `
-
 <div>
 
 <img
@@ -976,13 +921,11 @@ View
 </button>
 
 </div>
-
 `;
 
             }else{
 
                 imageHTML = `
-
 <span style="
 color:#dc3545;
 font-size:11px">
@@ -990,19 +933,15 @@ font-size:11px">
 No Image
 
 </span>
-
 `;
 
             }
 
-
             let badge = "";
-
 
             if(reqStatus === "Approved"){
 
                 badge = `
-
 <span style="
 background:#d1e7dd;
 color:#0b6623;
@@ -1014,13 +953,11 @@ font-weight:bold">
 Approved
 
 </span>
-
 `;
 
             }else if(reqStatus === "Inprocess"){
 
                 badge = `
-
 <span style="
 background:#cff4fc;
 color:#055160;
@@ -1032,7 +969,6 @@ font-weight:bold">
 Inprocess
 
 </span>
-
 `;
 
             }else if(
@@ -1041,7 +977,6 @@ Inprocess
             ){
 
                 badge = `
-
 <span style="
 background:#f8d7da;
 color:#842029;
@@ -1053,13 +988,11 @@ font-weight:bold">
 Rejected
 
 </span>
-
 `;
 
             }else{
 
                 badge = `
-
 <span style="
 background:#fff3cd;
 color:#664d03;
@@ -1071,16 +1004,44 @@ font-weight:bold">
 Pending
 
 </span>
-
 `;
 
             }
 
+            let amountHTML = "";
 
-            let amountHTML = `
+            if(
+                reqStatus === "Pending" ||
+                reqStatus === "Inprocess"
+            ){
 
+                amountHTML = `
+<input
+type="number"
+class="amount-input"
+id="amount-${escapeHTML(id)}"
+value="${escapeHTML(
+    Number(req.amount || 0).toFixed(2)
+)}"
+min="0.01"
+step="0.01">
+
+<br>
+
+<button
+class="btn-save-amount"
+onclick="updateDepositAmount('${escapeJS(id)}')">
+
+<i class="fa fa-save"></i>
+Save
+
+</button>
+`;
+
+            }else{
+
+                amountHTML = `
 <b>
-
 Rs ${
 Number(
 req.amount || 0
@@ -1092,23 +1053,20 @@ maximumFractionDigits:2
 }
 )
 }
-
 </b>
 
 <br>
 
-<small style="
-color:#6c757d">
+<small style="color:#6c757d">
 
-Amount is server controlled
+Locked
 
 </small>
-
 `;
 
+            }
 
             let actions = "";
-
 
             if(
                 reqStatus === "Pending" ||
@@ -1116,7 +1074,6 @@ Amount is server controlled
             ){
 
                 actions = `
-
 <button
 class="btn-action btn-approve"
 onclick="updateStatus(
@@ -1127,7 +1084,6 @@ onclick="updateStatus(
 Approve
 
 </button>
-
 
 <button
 class="btn-action btn-inprocess"
@@ -1140,7 +1096,6 @@ Inprocess
 
 </button>
 
-
 <button
 class="btn-action btn-reject"
 onclick="updateStatus(
@@ -1151,13 +1106,11 @@ onclick="updateStatus(
 Reject
 
 </button>
-
 `;
 
             }else{
 
                 actions = `
-
 <span style="
 font-size:12px;
 color:#6c757d">
@@ -1165,21 +1118,17 @@ color:#6c757d">
 Processed
 
 </span>
-
 `;
 
             }
-
 
             const createdDate =
                 req.createdAt ||
                 req.created_at;
 
-
             const approvedDate =
                 req.approvedAt ||
                 req.approved_at;
-
 
             let dateHTML =
                 escapeHTML(
@@ -1188,15 +1137,11 @@ Processed
                     )
                 );
 
-
             if(approvedDate){
 
                 dateHTML += `
-
 <br>
-
-<small style="
-color:#007bff">
+<small style="color:#007bff">
 
 Approved:
 ${escapeHTML(
@@ -1206,25 +1151,19 @@ approvedDate
 )}
 
 </small>
-
 `;
 
             }
-
 
             const approvedBy =
                 req.approvedBy ||
                 req.approved_by;
 
-
             if(approvedBy){
 
                 dateHTML += `
-
 <br>
-
-<small style="
-color:#6c757d">
+<small style="color:#6c757d">
 
 By:
 ${escapeHTML(
@@ -1232,11 +1171,9 @@ approvedBy
 )}
 
 </small>
-
 `;
 
             }
-
 
             const transactionId =
                 req.transactionId ||
@@ -1244,14 +1181,11 @@ approvedBy
                 req.trxid ||
                 "-";
 
-
             const details =
                 req.details ||
                 "";
 
-
             html += `
-
 <tr>
 
 <td>
@@ -1259,29 +1193,23 @@ ${index + 1}
 </td>
 
 <td>
-
 <b>
 ${escapeHTML(
 req.username ||
 "Unknown"
 )}
 </b>
-
 </td>
 
 <td>
-
 ${escapeHTML(
 req.method ||
 "-"
 )}
-
 </td>
 
 <td>
-
 ${amountHTML}
-
 </td>
 
 <td>
@@ -1306,46 +1234,203 @@ ${escapeHTML(details)}
 </td>
 
 <td>
-
 ${imageHTML}
-
 </td>
 
-<td style="
-font-size:12px">
-
+<td style="font-size:12px">
 ${dateHTML}
-
 </td>
 
 <td>
-
 ${badge}
-
 </td>
 
 <td>
-
 ${actions}
-
 </td>
 
 </tr>
-
 `;
 
         }
     );
 
-
     tbody.innerHTML =
         html;
 }
 
+async function updateDepositAmount(id){
 
-/* =========================
-   UPDATE STATUS
-========================= */
+    if(!id){
+
+        alert(
+            "Deposit ID is missing."
+        );
+
+        return;
+    }
+
+    const input =
+        document.getElementById(
+            "amount-" + id
+        );
+
+    if(!input){
+
+        alert(
+            "Amount field not found."
+        );
+
+        return;
+    }
+
+    const amount =
+        Number(
+            input.value
+        );
+
+    if(
+        !Number.isFinite(amount) ||
+        amount <= 0
+    ){
+
+        alert(
+            "Please enter a valid amount."
+        );
+
+        input.focus();
+
+        return;
+    }
+
+    const sessionToken =
+        sessionStorage.getItem(
+            "adminSessionToken"
+        );
+
+    const csrfToken =
+        sessionStorage.getItem(
+            "adminCsrfToken"
+        );
+
+    if(
+        !sessionToken ||
+        !csrfToken
+    ){
+
+        redirectToLogin();
+
+        return;
+    }
+
+    if(
+        !confirm(
+            "Are you sure you want to save this amount?"
+        )
+    ){
+
+        return;
+    }
+
+    const buttons =
+        document.querySelectorAll(
+            ".btn-save-amount"
+        );
+
+    buttons.forEach(
+        function(button){
+
+            button.disabled = true;
+
+        }
+    );
+
+    try{
+
+        const response =
+            await fetch(
+                API_URL +
+                "/api/admin/deposits/" +
+                encodeURIComponent(id) +
+                "/amount",
+                {
+                    method:"PATCH",
+
+                    headers:{
+                        ...adminHeaders(true),
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+                        amount:amount
+                    })
+                }
+            );
+
+        if(
+            response.status === 401 ||
+            response.status === 403
+        ){
+
+            redirectToLogin();
+
+            return;
+        }
+
+        let data = {};
+
+        try{
+
+            data =
+                await response.json();
+
+        }catch(error){
+
+            data = {};
+
+        }
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                "Failed to update deposit amount."
+            );
+
+        }
+
+        alert(
+            data.message ||
+            "Deposit amount updated successfully."
+        );
+
+        await loadDepositTable(false);
+
+    }catch(error){
+
+        console.error(
+            "Amount update error:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Failed to update deposit amount."
+        );
+
+    }finally{
+
+        buttons.forEach(
+            function(button){
+
+                button.disabled = false;
+
+            }
+        );
+
+    }
+}
 
 async function updateStatus(
     id,
@@ -1361,10 +1446,8 @@ async function updateStatus(
         return;
     }
 
-
     let confirmText =
         "Are you sure you want to change this deposit status?";
-
 
     if(newStatus === "Approved"){
 
@@ -1383,23 +1466,19 @@ async function updateStatus(
 
     }
 
-
     if(!confirm(confirmText)){
         return;
     }
-
 
     const csrfToken =
         sessionStorage.getItem(
             "adminCsrfToken"
         );
 
-
     const sessionToken =
         sessionStorage.getItem(
             "adminSessionToken"
         );
-
 
     if(
         !csrfToken ||
@@ -1411,14 +1490,12 @@ async function updateStatus(
         return;
     }
 
-
     try{
 
         const buttons =
             document.querySelectorAll(
                 ".btn-action"
             );
-
 
         buttons.forEach(
             function(button){
@@ -1427,7 +1504,6 @@ async function updateStatus(
 
             }
         );
-
 
         const response =
             await fetch(
@@ -1438,15 +1514,17 @@ async function updateStatus(
                 {
                     method:"PATCH",
 
-                    headers:
-                        adminHeaders(true),
+                    headers:{
+                        ...adminHeaders(true),
+                        "Content-Type":
+                            "application/json"
+                    },
 
                     body:JSON.stringify({
                         status:newStatus
                     })
                 }
             );
-
 
         if(
             response.status === 401 ||
@@ -1458,9 +1536,7 @@ async function updateStatus(
             return;
         }
 
-
         let data = {};
-
 
         try{
 
@@ -1473,7 +1549,6 @@ async function updateStatus(
 
         }
 
-
         if(!response.ok){
 
             throw new Error(
@@ -1483,15 +1558,12 @@ async function updateStatus(
 
         }
 
-
         alert(
             data.message ||
             "Deposit status updated successfully."
         );
 
-
         await loadDepositTable(true);
-
 
     }catch(error){
 
@@ -1500,22 +1572,15 @@ async function updateStatus(
             error
         );
 
-
         alert(
             error.message ||
             "Failed to update deposit status."
         );
 
-
         await loadDepositTable(true);
 
     }
 }
-
-
-/* =========================
-   DATE
-========================= */
 
 function displayDateTime(value){
 
@@ -1523,17 +1588,14 @@ function displayDateTime(value){
         return "-";
     }
 
-
     const date =
         new Date(value);
-
 
     if(isNaN(date.getTime())){
 
         return String(value);
 
     }
-
 
     return date.toLocaleString(
         "en-PK",
@@ -1549,23 +1611,16 @@ function displayDateTime(value){
     );
 }
 
-
-/* =========================
-   IMAGE MODAL
-========================= */
-
 function openImageModal(image){
 
     document.getElementById(
         "modalImage"
     ).src = image;
 
-
     document.getElementById(
         "imageModal"
     ).classList.add("active");
 }
-
 
 function closeImageModal(event){
 
@@ -1579,17 +1634,14 @@ function closeImageModal(event){
 
     }
 
-
     document.getElementById(
         "imageModal"
     ).classList.remove("active");
-
 
     document.getElementById(
         "modalImage"
     ).src = "";
 }
-
 
 document.addEventListener(
     "keydown",
@@ -1604,11 +1656,6 @@ document.addEventListener(
     }
 );
 
-
-/* =========================
-   SIDEBAR
-========================= */
-
 function toggleSidebar(){
 
     document
@@ -1616,11 +1663,6 @@ function toggleSidebar(){
         .classList
         .toggle("active");
 }
-
-
-/* =========================
-   DROPDOWN
-========================= */
 
 function toggleDropdown(){
 
@@ -1630,32 +1672,19 @@ function toggleDropdown(){
         .toggle("active");
 }
 
-
-/* =========================
-   LOGOUT
-========================= */
-
 async function logoutAdmin(event){
 
     if(event){
         event.preventDefault();
     }
 
-
     try{
-
-        const csrfToken =
-            sessionStorage.getItem(
-                "adminCsrfToken"
-            );
-
 
         await fetch(
             API_URL +
             "/api/admin/logout",
             {
                 method:"POST",
-
                 headers:
                     adminHeaders(true)
             }
@@ -1682,16 +1711,10 @@ async function logoutAdmin(event){
             "adminPanelUsername"
         );
 
-
         window.location.href =
             "./index.html";
     }
 }
-
-
-/* =========================
-   DROPDOWN CLOSE
-========================= */
 
 document.addEventListener(
     "click",
@@ -1702,12 +1725,10 @@ document.addEventListener(
                 ".user-dropdown-container"
             );
 
-
         const menu =
             document.getElementById(
                 "dropdownMenu"
             );
-
 
         if(
             container &&
@@ -1726,11 +1747,6 @@ document.addEventListener(
     }
 );
 
-
-/* =========================
-   SECURITY HELPERS
-========================= */
-
 function escapeHTML(value){
 
     return String(value ?? "")
@@ -1741,7 +1757,6 @@ function escapeHTML(value){
         .replace(/'/g,"&#039;");
 }
 
-
 function escapeJS(value){
 
     return String(value ?? "")
@@ -1751,11 +1766,6 @@ function escapeJS(value){
         .replace(/\r/g,"\\r")
         .replace(/\n/g,"\\n");
 }
-
-
-/* =========================
-   START
-========================= */
 
 document.addEventListener(
     "DOMContentLoaded",
