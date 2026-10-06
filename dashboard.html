@@ -1,8 +1,16 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin Dashboard</title><link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Dashboard</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
 *{
     margin:0;
     padding:0;
@@ -336,239 +344,274 @@ body{
     color:#007bff;
     font-weight:bold;
 }
-</style></head><body><div class="sidebar" id="sidebar"><div class="sidebar-header">
-    <i class="fa fa-wallet"></i>
-    Payment App
+</style>
+</head>
+
+<body>
+
+<div class="sidebar" id="sidebar">
+
+    <div class="sidebar-header">
+        <i class="fa fa-wallet"></i>
+        Payment App
+    </div>
+
+    <ul class="sidebar-menu">
+
+        <li class="active">
+            <a href="dashboard.html">
+                <i class="fa fa-tachometer-alt"></i>
+                Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="withdraw.html">
+                <i class="fa fa-file-invoice-dollar"></i>
+                Withdraw Requests
+            </a>
+        </li>
+
+        <li>
+            <a href="deposit.html">
+                <i class="fa fa-money-bill-wave"></i>
+                Deposit Requests
+            </a>
+        </li>
+
+        <li>
+            <a href="deposit-type.html">
+                <i class="fa fa-list"></i>
+                Deposit Type List
+            </a>
+        </li>
+
+        <li>
+            <a href="deposit-report.html">
+                <i class="fa fa-chart-bar"></i>
+                Deposit Report
+            </a>
+        </li>
+
+        <li>
+            <a href="withdraw-report.html">
+                <i class="fa fa-chart-line"></i>
+                Withdraw Report
+            </a>
+        </li>
+
+    </ul>
 </div>
 
-<ul class="sidebar-menu">
 
-    <li class="active">
-        <a href="dashboard.html">
-            <i class="fa fa-tachometer-alt"></i>
-            Dashboard
-        </a>
-    </li>
+<div class="navbar">
 
-    <li>
-        <a href="withdraw.html">
-            <i class="fa fa-file-invoice-dollar"></i>
-            Withdraw Requests
-        </a>
-    </li>
+    <i class="fa fa-bars menu-toggle"
+       onclick="toggleSidebar()"></i>
 
-    <li>
-        <a href="deposit.html">
-            <i class="fa fa-money-bill-wave"></i>
-            Deposit Requests
-        </a>
-    </li>
+    <div class="user-dropdown-container"
+         onclick="toggleDropdown()">
 
-    <li>
-        <a href="deposit-type.html">
-            <i class="fa fa-list"></i>
-            Deposit Type List
-        </a>
-    </li>
+        <span class="user-profile">
+            Welcome <span id="adminName">Admin</span>
+            <i class="fa fa-caret-down"></i>
+        </span>
 
-    <li>
-        <a href="deposit-report.html">
-            <i class="fa fa-chart-bar"></i>
-            Deposit Report
-        </a>
-    </li>
+        <div class="dropdown-menu" id="dropdownMenu">
 
-    <li>
-        <a href="withdraw-report.html">
-            <i class="fa fa-chart-line"></i>
-            Withdraw Report
-        </a>
-    </li>
+            <a href="#" onclick="return false;">
+                <i class="fa fa-key"></i>
+                Change Password
+            </a>
 
-</ul>
+            <a href="index.html"
+               onclick="logoutAdmin(event)">
+                <i class="fa fa-power-off"></i>
+                Logout
+            </a>
 
-</div><div class="navbar"><i class="fa fa-bars menu-toggle"
-   onclick="toggleSidebar()"></i>
-
-<div class="user-dropdown-container"
-     onclick="toggleDropdown()">
-
-    <span class="user-profile">
-        Welcome <span id="adminName">Admin</span>
-        <i class="fa fa-caret-down"></i>
-    </span>
-
-    <div class="dropdown-menu" id="dropdownMenu">
-
-        <a href="#" onclick="return false;">
-            <i class="fa fa-key"></i>
-            Change Password
-        </a>
-
-        <a href="login.html"
-           onclick="logoutAdmin(event)">
-            <i class="fa fa-power-off"></i>
-            Logout
-        </a>
-
+        </div>
     </div>
 </div>
 
-</div><div class="main-content"><div class="dashboard-header">
 
-    <div class="breadcrumb-title">
+<div class="main-content">
 
-        <h2>Dashboard</h2>
+    <div class="dashboard-header">
 
-        <span>
-            Home / Dashboard
+        <div class="breadcrumb-title">
+
+            <h2>Dashboard</h2>
+
+            <span>
+                Home / Dashboard
+            </span>
+
+        </div>
+
+        <div class="live-datetime"
+             id="liveClock">
+
+            <i class="fa fa-clock"></i>
+
+            <span id="clockText">
+                Loading...
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="today-box">
+
+        <i class="fa fa-calendar-day"></i>
+
+        Today:
+
+        <b id="todayText">
+            Loading...
+        </b>
+
+        <span style="color:#666;margin-left:8px;">
+            Only admin-approved transactions are counted.
         </span>
 
     </div>
 
-    <div class="live-datetime"
-         id="liveClock">
 
-        <i class="fa fa-clock"></i>
-        <span id="clockText">Loading...</span>
+    <div class="error-box" id="errorBox"></div>
+
+
+    <div class="filter-box">
+
+        <b>
+            <i class="fa fa-calendar-alt"></i>
+            History:
+        </b>
+
+        <input
+            type="date"
+            id="filterDate"
+        >
+
+        <select id="filterMonth">
+
+            <option value="">
+                Select Month
+            </option>
+
+            <option value="01">January</option>
+            <option value="02">February</option>
+            <option value="03">March</option>
+            <option value="04">April</option>
+            <option value="05">May</option>
+            <option value="06">June</option>
+            <option value="07">July</option>
+            <option value="08">August</option>
+            <option value="09">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+
+        </select>
+
+        <input
+            type="number"
+            id="filterYear"
+            placeholder="Year e.g. 2026"
+            style="width:140px;"
+        >
+
+        <button
+            class="btn btn-search"
+            onclick="searchRecords()">
+
+            <i class="fa fa-search"></i>
+            Search
+
+        </button>
+
+        <button
+            class="btn btn-clear"
+            onclick="clearSearch()">
+
+            Clear
+
+        </button>
+
+    </div>
+
+
+    <div
+        class="result-box"
+        id="resultBox">
+    </div>
+
+
+    <div class="stats-grid">
+
+        <div class="stat-card bg-deposit">
+
+            <h3 id="depositAmount">
+                Rs 0
+            </h3>
+
+            <p>
+                Today's Approved Deposit
+            </p>
+
+            <i class="fa fa-wallet"></i>
+
+        </div>
+
+
+        <div class="stat-card bg-withdraw">
+
+            <h3 id="withdrawAmount">
+                Rs 0
+            </h3>
+
+            <p>
+                Today's Approved Withdraw
+            </p>
+
+            <i class="fa fa-file-invoice-dollar"></i>
+
+        </div>
+
+
+        <div class="stat-card bg-users">
+
+            <h3 id="approvedCount">
+                0
+            </h3>
+
+            <p>
+                Today's Approved Transactions
+            </p>
+
+            <i class="fa fa-check-circle"></i>
+
+        </div>
 
     </div>
 
 </div>
 
-<div class="today-box">
 
-    <i class="fa fa-calendar-day"></i>
+<div class="footer">
 
-    Today:
+    Copyright © 2022-2026
 
-    <b id="todayText">
-        Loading...
-    </b>
+    <span>DW.</span>
 
-    <span style="color:#666;margin-left:8px;">
-        Only admin-approved transactions are counted.
-    </span>
+    All rights reserved.
 
 </div>
 
-<div class="error-box" id="errorBox"></div>
 
-<div class="filter-box">
-
-    <b>
-        <i class="fa fa-calendar-alt"></i>
-        History:
-    </b>
-
-    <input
-        type="date"
-        id="filterDate"
-    >
-
-    <select id="filterMonth">
-
-        <option value="">Select Month</option>
-
-        <option value="01">January</option>
-        <option value="02">February</option>
-        <option value="03">March</option>
-        <option value="04">April</option>
-        <option value="05">May</option>
-        <option value="06">June</option>
-        <option value="07">July</option>
-        <option value="08">August</option>
-        <option value="09">September</option>
-        <option value="10">October</option>
-        <option value="11">November</option>
-        <option value="12">December</option>
-
-    </select>
-
-    <input
-        type="number"
-        id="filterYear"
-        placeholder="Year e.g. 2026"
-        style="width:140px;"
-    >
-
-    <button
-        class="btn btn-search"
-        onclick="searchRecords()">
-
-        <i class="fa fa-search"></i>
-        Search
-
-    </button>
-
-    <button
-        class="btn btn-clear"
-        onclick="clearSearch()">
-
-        Clear
-
-    </button>
-
-</div>
-
-<div
-    class="result-box"
-    id="resultBox">
-</div>
-
-<div class="stats-grid">
-
-    <div class="stat-card bg-deposit">
-
-        <h3 id="depositAmount">
-            Rs 0
-        </h3>
-
-        <p>
-            Today's Approved Deposit
-        </p>
-
-        <i class="fa fa-wallet"></i>
-
-    </div>
-
-    <div class="stat-card bg-withdraw">
-
-        <h3 id="withdrawAmount">
-            Rs 0
-        </h3>
-
-        <p>
-            Today's Approved Withdraw
-        </p>
-
-        <i class="fa fa-file-invoice-dollar"></i>
-
-    </div>
-
-    <div class="stat-card bg-users">
-
-        <h3 id="approvedCount">
-            0
-        </h3>
-
-        <p>
-            Today's Approved Transactions
-        </p>
-
-        <i class="fa fa-check-circle"></i>
-
-    </div>
-
-</div>
-
-</div><div class="footer">Copyright © 2022-2026
-
-<span>DW.</span>
-
-All rights reserved.
-
-</div><script>
+<script>
 
 const BACKEND_URL =
     "https://aasan-rozgaar-backend.onrender.com";
@@ -597,35 +640,42 @@ async function checkAdminSession(){
         if(!response.ok){
 
             window.location.href =
-                "login.html";
+                "index.html";
 
             return false;
         }
+
 
         const data =
             await response.json();
 
+
         if(!data.success){
 
             window.location.href =
-                "login.html";
+                "index.html";
 
             return false;
         }
 
+
         const adminName =
             data.username || "Admin";
+
 
         document.getElementById(
             "adminName"
         ).innerText = adminName;
+
 
         sessionStorage.setItem(
             "adminPanelUsername",
             adminName
         );
 
+
         return true;
+
 
     }catch(error){
 
@@ -634,8 +684,10 @@ async function checkAdminSession(){
             error
         );
 
+
         window.location.href =
-            "login.html";
+            "index.html";
+
 
         return false;
     }
@@ -684,7 +736,6 @@ window.addEventListener(
                 )
                 .classList
                 .remove("active");
-
         }
     }
 );
@@ -700,12 +751,14 @@ async function logoutAdmin(event){
         event.preventDefault();
     }
 
+
     try{
 
         const csrfToken =
             sessionStorage.getItem(
                 "adminCsrfToken"
             );
+
 
         await fetch(
             BACKEND_URL +
@@ -722,12 +775,14 @@ async function logoutAdmin(event){
             }
         );
 
+
     }catch(error){
 
         console.error(
             "Logout error:",
             error
         );
+
 
     }finally{
 
@@ -739,8 +794,9 @@ async function logoutAdmin(event){
             "adminPanelUsername"
         );
 
+
         window.location.href =
-            "login.html";
+            "index.html";
     }
 }
 
@@ -756,9 +812,13 @@ function showError(message){
             "errorBox"
         );
 
-    box.textContent = message;
 
-    box.style.display = "block";
+    box.textContent =
+        message;
+
+
+    box.style.display =
+        "block";
 }
 
 
@@ -769,8 +829,13 @@ function hideError(){
             "errorBox"
         );
 
-    box.style.display = "none";
-    box.textContent = "";
+
+    box.style.display =
+        "none";
+
+
+    box.textContent =
+        "";
 }
 
 
@@ -789,13 +854,15 @@ async function fetchAdminData(url){
             }
         );
 
+
     if(
         response.status === 401 ||
         response.status === 403
     ){
 
         window.location.href =
-            "login.html";
+            "index.html";
+
 
         throw new Error(
             "Admin session expired."
@@ -805,9 +872,14 @@ async function fetchAdminData(url){
 
     let data = {};
 
+
     try{
-        data = await response.json();
+
+        data =
+            await response.json();
+
     }catch(error){
+
         data = {};
     }
 
@@ -833,6 +905,7 @@ async function loadDatabaseRecords(){
 
     hideError();
 
+
     try{
 
         const results =
@@ -852,15 +925,10 @@ async function loadDatabaseRecords(){
         const depositData =
             results[0];
 
+
         const withdrawData =
             results[1];
 
-
-        /*
-         * Backend response array ko support
-         * karta hai aur {success,data} format
-         * ko bhi.
-         */
 
         allDeposits =
             Array.isArray(depositData)
@@ -900,6 +968,7 @@ async function loadDatabaseRecords(){
 
         loadDashboard();
 
+
     }catch(error){
 
         console.error(
@@ -907,11 +976,11 @@ async function loadDatabaseRecords(){
             error
         );
 
+
         showError(
             error.message ||
             "Database data load nahi ho saka."
         );
-
     }
 }
 
@@ -945,6 +1014,7 @@ function parseRecordDate(value){
 
         const d =
             new Date(value);
+
 
         return isNaN(
             d.getTime()
@@ -1003,6 +1073,7 @@ function getRecordDate(record){
                 possibleDates[i]
             );
 
+
         if(d){
             return d;
         }
@@ -1058,6 +1129,7 @@ function money(amount){
 
     const number =
         Number(amount || 0);
+
 
     return number.toLocaleString(
         "en-PK",
@@ -1124,6 +1196,7 @@ function loadDashboard(){
     let depositTotal = 0;
     let withdrawTotal = 0;
 
+
     let depositCount = 0;
     let withdrawCount = 0;
 
@@ -1134,6 +1207,7 @@ function loadDashboard(){
             const d =
                 getRecordDate(item);
 
+
             if(
                 d &&
                 dateKey(d) === today
@@ -1143,6 +1217,7 @@ function loadDashboard(){
                     Number(
                         item.amount || 0
                     );
+
 
                 depositCount++;
             }
@@ -1156,6 +1231,7 @@ function loadDashboard(){
             const d =
                 getRecordDate(item);
 
+
             if(
                 d &&
                 dateKey(d) === today
@@ -1165,6 +1241,7 @@ function loadDashboard(){
                     Number(
                         item.amount || 0
                     );
+
 
                 withdrawCount++;
             }
@@ -1349,6 +1426,7 @@ function searchRecords(){
 
         `;
 
+
         return;
     }
 
@@ -1368,7 +1446,9 @@ function searchRecords(){
 
                 <strong
                     style="color:#17a2b8;">
+
                     Rs ${money(depositTotal)}
+
                 </strong>
 
             </div>
@@ -1380,7 +1460,9 @@ function searchRecords(){
 
                 <strong
                     style="color:#d39e00;">
+
                     Rs ${money(withdrawTotal)}
+
                 </strong>
 
             </div>
@@ -1668,6 +1750,7 @@ async function init(){
 
     updateClock();
 
+
     setInterval(
         updateClock,
         1000
@@ -1676,11 +1759,6 @@ async function init(){
 
     await loadDatabaseRecords();
 
-
-    /*
-     * Database se fresh records
-     * har 15 seconds baad.
-     */
 
     setInterval(
         loadDatabaseRecords,
@@ -1698,5 +1776,7 @@ document.addEventListener(
     init
 );
 
-</script></body>
+</script>
+
+</body>
 </html>
