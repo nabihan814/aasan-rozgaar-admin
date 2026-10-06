@@ -2,19 +2,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Payment App - Withdraw Requests</title><link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>
+<title>Payment App - Withdraw Requests</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
     font-family:Arial,sans-serif;
 }
-
-body{
-    background:#f4f6f9;
-}
-
+body{background:#f4f6f9}
 .navbar{
     background:#fff;
     padding:12px 20px;
@@ -26,24 +23,9 @@ body{
     top:0;
     z-index:999;
 }
-
-.menu-toggle{
-    font-size:20px;
-    cursor:pointer;
-    color:#333;
-}
-
-.user-dropdown-container{
-    position:relative;
-    cursor:pointer;
-}
-
-.user-profile{
-    font-weight:bold;
-    color:#333;
-    font-size:14px;
-}
-
+.menu-toggle{font-size:20px;cursor:pointer;color:#333}
+.user-dropdown-container{position:relative;cursor:pointer}
+.user-profile{font-weight:bold;color:#333;font-size:14px}
 .dropdown-menu{
     position:absolute;
     right:0;
@@ -55,11 +37,7 @@ body{
     display:none;
     z-index:1001;
 }
-
-.dropdown-menu.active{
-    display:block;
-}
-
+.dropdown-menu.active{display:block}
 .dropdown-menu a{
     display:flex;
     align-items:center;
@@ -70,7 +48,6 @@ body{
     font-size:14px;
     border-bottom:1px solid #f1f1f1;
 }
-
 .sidebar{
     position:fixed;
     left:-260px;
@@ -83,11 +60,7 @@ body{
     z-index:1002;
     overflow-y:auto;
 }
-
-.sidebar.active{
-    left:0;
-}
-
+.sidebar.active{left:0}
 .sidebar-header{
     padding:15px 20px;
     background:#212529;
@@ -96,17 +69,8 @@ body{
     align-items:center;
     gap:10px;
 }
-
-.sidebar-menu{
-    list-style:none;
-    padding:5px 0;
-}
-
-.sidebar-menu li{
-    color:#c2c7d0;
-    font-size:14px;
-}
-
+.sidebar-menu{list-style:none;padding:5px 0}
+.sidebar-menu li{color:#c2c7d0;font-size:14px}
 .sidebar-menu li a{
     color:inherit;
     text-decoration:none;
@@ -116,29 +80,19 @@ body{
     padding:12px 20px;
     width:100%;
 }
-
 .sidebar-menu li:hover,
 .sidebar-menu li.active{
     background:#007bff;
     color:#fff;
 }
-
-.main-content{
-    padding:15px;
-}
-
+.main-content{padding:15px}
 .breadcrumb-title h2{
     color:#333;
     font-size:20px;
     text-transform:uppercase;
     margin-bottom:5px;
 }
-
-.breadcrumb-title span{
-    color:#666;
-    font-size:13px;
-}
-
+.breadcrumb-title span{color:#666;font-size:13px}
 .card-box{
     background:#fff;
     padding:15px;
@@ -151,7 +105,6 @@ body{
     flex-wrap:wrap;
     gap:10px;
 }
-
 .card-box select{
     padding:8px 12px;
     border:1px solid #ccc;
@@ -159,34 +112,17 @@ body{
     outline:none;
     width:200px;
 }
-
-.action-btns{
-    display:flex;
-    gap:8px;
-}
-
-.btn-refresh,
-.btn-excel,
-.btn-pdf{
+.action-btns{display:flex;gap:8px}
+.btn-refresh,.btn-excel,.btn-pdf{
     color:#fff;
     border:none;
     padding:8px 12px;
     border-radius:4px;
     cursor:pointer;
 }
-
-.btn-refresh{
-    background:#007bff;
-}
-
-.btn-excel{
-    background:#28a745;
-}
-
-.btn-pdf{
-    background:#dc3545;
-}
-
+.btn-refresh{background:#007bff}
+.btn-excel{background:#28a745}
+.btn-pdf{background:#dc3545}
 .table-controls{
     display:flex;
     justify-content:space-between;
@@ -201,74 +137,38 @@ body{
     border-radius:4px;
     box-shadow:0 1px 3px rgba(0,0,0,.1);
 }
-
-.table-controls select,
-.table-controls input{
+.table-controls select,.table-controls input{
     padding:6px 10px;
     border:1px solid #ccc;
     border-radius:4px;
     outline:none;
 }
-
-.table-controls input{
-    width:180px;
-}
-
+.table-controls input{width:180px}
 .table-responsive{
     overflow-x:auto;
     background:#fff;
     border-radius:4px;
     box-shadow:0 1px 3px rgba(0,0,0,.1);
 }
-
 table{
     width:100%;
     border-collapse:collapse;
     text-align:left;
     font-size:14px;
 }
-
 th,td{
     padding:12px 10px;
     border-bottom:1px solid #eee;
     color:#333;
     white-space:nowrap;
 }
-
-th{
-    background:#f8f9fa;
-}
-
-.no-data{
-    text-align:center;
-    padding:25px;
-    color:#666;
-    font-size:15px;
-}
-
-.status{
-    font-weight:bold;
-}
-
-.username-cell{
-    font-weight:bold;
-    color:#007bff;
-}
-
-.account-name{
-    font-weight:bold;
-}
-
-.account-number{
-    color:#666;
-    font-size:12px;
-}
-
-.action-btn-group{
-    display:flex;
-    gap:4px;
-}
-
+th{background:#f8f9fa}
+.no-data{text-align:center;padding:25px;color:#666;font-size:15px}
+.status{font-weight:bold}
+.username-cell{font-weight:bold;color:#007bff}
+.account-name{font-weight:bold}
+.account-number{color:#666;font-size:12px}
+.action-btn-group{display:flex;gap:4px}
 .action-btn-group button{
     border:none;
     padding:5px 10px;
@@ -278,156 +178,125 @@ th{
     font-size:12px;
     font-weight:bold;
 }
-
-.action-btn-group button:disabled{
-    opacity:.6;
-    cursor:not-allowed;
-}
-
-.footer{
-    text-align:center;
-    padding:20px;
-    color:#666;
-    font-size:13px;
-}
-
-.footer span{
-    color:#007bff;
-    font-weight:bold;
-}
-
-.loading{
-    text-align:center;
-    padding:25px;
-    color:#007bff;
-}
-
-.error-message{
-    text-align:center;
-    padding:25px;
-    color:#dc3545;
-    font-weight:bold;
-}
-</style></head><body><div class="sidebar" id="sidebar"><div class="sidebar-header">
+.action-btn-group button:disabled{opacity:.6;cursor:not-allowed}
+.footer{text-align:center;padding:20px;color:#666;font-size:13px}
+.footer span{color:#007bff;font-weight:bold}
+.loading{text-align:center;padding:25px;color:#007bff}
+.error-message{text-align:center;padding:25px;color:#dc3545;font-weight:bold}
+</style>
+</head>
+<body><div class="sidebar" id="sidebar">
+<div class="sidebar-header">
 <i class="fa fa-wallet"></i>
 Payment App
-</div><ul class="sidebar-menu"><li>
+</div>
+<ul class="sidebar-menu">
+<li>
 <a href="./dashboard.html">
 <i class="fa fa-tachometer-alt"></i>
 Dashboard
 </a>
-</li><li class="active">
+</li>
+<li class="active">
 <a href="./withdraw.html">
 <i class="fa fa-file-invoice-dollar"></i>
 Withdraw Requests
 </a>
-</li><li>
+</li>
+<li>
 <a href="./deposit.html">
 <i class="fa fa-money-bill-wave"></i>
 Deposite Requests
 </a>
-</li><li>
+</li>
+<li>
 <a href="./deposit-type.html">
 <i class="fa fa-list"></i>
 Deposite Type List
 </a>
-</li><li>
+</li>
+<li>
 <a href="./deposit-report.html">
 <i class="fa fa-chart-bar"></i>
 Deposit Report
 </a>
-</li><li>
+</li>
+<li>
 <a href="./withdraw-report.html">
 <i class="fa fa-chart-line"></i>
 Withdraw Report
 </a>
-</li></ul>
-</div><div class="navbar"><i class="fa fa-bars menu-toggle"
-onclick="toggleSidebar()"></i>
-
-<div class="user-dropdown-container"
-onclick="toggleDropdown()"><span class="user-profile">
+</li>
+</ul>
+</div><div class="navbar">
+<i class="fa fa-bars menu-toggle" onclick="toggleSidebar()"></i><div class="user-dropdown-container" onclick="toggleDropdown()">
+<span class="user-profile">
 Welcome <span id="adminName">Admin</span>
 <i class="fa fa-caret-down"></i>
-</span><div class="dropdown-menu"
-id="dropdownMenu"><a href="#">
+</span><div class="dropdown-menu" id="dropdownMenu">
+<a href="#">
 <i class="fa fa-wallet"></i>
 Change Password
-</a><a href="./index.html"
-onclick="logoutAdmin(event)">
+</a><a href="./index.html" onclick="logoutAdmin(event)">
 <i class="fa fa-power-off"></i>
 Logout
 </a>
-
 </div>
 </div>
-</div><div class="main-content"><div class="breadcrumb-title"><h2>Withdraw Requests</h2><span>
-Home / Withdraw Requests
-</span></div><div class="card-box"><select id="statusFilter"
-onchange="renderRequests()">
-
-<option value="All">
-All Status
-</option><option value="Pending" selected>
-Pending
-</option><option value="Inprocess">
-In Process
-</option><option value="Approved">
-Approved
-</option><option value="Rejected">
-Rejected
-</option></select><div class="action-btns"><button class="btn-refresh"
-onclick="loadRequests()">
-
+</div><div class="main-content"><div class="breadcrumb-title">
+<h2>Withdraw Requests</h2>
+<span>Home / Withdraw Requests</span>
+</div><div class="card-box"><select id="statusFilter" onchange="renderRequests()">
+<option value="All">All Status</option>
+<option value="Pending" selected>Pending</option>
+<option value="Inprocess">In Process</option>
+<option value="Approved">Approved</option>
+<option value="Rejected">Rejected</option>
+</select><div class="action-btns"><button class="btn-refresh" onclick="loadRequests()">
 <i class="fa fa-sync-alt"></i>
 Refresh
-
-</button><button class="btn-excel"
-type="button"
-title="Excel export coming later">
-
+</button><button class="btn-excel" type="button" title="Excel export coming later">
 <i class="fa fa-file-excel"></i>
-
-</button><button class="btn-pdf"
-type="button"
-title="PDF export coming later">
-
+</button><button class="btn-pdf" type="button" title="PDF export coming later">
 <i class="fa fa-file-pdf"></i>
-
-</button></div></div><div class="table-controls"><div>Show
-
-<select id="entriesCount"
-onchange="renderRequests()">
-
+</button></div>
+</div><div class="table-controls"><div>
+Show
+<select id="entriesCount" onchange="renderRequests()">
 <option value="10">10</option>
 <option value="25">25</option>
 <option value="50">50</option>
-<option value="100">100</option></select>entries
-
-</div><div>Search:
-
-<input
-type="text"
-id="searchInput"
-placeholder="Search..."
-oninput="renderRequests()">
-
-</div></div><div class="table-responsive"><table><thead><tr><th>S.No.</th>
+<option value="100">100</option>
+</select>
+entries
+</div><div>
+Search:
+<input type="text" id="searchInput" placeholder="Search..." oninput="renderRequests()">
+</div></div><div class="table-responsive">
+<table>
+<thead>
+<tr>
+<th>S.No.</th>
 <th>User Name</th>
 <th>Amount</th>
 <th>Method</th>
 <th>Account Details</th>
 <th>Status</th>
 <th>Date</th>
-<th>Action</th></tr></thead><tbody id="withdrawTableBody"><tr><td colspan="8"
-class="loading">Loading withdrawal requests...
-
-</td></tr></tbody></table></div></div><div class="footer">Copyright © 2022-2026
-
+<th>Action</th>
+</tr>
+</thead><tbody id="withdrawTableBody">
+<tr>
+<td colspan="8" class="loading">
+Loading withdrawal requests...
+</td>
+</tr>
+</tbody>
+</table>
+</div></div><div class="footer">
+Copyright © 2022-2026
 <span>DW.</span>
-
 All rights reserved.
-
 </div><script>
 
 const API_URL =
@@ -435,162 +304,100 @@ const API_URL =
 
 let withdrawalRequests = [];
 
-
-/* =========================================
-   ADMIN AUTH HEADERS
-========================================= */
-
 function adminHeaders(includeCsrf = false){
 
     const token =
-        sessionStorage.getItem(
-            "adminSessionToken"
-        );
+        sessionStorage.getItem("adminSessionToken");
 
     const csrfToken =
-        sessionStorage.getItem(
-            "adminCsrfToken"
-        );
+        sessionStorage.getItem("adminCsrfToken");
 
     const headers = {
-        "Accept":
-            "application/json"
+        "Accept":"application/json"
     };
 
     if(token){
-
         headers["Authorization"] =
             "Bearer " + token;
-
     }
 
     if(includeCsrf && csrfToken){
-
         headers["X-CSRF-Token"] =
             csrfToken;
-
     }
 
     return headers;
 }
 
-
-/* =========================================
-   SESSION EXPIRED
-========================================= */
-
 function redirectToLogin(){
 
-    sessionStorage.removeItem(
-        "adminSessionToken"
-    );
+    sessionStorage.removeItem("adminSessionToken");
+    sessionStorage.removeItem("adminCsrfToken");
+    sessionStorage.removeItem("adminPanelUsername");
 
-    sessionStorage.removeItem(
-        "adminCsrfToken"
-    );
-
-    sessionStorage.removeItem(
-        "adminPanelUsername"
-    );
-
-    window.location.href =
-        "./index.html";
-
+    window.location.href="./index.html";
 }
-
-
-/* =========================================
-   ADMIN SESSION
-========================================= */
 
 async function checkAdminSession(){
 
     const token =
-        sessionStorage.getItem(
-            "adminSessionToken"
-        );
+        sessionStorage.getItem("adminSessionToken");
 
     if(!token){
-
         redirectToLogin();
-
         return false;
-
     }
-
 
     try{
 
         const response =
             await fetch(
-                API_URL +
-                "/api/admin/me",
+                API_URL + "/api/admin/me",
                 {
                     method:"GET",
-                    headers:
-                        adminHeaders(false),
+                    headers:adminHeaders(false),
                     cache:"no-store"
                 }
             );
-
 
         if(
             response.status === 401 ||
             response.status === 403
         ){
-
             redirectToLogin();
-
             return false;
-
         }
-
 
         if(!response.ok){
-
             redirectToLogin();
-
             return false;
-
         }
-
 
         const data =
             await response.json();
-
 
         if(
             !data.success ||
             data.authenticated === false
         ){
-
             redirectToLogin();
-
             return false;
-
         }
-
 
         const username =
             data.username ||
             data.admin?.username ||
             "Admin";
 
-
-        document.getElementById(
-            "adminName"
-        ).textContent =
+        document.getElementById("adminName").textContent =
             username;
-
 
         sessionStorage.setItem(
             "adminPanelUsername",
             username
         );
 
-
         return true;
-
 
     }catch(error){
 
@@ -602,34 +409,22 @@ async function checkAdminSession(){
         redirectToLogin();
 
         return false;
-
     }
-
 }
-
-
-/* =========================================
-   LOGOUT
-========================================= */
 
 async function logoutAdmin(event){
 
     if(event){
-
         event.preventDefault();
-
     }
-
 
     try{
 
         await fetch(
-            API_URL +
-            "/api/admin/logout",
+            API_URL + "/api/admin/logout",
             {
                 method:"POST",
-                headers:
-                    adminHeaders(true)
+                headers:adminHeaders(true)
             }
         );
 
@@ -642,29 +437,13 @@ async function logoutAdmin(event){
 
     }finally{
 
-        sessionStorage.removeItem(
-            "adminSessionToken"
-        );
+        sessionStorage.removeItem("adminSessionToken");
+        sessionStorage.removeItem("adminCsrfToken");
+        sessionStorage.removeItem("adminPanelUsername");
 
-        sessionStorage.removeItem(
-            "adminCsrfToken"
-        );
-
-        sessionStorage.removeItem(
-            "adminPanelUsername"
-        );
-
-        window.location.href =
-            "./index.html";
-
+        window.location.href="./index.html";
     }
-
 }
-
-
-/* =========================================
-   SIDEBAR
-========================================= */
 
 function toggleSidebar(){
 
@@ -672,13 +451,7 @@ function toggleSidebar(){
     .getElementById("sidebar")
     .classList
     .toggle("active");
-
 }
-
-
-/* =========================================
-   DROPDOWN
-========================================= */
 
 function toggleDropdown(){
 
@@ -686,9 +459,7 @@ function toggleDropdown(){
     .getElementById("dropdownMenu")
     .classList
     .toggle("active");
-
 }
-
 
 window.onclick=function(event){
 
@@ -702,15 +473,8 @@ window.onclick=function(event){
         .getElementById("dropdownMenu")
         .classList
         .remove("active");
-
     }
-
 };
-
-
-/* =========================================
-   GET WITHDRAWAL REQUESTS
-========================================= */
 
 async function loadRequests(){
 
@@ -719,22 +483,13 @@ async function loadRequests(){
             "withdrawTableBody"
         );
 
-
     tbody.innerHTML=`
-
 <tr>
-
-<td colspan="8"
-class="loading">
-
+<td colspan="8" class="loading">
 Loading withdrawal requests...
-
 </td>
-
 </tr>
-
 `;
-
 
     try{
 
@@ -744,12 +499,10 @@ Loading withdrawal requests...
                 "/api/admin/withdrawals",
                 {
                     method:"GET",
-                    headers:
-                        adminHeaders(false),
+                    headers:adminHeaders(false),
                     cache:"no-store"
                 }
             );
-
 
         if(
             response.status === 401 ||
@@ -757,17 +510,13 @@ Loading withdrawal requests...
         ){
 
             redirectToLogin();
-
             return;
-
         }
-
 
         if(!response.ok){
 
             let message =
                 "Unable to load withdrawal requests.";
-
 
             try{
 
@@ -781,34 +530,25 @@ Loading withdrawal requests...
 
             }catch(e){}
 
-
             throw new Error(message);
-
         }
-
 
         const data =
             await response.json();
 
-
         if(Array.isArray(data)){
 
-            withdrawalRequests =
-                data;
+            withdrawalRequests=data;
 
         }else if(
-            Array.isArray(
-                data.withdrawals
-            )
+            Array.isArray(data.withdrawals)
         ){
 
             withdrawalRequests =
                 data.withdrawals;
 
         }else if(
-            Array.isArray(
-                data.data
-            )
+            Array.isArray(data.data)
         ){
 
             withdrawalRequests =
@@ -816,13 +556,10 @@ Loading withdrawal requests...
 
         }else{
 
-            withdrawalRequests = [];
-
+            withdrawalRequests=[];
         }
 
-
         renderRequests();
-
 
     }catch(error){
 
@@ -831,33 +568,51 @@ Loading withdrawal requests...
             error
         );
 
-
         tbody.innerHTML=`
-
 <tr>
-
-<td colspan="8"
-class="error-message">
-
+<td colspan="8" class="error-message">
 ${escapeHtml(
 error.message ||
 "Unable to load withdrawal requests."
 )}
-
 </td>
-
 </tr>
-
 `;
-
     }
-
 }
 
+function normalizeStatus(value){
 
-/* =========================================
-   RENDER REQUESTS
-========================================= */
+    const raw =
+        String(value || "Pending")
+        .trim()
+        .toLowerCase();
+
+    if(
+        raw === "reject" ||
+        raw === "rejected"
+    ){
+        return "Rejected";
+    }
+
+    if(
+        raw === "approve" ||
+        raw === "approved"
+    ){
+        return "Approved";
+    }
+
+    if(
+        raw === "in_process" ||
+        raw === "in-process" ||
+        raw === "in process" ||
+        raw === "inprocess"
+    ){
+        return "Inprocess";
+    }
+
+    return "Pending";
+}
 
 function renderRequests(){
 
@@ -866,12 +621,10 @@ function renderRequests(){
             "withdrawTableBody"
         );
 
-
     const statusFilter =
         document.getElementById(
             "statusFilter"
         ).value;
-
 
     const searchQuery =
         document.getElementById(
@@ -880,7 +633,6 @@ function renderRequests(){
         .toLowerCase()
         .trim();
 
-
     const entries =
         parseInt(
             document.getElementById(
@@ -888,206 +640,92 @@ function renderRequests(){
             ).value
         ) || 10;
 
-
     let requests =
-        Array.isArray(
-            withdrawalRequests
-        )
+        Array.isArray(withdrawalRequests)
         ? [...withdrawalRequests]
         : [];
 
+    requests.sort(function(a,b){
 
-    requests.sort(
-        function(a,b){
+        const dateA =
+            new Date(
+                a.created_at ||
+                a.createdAt ||
+                a.date ||
+                0
+            ).getTime();
 
-            const dateA =
-                new Date(
-                    a.created_at ||
-                    a.createdAt ||
-                    a.date ||
-                    0
-                ).getTime();
+        const dateB =
+            new Date(
+                b.created_at ||
+                b.createdAt ||
+                b.date ||
+                0
+            ).getTime();
 
-
-            const dateB =
-                new Date(
-                    b.created_at ||
-                    b.createdAt ||
-                    b.date ||
-                    0
-                ).getTime();
-
-
-            return dateB - dateA;
-
-        }
-    );
-
+        return dateB-dateA;
+    });
 
     const filtered =
-        requests.filter(
-            function(req){
+        requests.filter(function(req){
 
-                const rawStatus =
-                    String(
-                        req.status ||
-                        "Pending"
-                    );
+            const status =
+                normalizeStatus(req.status);
 
+            const statusMatch =
+                statusFilter === "All" ||
+                status === statusFilter;
 
-                let status =
-                    rawStatus;
+            const searchable=[
+                req.username || "",
+                req.account_name || "",
+                req.accountName || "",
+                req.account_number || "",
+                req.accountNumber || "",
+                req.method || "",
+                req.id || "",
+                req.created_at || "",
+                req.createdAt || ""
+            ]
+            .join(" ")
+            .toLowerCase();
 
+            const searchMatch =
+                !searchQuery ||
+                searchable.includes(searchQuery);
 
-                if(
-                    rawStatus.toLowerCase() ===
-                    "reject"
-                ){
+            return statusMatch && searchMatch;
+        });
 
-                    status = "Rejected";
-
-                }
-
-
-                if(
-                    rawStatus.toLowerCase() ===
-                    "approve"
-                ){
-
-                    status = "Approved";
-
-                }
-
-
-                if(
-                    rawStatus.toLowerCase() ===
-                    "in_process"
-                ){
-
-                    status = "Inprocess";
-
-                }
-
-
-                const statusMatch =
-                    statusFilter === "All" ||
-                    status === statusFilter;
-
-
-                const searchable=[
-
-                    req.username || "",
-                    req.account_name || "",
-                    req.accountName || "",
-                    req.account_number || "",
-                    req.accountNumber || "",
-                    req.method || "",
-                    req.id || "",
-                    req.created_at || "",
-                    req.createdAt || ""
-
-                ]
-                .join(" ")
-                .toLowerCase();
-
-
-                const searchMatch =
-                    !searchQuery ||
-                    searchable.includes(
-                        searchQuery
-                    );
-
-
-                return statusMatch &&
-                       searchMatch;
-
-            }
-        );
-
-
-    if(filtered.length === 0){
+    if(filtered.length===0){
 
         tbody.innerHTML=`
-
 <tr>
-
-<td colspan="8"
-class="no-data">
-
+<td colspan="8" class="no-data">
 No data available!
-
 </td>
-
 </tr>
-
 `;
 
         return;
-
     }
-
 
     tbody.innerHTML="";
 
-
     filtered
     .slice(0,entries)
-    .forEach(
-        function(req,index){
+    .forEach(function(req,index){
 
-            const rawStatus =
-                String(
-                    req.status ||
-                    "Pending"
-                );
+        const status =
+            normalizeStatus(req.status);
 
+        let action="";
 
-            let status =
-                rawStatus;
+        if(status==="Pending"){
 
-
-            if(
-                rawStatus.toLowerCase() ===
-                "reject"
-            ){
-
-                status = "Rejected";
-
-            }
-
-
-            if(
-                rawStatus.toLowerCase() ===
-                "approve"
-            ){
-
-                status = "Approved";
-
-            }
-
-
-            if(
-                rawStatus.toLowerCase() ===
-                "in_process"
-            ){
-
-                status = "Inprocess";
-
-            }
-
-
-            let action="";
-
-
-            if(status==="Pending"){
-
-                action=`
-
+            action=`
 <button
-onclick="updateStatus(
-'${escapeJs(req.id)}',
-'Inprocess'
-)"
+onclick="updateStatus('${escapeJs(req.id)}','Inprocess')"
 style="
 background:#17a2b8;
 border:none;
@@ -1098,119 +736,82 @@ cursor:pointer;
 font-size:12px;
 font-weight:bold;
 ">
-
 In Process
-
 </button>
-
 `;
 
-            }else if(status==="Inprocess"){
+        }else if(status==="Inprocess"){
 
-                action=`
-
+            action=`
 <div class="action-btn-group">
 
 <button
 style="background:#28a745;"
-onclick="updateStatus(
-'${escapeJs(req.id)}',
-'Approved'
-)">
-
+onclick="updateStatus('${escapeJs(req.id)}','Approved')">
 Approve
-
 </button>
 
 <button
 style="background:#dc3545;"
-onclick="updateStatus(
-'${escapeJs(req.id)}',
-'Rejected'
-)">
-
+onclick="updateStatus('${escapeJs(req.id)}','Rejected')">
 Reject
-
 </button>
 
 </div>
-
 `;
 
-            }else{
+        }else{
 
-                action=`
-
+            action=`
 <span
 style="
 color:#666;
 font-size:12px;
 font-weight:bold;
 ">
-
 Completed
-
 </span>
-
 `;
+        }
 
-            }
+        const accountName =
+            req.account_name ||
+            req.accountName ||
+            "N/A";
 
+        const accountNumber =
+            req.account_number ||
+            req.accountNumber ||
+            "N/A";
 
-            const accountName =
-                req.account_name ||
-                req.accountName ||
-                "N/A";
+        const createdDate =
+            req.created_at ||
+            req.createdAt ||
+            req.date ||
+            "-";
 
+        const formattedDate =
+            formatDate(createdDate);
 
-            const accountNumber =
-                req.account_number ||
-                req.accountNumber ||
-                "N/A";
+        const row =
+            document.createElement("tr");
 
-
-            const createdDate =
-                req.created_at ||
-                req.createdAt ||
-                req.date ||
-                "-";
-
-
-            const formattedDate =
-                formatDate(createdDate);
-
-
-            const row =
-                document.createElement("tr");
-
-
-            row.innerHTML=`
+        row.innerHTML=`
+<td>${index+1}</td>
 
 <td>
-${index+1}
-</td>
-
-<td>
-
 <span class="username-cell">
-
 ${escapeHtml(
-req.username ||
-"User"
+req.username || "User"
 )}
-
 </span>
-
 </td>
 
 <td>
-
 <b>
-
 Rs ${
-Number(
-req.amount || 0
-).toLocaleString(
+Number(req.amount || 0)
+.toLocaleString(
 "en-PK",
 {
 minimumFractionDigits:2,
@@ -1218,52 +819,29 @@ maximumFractionDigits:2
 }
 )
 }
-
 </b>
-
 </td>
 
 <td>
-
-${escapeHtml(
-req.method ||
-"-"
-)}
-
+${escapeHtml(req.method || "-")}
 </td>
 
 <td>
-
 <div class="account-name">
-
-${escapeHtml(
-accountName
-)}
-
+${escapeHtml(accountName)}
 </div>
 
 <div class="account-number">
-
-${escapeHtml(
-accountNumber
-)}
-
+${escapeHtml(accountNumber)}
 </div>
-
 </td>
 
 <td>
-
 <span
 class="status"
-style="
-color:${getStatusColor(status)}
-">
-
+style="color:${getStatusColor(status)}">
 ${escapeHtml(status)}
-
 </span>
-
 </td>
 
 <td
@@ -1271,57 +849,32 @@ style="
 font-size:12px;
 color:#555;
 ">
-
-${escapeHtml(
-formattedDate
-)}
-
+${escapeHtml(formattedDate)}
 </td>
 
-<td>
-
-${action}
-
-</td>
-
+<td>${action}</td>
 `;
 
-
-            tbody.appendChild(row);
-
-        }
-    );
-
+        tbody.appendChild(row);
+    });
 }
-
-
-/* =========================================
-   FORMAT DATE
-========================================= */
 
 function formatDate(value){
 
     if(!value){
-
         return "-";
-
     }
-
 
     const date =
         new Date(value);
-
 
     if(
         Number.isNaN(
             date.getTime()
         )
     ){
-
         return String(value);
-
     }
-
 
     return date.toLocaleString(
         "en-PK",
@@ -1335,57 +888,30 @@ function formatDate(value){
             hour12:true
         }
     );
-
 }
-
-
-/* =========================================
-   STATUS COLOR
-========================================= */
 
 function getStatusColor(status){
 
     if(status==="Pending"){
-
         return "#ff9800";
-
     }
-
 
     if(status==="Inprocess"){
-
         return "#17a2b8";
-
     }
-
 
     if(status==="Approved"){
-
         return "#28a745";
-
     }
-
 
     if(status==="Rejected"){
-
         return "#dc3545";
-
     }
 
-
     return "#333";
-
 }
 
-
-/* =========================================
-   UPDATE STATUS
-========================================= */
-
-async function updateStatus(
-    id,
-    newStatus
-){
+async function updateStatus(id,newStatus){
 
     try{
 
@@ -1394,23 +920,18 @@ async function updateStatus(
             newStatus!=="Approved" &&
             newStatus!=="Rejected"
         ){
-
             return;
-
         }
-
 
         const csrfToken =
             sessionStorage.getItem(
                 "adminCsrfToken"
             );
 
-
         const sessionToken =
             sessionStorage.getItem(
                 "adminSessionToken"
             );
-
 
         if(
             !csrfToken ||
@@ -1424,9 +945,7 @@ async function updateStatus(
             redirectToLogin();
 
             return;
-
         }
-
 
         const confirmed =
             confirm(
@@ -1435,13 +954,15 @@ async function updateStatus(
                 "?"
             );
 
-
         if(!confirmed){
-
             return;
-
         }
 
+        const headers =
+            adminHeaders(true);
+
+        headers["Content-Type"] =
+            "application/json";
 
         const response =
             await fetch(
@@ -1451,14 +972,12 @@ async function updateStatus(
                 "/status",
                 {
                     method:"PATCH",
-                    headers:
-                        adminHeaders(true),
+                    headers:headers,
                     body:JSON.stringify({
                         status:newStatus
                     })
                 }
             );
-
 
         if(
             response.status === 401 ||
@@ -1472,20 +991,13 @@ async function updateStatus(
             redirectToLogin();
 
             return;
-
         }
-
 
         const data =
             await response.json()
-            .catch(
-                function(){
-
-                    return {};
-
-                }
-            );
-
+            .catch(function(){
+                return {};
+            });
 
         if(!response.ok){
 
@@ -1494,18 +1006,14 @@ async function updateStatus(
                 data.error ||
                 "Unable to update withdrawal status."
             );
-
         }
-
 
         alert(
             data.message ||
             "Withdrawal status updated successfully."
         );
 
-
         await loadRequests();
-
 
     }catch(error){
 
@@ -1514,50 +1022,31 @@ async function updateStatus(
             error
         );
 
-
         alert(
             error.message ||
             "Something went wrong. Please try again."
         );
-
     }
-
 }
-
-
-/* =========================================
-   ESCAPE HTML
-========================================= */
 
 function escapeHtml(text){
 
     const map={
-
         "&":"&amp;",
         "<":"&lt;",
         ">":"&gt;",
         '"':"&quot;",
         "'":"&#039;"
-
     };
-
 
     return String(text ?? "")
     .replace(
         /[&<>"']/g,
         function(m){
-
             return map[m];
-
         }
     );
-
 }
-
-
-/* =========================================
-   ESCAPE JS
-========================================= */
 
 function escapeJs(text){
 
@@ -1567,13 +1056,7 @@ function escapeJs(text){
     .replace(/"/g,'\\"')
     .replace(/\n/g,"\\n")
     .replace(/\r/g,"\\r");
-
 }
-
-
-/* =========================================
-   PAGE LOAD
-========================================= */
 
 window.addEventListener(
     "DOMContentLoaded",
@@ -1582,23 +1065,13 @@ window.addEventListener(
         const sessionOK =
             await checkAdminSession();
 
-
         if(!sessionOK){
-
             return;
-
         }
 
-
         await loadRequests();
-
     }
 );
-
-
-/* =========================================
-   AUTO REFRESH
-========================================= */
 
 setInterval(
     async function(){
@@ -1614,11 +1087,8 @@ setInterval(
                 );
 
             if(token){
-
                 await loadRequests();
-
             }
-
         }
 
     },
