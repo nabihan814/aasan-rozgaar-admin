@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Payment App - Admin Login</title>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -63,6 +68,11 @@
             border: 1px solid #ccc;
             border-radius: 8px;
             font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #0f9d58;
         }
 
         button {
@@ -77,6 +87,10 @@
             cursor: pointer;
         }
 
+        button:hover {
+            background: #087f3e;
+        }
+
         button:disabled {
             opacity: .6;
             cursor: not-allowed;
@@ -88,6 +102,7 @@
             margin-bottom: 15px;
             border-radius: 8px;
             text-align: center;
+            font-size: 14px;
         }
 
         .error {
@@ -101,22 +116,37 @@
             background: #e5f7eb;
             color: #087f3e;
         }
+
     </style>
+
 </head>
+
 
 <body>
 
+
 <div class="login-box">
 
-    <div class="logo">AR</div>
+    <div class="logo">
+        AR
+    </div>
 
-    <h2>Admin Panel Login</h2>
+
+    <h2>
+        Admin Panel Login
+    </h2>
+
 
     <div id="message"></div>
 
+
     <form id="loginForm">
 
-        <label for="username">Username</label>
+
+        <label for="username">
+            Username
+        </label>
+
 
         <input
             type="text"
@@ -127,7 +157,11 @@
             required
         >
 
-        <label for="password">Password</label>
+
+        <label for="password">
+            Password
+        </label>
+
 
         <input
             type="password"
@@ -137,154 +171,337 @@
             required
         >
 
-        <button type="submit" id="loginButton">
+
+        <button
+            type="submit"
+            id="loginButton">
+
             Login
+
         </button>
+
 
     </form>
 
 </div>
 
+
+
 <script>
+
+
+/* =========================
+   BACKEND
+========================= */
 
 const BACKEND_URL =
     "https://aasan-rozgaar-backend.onrender.com";
 
 
+
+/* =========================
+   ELEMENTS
+========================= */
+
 const form =
-    document.getElementById("loginForm");
+    document.getElementById(
+        "loginForm"
+    );
+
 
 const usernameInput =
-    document.getElementById("username");
+    document.getElementById(
+        "username"
+    );
+
 
 const passwordInput =
-    document.getElementById("password");
+    document.getElementById(
+        "password"
+    );
+
 
 const loginButton =
-    document.getElementById("loginButton");
+    document.getElementById(
+        "loginButton"
+    );
+
 
 const message =
-    document.getElementById("message");
+    document.getElementById(
+        "message"
+    );
 
 
-function showMessage(text, type) {
 
-    message.textContent = text;
-    message.className = type;
+/* =========================
+   MESSAGE
+========================= */
+
+function showMessage(
+    text,
+    type
+) {
+
+    message.textContent =
+        text;
+
+    message.className =
+        type;
 }
 
 
-form.addEventListener("submit", async function(event) {
 
-    event.preventDefault();
+/* =========================
+   LOGIN
+========================= */
 
-    loginButton.disabled = true;
-    message.className = "";
+form.addEventListener(
+    "submit",
+    async function(event) {
 
-    const username =
-        usernameInput.value.trim();
-
-    const password =
-        passwordInput.value;
+        event.preventDefault();
 
 
-    try {
-
-        const response = await fetch(
-            BACKEND_URL + "/api/admin/login",
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                credentials: "include",
-
-                body: JSON.stringify({
-                    username: username,
-                    password: password
-                })
-            }
-        );
+        loginButton.disabled =
+            true;
 
 
-        let data = {};
+        loginButton.textContent =
+            "Logging in...";
+
+
+        message.className =
+            "";
+
+
+        const username =
+            usernameInput.value.trim();
+
+
+        const password =
+            passwordInput.value;
+
+
+
+        if(!username || !password){
+
+            showMessage(
+                "Username aur password enter karein.",
+                "error"
+            );
+
+            loginButton.disabled =
+                false;
+
+            loginButton.textContent =
+                "Login";
+
+            return;
+        }
+
+
 
         try {
 
-            data = await response.json();
 
-        } catch (_) {
+            const response =
+                await fetch(
+                    BACKEND_URL +
+                    "/api/admin/login",
+                    {
+                        method: "POST",
 
-            data = {};
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
 
-        }
+                        credentials:
+                            "include",
+
+                        body:
+                            JSON.stringify({
+                                username:
+                                    username,
+
+                                password:
+                                    password
+                            })
+                    }
+                );
 
 
-        if (!response.ok || !data.success) {
 
-            throw new Error(
-                data.message || "Login failed"
+            let data = {};
+
+
+
+            try {
+
+                data =
+                    await response.json();
+
+            } catch (_) {
+
+                data = {};
+
+            }
+
+
+
+            /* =========================
+               LOGIN ERROR
+            ========================= */
+
+            if(
+                !response.ok ||
+                !data.success
+            ) {
+
+                throw new Error(
+                    data.message ||
+                    "Login failed"
+                );
+
+            }
+
+
+
+            /* =========================
+               SESSION TOKEN CHECK
+            ========================= */
+
+            if(
+                !data.sessionToken
+            ) {
+
+                throw new Error(
+                    "Session token was not received from server."
+                );
+
+            }
+
+
+
+            /* =========================
+               CSRF TOKEN CHECK
+            ========================= */
+
+            if(
+                !data.csrfToken
+            ) {
+
+                throw new Error(
+                    "Security token was not received."
+                );
+
+            }
+
+
+
+            /* =========================
+               SAVE ADMIN SESSION
+            ========================= */
+
+            sessionStorage.setItem(
+                "adminSessionToken",
+                data.sessionToken
             );
-        }
 
 
-        if (!data.csrfToken) {
-
-            throw new Error(
-                "Security token was not received."
+            sessionStorage.setItem(
+                "adminCsrfToken",
+                data.csrfToken
             );
+
+
+            sessionStorage.setItem(
+                "adminPanelUsername",
+                data.username ||
+                username
+            );
+
+
+
+            /* =========================
+               SUCCESS
+            ========================= */
+
+            showMessage(
+                "Login successful!",
+                "success"
+            );
+
+
+
+            /* =========================
+               DASHBOARD
+            ========================= */
+
+            setTimeout(
+                function() {
+
+                    window.location.href =
+                        "./dashboard.html";
+
+                },
+                500
+            );
+
+
+        } catch(error) {
+
+
+            console.error(
+                "Admin login error:",
+                error
+            );
+
+
+            /* Remove incomplete session */
+
+            sessionStorage.removeItem(
+                "adminSessionToken"
+            );
+
+
+            sessionStorage.removeItem(
+                "adminCsrfToken"
+            );
+
+
+            sessionStorage.removeItem(
+                "adminPanelUsername"
+            );
+
+
+            showMessage(
+                error.message ||
+                "Server connection failed.",
+                "error"
+            );
+
+
+        } finally {
+
+
+            loginButton.disabled =
+                false;
+
+
+            loginButton.textContent =
+                "Login";
+
         }
-
-
-        sessionStorage.setItem(
-            "adminCsrfToken",
-            data.csrfToken
-        );
-
-
-        sessionStorage.setItem(
-            "adminPanelUsername",
-            data.username || username
-        );
-
-
-        showMessage(
-            "Login successful!",
-            "success"
-        );
-
-
-        setTimeout(function() {
-
-            window.location.href = "./dashboard.html";
-
-        }, 500);
-
-
-    } catch (error) {
-
-        console.error(
-            "Admin login error:",
-            error
-        );
-
-        showMessage(
-            error.message ||
-            "Server connection failed.",
-            "error"
-        );
-
-    } finally {
-
-        loginButton.disabled = false;
 
     }
+);
 
-});
 
 </script>
 
+
 </body>
+
 </html>
