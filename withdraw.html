@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Payment App - Withdraw Requests</title>
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<style>
+<title>Payment App - Withdraw Requests</title><link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>
 *{
     margin:0;
     padding:0;
@@ -313,268 +308,195 @@ th{
     color:#dc3545;
     font-weight:bold;
 }
-</style>
-</head>
+</style></head><body><div class="sidebar" id="sidebar"><div class="sidebar-header">
+<i class="fa fa-wallet"></i>
+Payment App
+</div><ul class="sidebar-menu"><li>
+<a href="./dashboard.html">
+<i class="fa fa-tachometer-alt"></i>
+Dashboard
+</a>
+</li><li class="active">
+<a href="./withdraw.html">
+<i class="fa fa-file-invoice-dollar"></i>
+Withdraw Requests
+</a>
+</li><li>
+<a href="./deposit.html">
+<i class="fa fa-money-bill-wave"></i>
+Deposite Requests
+</a>
+</li><li>
+<a href="./deposit-type.html">
+<i class="fa fa-list"></i>
+Deposite Type List
+</a>
+</li><li>
+<a href="./deposit-report.html">
+<i class="fa fa-chart-bar"></i>
+Deposit Report
+</a>
+</li><li>
+<a href="./withdraw-report.html">
+<i class="fa fa-chart-line"></i>
+Withdraw Report
+</a>
+</li></ul>
+</div><div class="navbar"><i class="fa fa-bars menu-toggle"
+onclick="toggleSidebar()"></i>
 
-<body>
-
-<div class="sidebar" id="sidebar">
-
-    <div class="sidebar-header">
-        <i class="fa fa-wallet"></i>
-        Payment App
-    </div>
-
-    <ul class="sidebar-menu">
-
-        <li>
-            <a href="./dashboard.html">
-                <i class="fa fa-tachometer-alt"></i>
-                Dashboard
-            </a>
-        </li>
-
-        <li class="active">
-            <a href="./withdraw.html">
-                <i class="fa fa-file-invoice-dollar"></i>
-                Withdraw Requests
-            </a>
-        </li>
-
-        <li>
-            <a href="./deposit.html">
-                <i class="fa fa-money-bill-wave"></i>
-                Deposite Requests
-            </a>
-        </li>
-
-        <li>
-            <a href="./deposit-type.html">
-                <i class="fa fa-list"></i>
-                Deposite Type List
-            </a>
-        </li>
-
-        <li>
-            <a href="./deposit-report.html">
-                <i class="fa fa-chart-bar"></i>
-                Deposit Report
-            </a>
-        </li>
-
-        <li>
-            <a href="./withdraw-report.html">
-                <i class="fa fa-chart-line"></i>
-                Withdraw Report
-            </a>
-        </li>
-
-    </ul>
-</div>
-
-
-<div class="navbar">
-
-    <i class="fa fa-bars menu-toggle"
-       onclick="toggleSidebar()"></i>
-
-    <div class="user-dropdown-container"
-         onclick="toggleDropdown()">
-
-        <span class="user-profile">
-            Welcome <span id="adminName">Admin</span>
-            <i class="fa fa-caret-down"></i>
-        </span>
-
-        <div class="dropdown-menu"
-             id="dropdownMenu">
-
-            <a href="#">
-                <i class="fa fa-wallet"></i>
-                Change Password
-            </a>
-
-            <a href="./index.html"
-               onclick="logoutAdmin(event)">
-                <i class="fa fa-power-off"></i>
-                Logout
-            </a>
-
-        </div>
-    </div>
+<div class="user-dropdown-container"
+onclick="toggleDropdown()"><span class="user-profile">
+Welcome <span id="adminName">Admin</span>
+<i class="fa fa-caret-down"></i>
+</span><div class="dropdown-menu"
+id="dropdownMenu"><a href="#">
+<i class="fa fa-wallet"></i>
+Change Password
+</a><a href="./index.html"
+onclick="logoutAdmin(event)">
+<i class="fa fa-power-off"></i>
+Logout
+</a>
 
 </div>
-
-
-<div class="main-content">
-
-    <div class="breadcrumb-title">
-
-        <h2>Withdraw Requests</h2>
-
-        <span>
-            Home / Withdraw Requests
-        </span>
-
-    </div>
-
-
-    <div class="card-box">
-
-        <select id="statusFilter"
-                onchange="renderRequests()">
-
-            <option value="All">
-                All Status
-            </option>
-
-            <option value="Pending" selected>
-                Pending
-            </option>
-
-            <option value="Inprocess">
-                In Process
-            </option>
-
-            <option value="Approved">
-                Approved
-            </option>
-
-            <option value="Rejected">
-                Rejected
-            </option>
-
-        </select>
-
-
-        <div class="action-btns">
-
-            <button class="btn-refresh"
-                    onclick="loadRequests()">
-
-                <i class="fa fa-sync-alt"></i>
-                Refresh
-
-            </button>
-
-            <button class="btn-excel"
-                    type="button"
-                    title="Excel export coming later">
-
-                <i class="fa fa-file-excel"></i>
-
-            </button>
-
-            <button class="btn-pdf"
-                    type="button"
-                    title="PDF export coming later">
-
-                <i class="fa fa-file-pdf"></i>
-
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <div class="table-controls">
-
-        <div>
-
-            Show
-
-            <select id="entriesCount"
-                    onchange="renderRequests()">
-
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-
-            </select>
-
-            entries
-
-        </div>
-
-
-        <div>
-
-            Search:
-
-            <input type="text"
-                   id="searchInput"
-                   placeholder="Search..."
-                   oninput="renderRequests()">
-
-        </div>
-
-    </div>
-
-
-    <div class="table-responsive">
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>S.No.</th>
-                    <th>User Name</th>
-                    <th>Amount</th>
-                    <th>Method</th>
-                    <th>Account Details</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                    <th>Action</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody id="withdrawTableBody">
-
-                <tr>
-
-                    <td colspan="8"
-                        class="loading">
-
-                        Loading withdrawal requests...
-
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
-    </div>
-
 </div>
+</div><div class="main-content"><div class="breadcrumb-title"><h2>Withdraw Requests</h2><span>
+Home / Withdraw Requests
+</span></div><div class="card-box"><select id="statusFilter"
+onchange="renderRequests()">
 
+<option value="All">
+All Status
+</option><option value="Pending" selected>
+Pending
+</option><option value="Inprocess">
+In Process
+</option><option value="Approved">
+Approved
+</option><option value="Rejected">
+Rejected
+</option></select><div class="action-btns"><button class="btn-refresh"
+onclick="loadRequests()">
 
-<div class="footer">
+<i class="fa fa-sync-alt"></i>
+Refresh
 
-    Copyright © 2022-2026
+</button><button class="btn-excel"
+type="button"
+title="Excel export coming later">
 
-    <span>DW.</span>
+<i class="fa fa-file-excel"></i>
 
-    All rights reserved.
+</button><button class="btn-pdf"
+type="button"
+title="PDF export coming later">
 
-</div>
+<i class="fa fa-file-pdf"></i>
 
+</button></div></div><div class="table-controls"><div>Show
 
-<script>
+<select id="entriesCount"
+onchange="renderRequests()">
+
+<option value="10">10</option>
+<option value="25">25</option>
+<option value="50">50</option>
+<option value="100">100</option></select>entries
+
+</div><div>Search:
+
+<input
+type="text"
+id="searchInput"
+placeholder="Search..."
+oninput="renderRequests()">
+
+</div></div><div class="table-responsive"><table><thead><tr><th>S.No.</th>
+<th>User Name</th>
+<th>Amount</th>
+<th>Method</th>
+<th>Account Details</th>
+<th>Status</th>
+<th>Date</th>
+<th>Action</th></tr></thead><tbody id="withdrawTableBody"><tr><td colspan="8"
+class="loading">Loading withdrawal requests...
+
+</td></tr></tbody></table></div></div><div class="footer">Copyright © 2022-2026
+
+<span>DW.</span>
+
+All rights reserved.
+
+</div><script>
 
 const API_URL =
-    "https://aasan-rozgaar-backend.onrender.com";
-
+"https://aasan-rozgaar-backend.onrender.com";
 
 let withdrawalRequests = [];
-let adminSession = null;
+
+
+/* =========================================
+   ADMIN AUTH HEADERS
+========================================= */
+
+function adminHeaders(includeCsrf = false){
+
+    const token =
+        sessionStorage.getItem(
+            "adminSessionToken"
+        );
+
+    const csrfToken =
+        sessionStorage.getItem(
+            "adminCsrfToken"
+        );
+
+    const headers = {
+        "Accept":
+            "application/json"
+    };
+
+    if(token){
+
+        headers["Authorization"] =
+            "Bearer " + token;
+
+    }
+
+    if(includeCsrf && csrfToken){
+
+        headers["X-CSRF-Token"] =
+            csrfToken;
+
+    }
+
+    return headers;
+}
+
+
+/* =========================================
+   SESSION EXPIRED
+========================================= */
+
+function redirectToLogin(){
+
+    sessionStorage.removeItem(
+        "adminSessionToken"
+    );
+
+    sessionStorage.removeItem(
+        "adminCsrfToken"
+    );
+
+    sessionStorage.removeItem(
+        "adminPanelUsername"
+    );
+
+    window.location.href =
+        "./index.html";
+
+}
 
 
 /* =========================================
@@ -583,23 +505,50 @@ let adminSession = null;
 
 async function checkAdminSession(){
 
+    const token =
+        sessionStorage.getItem(
+            "adminSessionToken"
+        );
+
+    if(!token){
+
+        redirectToLogin();
+
+        return false;
+
+    }
+
+
     try{
 
         const response =
             await fetch(
-                API_URL + "/api/admin/me",
+                API_URL +
+                "/api/admin/me",
                 {
                     method:"GET",
-                    credentials:"include",
-                    headers:{
-                        "Accept":"application/json"
-                    },
+                    headers:
+                        adminHeaders(false),
                     cache:"no-store"
                 }
             );
 
 
+        if(
+            response.status === 401 ||
+            response.status === 403
+        ){
+
+            redirectToLogin();
+
+            return false;
+
+        }
+
+
         if(!response.ok){
+
+            redirectToLogin();
 
             return false;
 
@@ -611,16 +560,15 @@ async function checkAdminSession(){
 
 
         if(
-            data.success === false ||
+            !data.success ||
             data.authenticated === false
         ){
+
+            redirectToLogin();
 
             return false;
 
         }
-
-
-        adminSession = data;
 
 
         const username =
@@ -631,10 +579,18 @@ async function checkAdminSession(){
 
         document.getElementById(
             "adminName"
-        ).textContent = username;
+        ).textContent =
+            username;
+
+
+        sessionStorage.setItem(
+            "adminPanelUsername",
+            username
+        );
 
 
         return true;
+
 
     }catch(error){
 
@@ -643,33 +599,11 @@ async function checkAdminSession(){
             error
         );
 
+        redirectToLogin();
+
         return false;
 
     }
-
-}
-
-
-/* =========================================
-   SESSION EXPIRED
-========================================= */
-
-function redirectToLogin(){
-
-    sessionStorage.removeItem(
-        "adminCsrfToken"
-    );
-
-    localStorage.removeItem(
-        "adminPanelLoggedIn"
-    );
-
-    localStorage.removeItem(
-        "adminPanelUsername"
-    );
-
-    window.location.href =
-        "./index.html";
 
 }
 
@@ -689,31 +623,13 @@ async function logoutAdmin(event){
 
     try{
 
-        const csrfToken =
-            sessionStorage.getItem(
-                "adminCsrfToken"
-            );
-
-
-        const headers={
-            "Accept":"application/json"
-        };
-
-
-        if(csrfToken){
-
-            headers["X-CSRF-Token"] =
-                csrfToken;
-
-        }
-
-
         await fetch(
-            API_URL + "/api/admin/logout",
+            API_URL +
+            "/api/admin/logout",
             {
                 method:"POST",
-                credentials:"include",
-                headers:headers
+                headers:
+                    adminHeaders(true)
             }
         );
 
@@ -724,24 +640,24 @@ async function logoutAdmin(event){
             error
         );
 
+    }finally{
+
+        sessionStorage.removeItem(
+            "adminSessionToken"
+        );
+
+        sessionStorage.removeItem(
+            "adminCsrfToken"
+        );
+
+        sessionStorage.removeItem(
+            "adminPanelUsername"
+        );
+
+        window.location.href =
+            "./index.html";
+
     }
-
-
-    sessionStorage.removeItem(
-        "adminCsrfToken"
-    );
-
-    localStorage.removeItem(
-        "adminPanelLoggedIn"
-    );
-
-    localStorage.removeItem(
-        "adminPanelUsername"
-    );
-
-
-    window.location.href =
-        "./index.html";
 
 }
 
@@ -806,52 +722,38 @@ async function loadRequests(){
 
     tbody.innerHTML=`
 
-        <tr>
+<tr>
 
-            <td colspan="8"
-                class="loading">
+<td colspan="8"
+class="loading">
 
-                Loading withdrawal requests...
+Loading withdrawal requests...
 
-            </td>
+</td>
 
-        </tr>
+</tr>
 
-    `;
+`;
 
 
     try{
 
-        const sessionOK =
-            await checkAdminSession();
-
-
-        if(!sessionOK){
-
-            redirectToLogin();
-
-            return;
-
-        }
-
-
         const response =
             await fetch(
-                API_URL + "/api/admin/withdrawals",
+                API_URL +
+                "/api/admin/withdrawals",
                 {
                     method:"GET",
-                    credentials:"include",
-                    headers:{
-                        "Accept":"application/json"
-                    },
+                    headers:
+                        adminHeaders(false),
                     cache:"no-store"
                 }
             );
 
 
         if(
-            response.status===401 ||
-            response.status===403
+            response.status === 401 ||
+            response.status === 403
         ){
 
             redirectToLogin();
@@ -894,14 +796,27 @@ async function loadRequests(){
             withdrawalRequests =
                 data;
 
-        }else{
+        }else if(
+            Array.isArray(
+                data.withdrawals
+            )
+        ){
 
             withdrawalRequests =
-                Array.isArray(
-                    data.withdrawals
-                )
-                ? data.withdrawals
-                : [];
+                data.withdrawals;
+
+        }else if(
+            Array.isArray(
+                data.data
+            )
+        ){
+
+            withdrawalRequests =
+                data.data;
+
+        }else{
+
+            withdrawalRequests = [];
 
         }
 
@@ -919,21 +834,21 @@ async function loadRequests(){
 
         tbody.innerHTML=`
 
-            <tr>
+<tr>
 
-                <td colspan="8"
-                    class="error-message">
+<td colspan="8"
+class="error-message">
 
-                    ${escapeHtml(
-                        error.message ||
-                        "Unable to load withdrawal requests."
-                    )}
+${escapeHtml(
+error.message ||
+"Unable to load withdrawal requests."
+)}
 
-                </td>
+</td>
 
-            </tr>
+</tr>
 
-        `;
+`;
 
     }
 
@@ -1013,13 +928,50 @@ function renderRequests(){
         requests.filter(
             function(req){
 
-                const status =
-                    req.status || "Pending";
+                const rawStatus =
+                    String(
+                        req.status ||
+                        "Pending"
+                    );
+
+
+                let status =
+                    rawStatus;
+
+
+                if(
+                    rawStatus.toLowerCase() ===
+                    "reject"
+                ){
+
+                    status = "Rejected";
+
+                }
+
+
+                if(
+                    rawStatus.toLowerCase() ===
+                    "approve"
+                ){
+
+                    status = "Approved";
+
+                }
+
+
+                if(
+                    rawStatus.toLowerCase() ===
+                    "in_process"
+                ){
+
+                    status = "Inprocess";
+
+                }
 
 
                 const statusMatch =
-                    statusFilter==="All" ||
-                    status===statusFilter;
+                    statusFilter === "All" ||
+                    status === statusFilter;
 
 
                 const searchable=[
@@ -1053,22 +1005,22 @@ function renderRequests(){
         );
 
 
-    if(filtered.length===0){
+    if(filtered.length === 0){
 
         tbody.innerHTML=`
 
-            <tr>
+<tr>
 
-                <td colspan="8"
-                    class="no-data">
+<td colspan="8"
+class="no-data">
 
-                    No data available!
+No data available!
 
-                </td>
+</td>
 
-            </tr>
+</tr>
 
-        `;
+`;
 
         return;
 
@@ -1083,8 +1035,45 @@ function renderRequests(){
     .forEach(
         function(req,index){
 
-            const status =
-                req.status || "Pending";
+            const rawStatus =
+                String(
+                    req.status ||
+                    "Pending"
+                );
+
+
+            let status =
+                rawStatus;
+
+
+            if(
+                rawStatus.toLowerCase() ===
+                "reject"
+            ){
+
+                status = "Rejected";
+
+            }
+
+
+            if(
+                rawStatus.toLowerCase() ===
+                "approve"
+            ){
+
+                status = "Approved";
+
+            }
+
+
+            if(
+                rawStatus.toLowerCase() ===
+                "in_process"
+            ){
+
+                status = "Inprocess";
+
+            }
 
 
             let action="";
@@ -1094,76 +1083,76 @@ function renderRequests(){
 
                 action=`
 
-                    <button
-                        onclick="updateStatus(
-                            '${escapeJs(req.id)}',
-                            'Inprocess'
-                        )"
-                        style="
-                            background:#17a2b8;
-                            border:none;
-                            color:white;
-                            padding:5px 12px;
-                            border-radius:3px;
-                            cursor:pointer;
-                            font-size:12px;
-                            font-weight:bold;
-                        "
-                    >
-                        In Process
-                    </button>
+<button
+onclick="updateStatus(
+'${escapeJs(req.id)}',
+'Inprocess'
+)"
+style="
+background:#17a2b8;
+border:none;
+color:white;
+padding:5px 12px;
+border-radius:3px;
+cursor:pointer;
+font-size:12px;
+font-weight:bold;
+">
 
-                `;
+In Process
 
-            }
+</button>
 
-            else if(status==="Inprocess"){
+`;
 
-                action=`
-
-                    <div class="action-btn-group">
-
-                        <button
-                            style="background:#28a745;"
-                            onclick="updateStatus(
-                                '${escapeJs(req.id)}',
-                                'Approved'
-                            )"
-                        >
-                            Approve
-                        </button>
-
-                        <button
-                            style="background:#dc3545;"
-                            onclick="updateStatus(
-                                '${escapeJs(req.id)}',
-                                'Rejected'
-                            )"
-                        >
-                            Reject
-                        </button>
-
-                    </div>
-
-                `;
-
-            }
-
-            else{
+            }else if(status==="Inprocess"){
 
                 action=`
 
-                    <span
-                        style="
-                            color:#666;
-                            font-size:12px;
-                            font-weight:bold;
-                        "
-                    >
-                        Completed
-                    </span>
+<div class="action-btn-group">
 
-                `;
+<button
+style="background:#28a745;"
+onclick="updateStatus(
+'${escapeJs(req.id)}',
+'Approved'
+)">
+
+Approve
+
+</button>
+
+<button
+style="background:#dc3545;"
+onclick="updateStatus(
+'${escapeJs(req.id)}',
+'Rejected'
+)">
+
+Reject
+
+</button>
+
+</div>
+
+`;
+
+            }else{
+
+                action=`
+
+<span
+style="
+color:#666;
+font-size:12px;
+font-weight:bold;
+">
+
+Completed
+
+</span>
+
+`;
 
             }
 
@@ -1197,87 +1186,105 @@ function renderRequests(){
 
             row.innerHTML=`
 
-                <td>
-                    ${index+1}
-                </td>
+<td>
+${index+1}
+</td>
 
-                <td>
-                    <span class="username-cell">
-                        ${escapeHtml(
-                            req.username || "User"
-                        )}
-                    </span>
-                </td>
+<td>
 
-                <td>
-                    <b>
-                        Rs ${
-                            Number(
-                                req.amount || 0
-                            ).toLocaleString(
-                                "en-PK",
-                                {
-                                    minimumFractionDigits:2,
-                                    maximumFractionDigits:2
-                                }
-                            )
-                        }
-                    </b>
-                </td>
+<span class="username-cell">
 
-                <td>
-                    ${escapeHtml(
-                        req.method || "-"
-                    )}
-                </td>
+${escapeHtml(
+req.username ||
+"User"
+)}
 
-                <td>
+</span>
 
-                    <div class="account-name">
-                        ${escapeHtml(
-                            accountName
-                        )}
-                    </div>
+</td>
 
-                    <div class="account-number">
-                        ${escapeHtml(
-                            accountNumber
-                        )}
-                    </div>
+<td>
 
-                </td>
+<b>
 
-                <td>
+Rs ${
+Number(
+req.amount || 0
+).toLocaleString(
+"en-PK",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+)
+}
 
-                    <span
-                        class="status"
-                        style="
-                            color:${getStatusColor(
-                                status
-                            )}
-                        "
-                    >
-                        ${escapeHtml(status)}
-                    </span>
+</b>
 
-                </td>
+</td>
 
-                <td
-                    style="
-                        font-size:12px;
-                        color:#555;
-                    "
-                >
-                    ${escapeHtml(
-                        formattedDate
-                    )}
-                </td>
+<td>
 
-                <td>
-                    ${action}
-                </td>
+${escapeHtml(
+req.method ||
+"-"
+)}
 
-            `;
+</td>
+
+<td>
+
+<div class="account-name">
+
+${escapeHtml(
+accountName
+)}
+
+</div>
+
+<div class="account-number">
+
+${escapeHtml(
+accountNumber
+)}
+
+</div>
+
+</td>
+
+<td>
+
+<span
+class="status"
+style="
+color:${getStatusColor(status)}
+">
+
+${escapeHtml(status)}
+
+</span>
+
+</td>
+
+<td
+style="
+font-size:12px;
+color:#555;
+">
+
+${escapeHtml(
+formattedDate
+)}
+
+</td>
+
+<td>
+
+${action}
+
+</td>
+
+`;
 
 
             tbody.appendChild(row);
@@ -1375,7 +1382,10 @@ function getStatusColor(status){
    UPDATE STATUS
 ========================================= */
 
-async function updateStatus(id,newStatus){
+async function updateStatus(
+    id,
+    newStatus
+){
 
     try{
 
@@ -1396,7 +1406,16 @@ async function updateStatus(id,newStatus){
             );
 
 
-        if(!csrfToken){
+        const sessionToken =
+            sessionStorage.getItem(
+                "adminSessionToken"
+            );
+
+
+        if(
+            !csrfToken ||
+            !sessionToken
+        ){
 
             alert(
                 "Admin session expired. Please login again."
@@ -1432,15 +1451,8 @@ async function updateStatus(id,newStatus){
                 "/status",
                 {
                     method:"PATCH",
-                    credentials:"include",
-                    headers:{
-                        "Content-Type":
-                            "application/json",
-                        "Accept":
-                            "application/json",
-                        "X-CSRF-Token":
-                            csrfToken
-                    },
+                    headers:
+                        adminHeaders(true),
                     body:JSON.stringify({
                         status:newStatus
                     })
@@ -1449,8 +1461,8 @@ async function updateStatus(id,newStatus){
 
 
         if(
-            response.status===401 ||
-            response.status===403
+            response.status === 401 ||
+            response.status === 403
         ){
 
             alert(
@@ -1530,15 +1542,15 @@ function escapeHtml(text){
     };
 
 
-    return String(text)
-        .replace(
-            /[&<>"']/g,
-            function(m){
+    return String(text ?? "")
+    .replace(
+        /[&<>"']/g,
+        function(m){
 
-                return map[m];
+            return map[m];
 
-            }
-        );
+        }
+    );
 
 }
 
@@ -1549,30 +1561,14 @@ function escapeHtml(text){
 
 function escapeJs(text){
 
-    return String(text)
-        .replace(/\\/g,"\\\\")
-        .replace(/'/g,"\\'")
-        .replace(/"/g,'\\"')
-        .replace(/\n/g,"\\n")
-        .replace(/\r/g,"\\r");
+    return String(text ?? "")
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'")
+    .replace(/"/g,'\\"')
+    .replace(/\n/g,"\\n")
+    .replace(/\r/g,"\\r");
 
 }
-
-
-/* =========================================
-   SEARCH
-========================================= */
-
-document
-.getElementById("searchInput")
-.addEventListener(
-    "input",
-    function(){
-
-        renderRequests();
-
-    }
-);
 
 
 /* =========================================
@@ -1588,8 +1584,6 @@ window.addEventListener(
 
 
         if(!sessionOK){
-
-            redirectToLogin();
 
             return;
 
@@ -1614,7 +1608,16 @@ setInterval(
             "visible"
         ){
 
-            await loadRequests();
+            const token =
+                sessionStorage.getItem(
+                    "adminSessionToken"
+                );
+
+            if(token){
+
+                await loadRequests();
+
+            }
 
         }
 
@@ -1622,7 +1625,5 @@ setInterval(
     10000
 );
 
-</script>
-
-</body>
+</script></body>
 </html>
