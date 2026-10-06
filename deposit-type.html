@@ -16,9 +16,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     font-family:Arial,sans-serif
 }
 
-body{
-    background:#f4f6f9
-}
+body{background:#f4f6f9}
 
 .navbar{
     background:#fff;
@@ -32,11 +30,7 @@ body{
     z-index:999
 }
 
-.menu-toggle{
-    font-size:20px;
-    cursor:pointer;
-    color:#333
-}
+.menu-toggle{font-size:20px;cursor:pointer;color:#333}
 
 .user-dropdown-container{
     position:relative;
@@ -61,9 +55,7 @@ body{
     z-index:1001
 }
 
-.dropdown-menu.active{
-    display:block
-}
+.dropdown-menu.active{display:block}
 
 .dropdown-menu a{
     display:flex;
@@ -88,9 +80,7 @@ body{
     overflow-y:auto
 }
 
-.sidebar.active{
-    left:0
-}
+.sidebar.active{left:0}
 
 .sidebar-header{
     padding:15px 20px;
@@ -121,9 +111,7 @@ body{
     background:#007bff
 }
 
-.main-content{
-    padding:15px
-}
+.main-content{padding:15px}
 
 .page-title{
     font-size:22px;
@@ -204,17 +192,9 @@ body{
     color:#fff
 }
 
-.btn-refresh{
-    background:#007bff
-}
-
-.btn-add{
-    background:#343a40
-}
-
-.btn-cancel{
-    background:#6c757d
-}
+.btn-refresh{background:#007bff}
+.btn-add{background:#343a40}
+.btn-cancel{background:#6c757d}
 
 .btn:disabled{
     opacity:.6;
@@ -239,9 +219,7 @@ body{
     outline:none
 }
 
-.table-responsive{
-    overflow-x:auto
-}
+.table-responsive{overflow-x:auto}
 
 table{
     width:100%;
@@ -257,9 +235,7 @@ th,td{
     vertical-align:middle
 }
 
-th{
-    background:#f8f9fa
-}
+th{background:#f8f9fa}
 
 .no-data{
     text-align:center;
@@ -296,9 +272,7 @@ th{
     align-items:center
 }
 
-.modal.active{
-    display:flex
-}
+.modal.active{display:flex}
 
 .modal-content{
     background:#fff;
@@ -327,13 +301,9 @@ th{
     cursor:pointer
 }
 
-.modal-body{
-    padding:20px
-}
+.modal-body{padding:20px}
 
-.form-group{
-    margin-bottom:15px
-}
+.form-group{margin-bottom:15px}
 
 .form-group label{
     display:block;
@@ -383,13 +353,8 @@ th{
     cursor:not-allowed
 }
 
-.btn-approve{
-    background:#28a745
-}
-
-.btn-reject{
-    background:#dc3545
-}
+.btn-approve{background:#28a745}
+.btn-reject{background:#dc3545}
 
 .footer{
     text-align:center;
@@ -461,34 +426,25 @@ th{
     </ul>
 </div>
 
-
 <div class="navbar">
 
-    <i
-        class="fa fa-bars menu-toggle"
-        onclick="toggleSidebar()">
-    </i>
+    <i class="fa fa-bars menu-toggle"
+       onclick="toggleSidebar()"></i>
 
-    <div
-        class="user-dropdown-container"
-        onclick="toggleDropdown()">
+    <div class="user-dropdown-container"
+         onclick="toggleDropdown()">
 
         <span class="user-profile">
-
             Welcome
             <span id="adminName">Admin</span>
-
             <i class="fa fa-caret-down"></i>
-
         </span>
 
-        <div
-            class="dropdown-menu"
-            id="dropdownMenu">
+        <div class="dropdown-menu"
+             id="dropdownMenu">
 
-            <a
-                href="./index.html"
-                onclick="logoutAdmin(event)">
+            <a href="./index.html"
+               onclick="logoutAdmin(event)">
 
                 <i class="fa fa-power-off"></i>
                 Logout
@@ -501,7 +457,6 @@ th{
 
 </div>
 
-
 <div class="main-content">
 
     <div class="page-title">
@@ -509,48 +464,34 @@ th{
     </div>
 
     <div class="breadcrumb">
-
-        <a href="./dashboard.html">
-            Home
-        </a>
-
+        <a href="./dashboard.html">Home</a>
         / Deposit Type List
-
     </div>
-
 
     <div class="card-box">
 
         <div class="tabs-container">
 
-            <button
-                id="activeTab"
-                class="tab-btn active"
-                onclick="switchTab('Active',this)">
-
+            <button id="activeTab"
+                    class="tab-btn active"
+                    onclick="switchTab('Active',this)">
                 Active
-
             </button>
 
-            <button
-                id="disabledTab"
-                class="tab-btn"
-                onclick="switchTab('Disabled',this)">
-
+            <button id="disabledTab"
+                    class="tab-btn"
+                    onclick="switchTab('Disabled',this)">
                 Disabled
-
             </button>
 
         </div>
-
 
         <div class="action-bar">
 
             <div class="left-actions">
 
-                <button
-                    class="btn btn-refresh"
-                    onclick="loadDepositTypes()">
+                <button class="btn btn-refresh"
+                        onclick="loadDepositTypes()">
 
                     <i class="fa fa-sync-alt"></i>
                     Refresh
@@ -559,10 +500,8 @@ th{
 
             </div>
 
-
-            <button
-                class="btn btn-add"
-                onclick="openAddModal()">
+            <button class="btn btn-add"
+                    onclick="openAddModal()">
 
                 <i class="fa fa-plus"></i>
                 Add New
@@ -571,28 +510,18 @@ th{
 
         </div>
 
-
         <div class="table-controls">
 
             <div>
 
                 Show
 
-                <select
-                    id="entriesSelect"
-                    onchange="renderDepositTypes()">
+                <select id="entriesSelect"
+                        onchange="renderDepositTypes()">
 
-                    <option value="10">
-                        10
-                    </option>
-
-                    <option value="25">
-                        25
-                    </option>
-
-                    <option value="50">
-                        50
-                    </option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
 
                 </select>
 
@@ -600,21 +529,18 @@ th{
 
             </div>
 
-
             <div>
 
                 Search:
 
-                <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="Search type..."
-                    oninput="renderDepositTypes()">
+                <input type="text"
+                       id="searchInput"
+                       placeholder="Search type..."
+                       oninput="renderDepositTypes()">
 
             </div>
 
         </div>
-
 
         <div class="table-responsive">
 
@@ -623,38 +549,21 @@ th{
                 <thead>
 
                     <tr>
-
                         <th>S.No.</th>
-
-                        <th>
-                            Payment Type
-                        </th>
-
-                        <th>
-                            Payment Details / Number
-                        </th>
-
-                        <th>
-                            Action
-                        </th>
-
+                        <th>Payment Type</th>
+                        <th>Payment Details / Number</th>
+                        <th>Action</th>
                     </tr>
 
                 </thead>
 
-
                 <tbody id="depositTypesTableBody">
 
                     <tr>
-
-                        <td
-                            colspan="4"
+                        <td colspan="4"
                             class="no-data">
-
                             Loading...
-
                         </td>
-
                     </tr>
 
                 </tbody>
@@ -663,13 +572,10 @@ th{
 
         </div>
 
-
         <div class="pagination-container">
 
             <div id="tableInfo">
-
                 Showing 0 to 0 of 0 entries
-
             </div>
 
         </div>
@@ -678,45 +584,32 @@ th{
 
 </div>
 
-
-<div
-    class="modal"
-    id="addDepositModal">
+<div class="modal" id="addDepositModal">
 
     <div class="modal-content">
 
         <div class="modal-header">
 
-            <span>
-                Add Deposit Type
-            </span>
+            <span>Add Deposit Type</span>
 
-            <button
-                class="modal-close"
-                onclick="closeAddModal()">
-
+            <button class="modal-close"
+                    onclick="closeAddModal()">
                 &times;
-
             </button>
 
         </div>
-
 
         <div class="modal-body">
 
             <div class="form-group">
 
-                <label>
-                    Payment Type Name
-                </label>
+                <label>Payment Type Name</label>
 
-                <input
-                    type="text"
-                    id="typeName"
-                    placeholder="e.g., JazzCash / EasyPaisa">
+                <input type="text"
+                       id="typeName"
+                       placeholder="e.g., JazzCash / EasyPaisa">
 
             </div>
-
 
             <div class="form-group">
 
@@ -724,32 +617,23 @@ th{
                     Payment Details / Account Number
                 </label>
 
-                <textarea
-                    id="typeDetails"
-                    placeholder="e.g., Title: Sajeel, Number: 03001234567"></textarea>
+                <textarea id="typeDetails"
+                          placeholder="e.g., Title: Sajeel, Number: 03001234567"></textarea>
 
             </div>
 
         </div>
 
-
         <div class="modal-footer">
 
-            <button
-                class="btn btn-cancel"
-                onclick="closeAddModal()">
-
+            <button class="btn btn-cancel"
+                    onclick="closeAddModal()">
                 Cancel
-
             </button>
 
-
-            <button
-                class="btn btn-refresh"
-                onclick="saveDepositType()">
-
+            <button class="btn btn-refresh"
+                    onclick="saveDepositType()">
                 Save Type
-
             </button>
 
         </div>
@@ -758,29 +642,93 @@ th{
 
 </div>
 
-
 <div class="footer">
 
     Copyright © 2022-2026
-
     <span>DW.</span>
-
     All rights reserved.
 
 </div>
-
 
 <script>
 
 const API_URL =
     "https://aasan-rozgaar-backend.onrender.com";
 
-
 let currentTab = "Active";
-
 let depositTypes = [];
-
 let adminSession = null;
+
+
+/* =========================================
+   ADMIN HEADERS
+========================================= */
+
+function adminHeaders(includeCsrf = false){
+
+    const token =
+        sessionStorage.getItem(
+            "adminSessionToken"
+        );
+
+    const csrfToken =
+        sessionStorage.getItem(
+            "adminCsrfToken"
+        );
+
+    const headers = {
+        "Accept":"application/json"
+    };
+
+    if(token){
+
+        headers["Authorization"] =
+            "Bearer " + token;
+
+    }
+
+    if(includeCsrf && csrfToken){
+
+        headers["X-CSRF-Token"] =
+            csrfToken;
+
+    }
+
+    return headers;
+
+}
+
+
+/* =========================================
+   REDIRECT LOGIN
+========================================= */
+
+function redirectToLogin(){
+
+    sessionStorage.removeItem(
+        "adminSessionToken"
+    );
+
+    sessionStorage.removeItem(
+        "adminCsrfToken"
+    );
+
+    sessionStorage.removeItem(
+        "adminPanelUsername"
+    );
+
+    localStorage.removeItem(
+        "adminPanelLoggedIn"
+    );
+
+    localStorage.removeItem(
+        "adminPanelUsername"
+    );
+
+    window.location.href =
+        "./index.html";
+
+}
 
 
 /* =========================================
@@ -788,6 +736,17 @@ let adminSession = null;
 ========================================= */
 
 async function checkAdminSession(){
+
+    const token =
+        sessionStorage.getItem(
+            "adminSessionToken"
+        );
+
+    if(!token){
+
+        return false;
+
+    }
 
     try{
 
@@ -798,14 +757,19 @@ async function checkAdminSession(){
                 {
                     method:"GET",
                     credentials:"include",
-                    headers:{
-                        "Accept":
-                            "application/json"
-                    },
+                    headers:adminHeaders(),
                     cache:"no-store"
                 }
             );
 
+        if(
+            response.status === 401 ||
+            response.status === 403
+        ){
+
+            return false;
+
+        }
 
         if(!response.ok){
 
@@ -813,10 +777,8 @@ async function checkAdminSession(){
 
         }
 
-
         const data =
             await response.json();
-
 
         if(
             data.success === false ||
@@ -827,20 +789,19 @@ async function checkAdminSession(){
 
         }
 
-
         adminSession = data;
-
 
         const username =
             data.username ||
             data.admin?.username ||
+            sessionStorage.getItem(
+                "adminPanelUsername"
+            ) ||
             "Admin";
-
 
         document.getElementById(
             "adminName"
         ).textContent = username;
-
 
         return true;
 
@@ -859,30 +820,6 @@ async function checkAdminSession(){
 
 
 /* =========================================
-   REDIRECT LOGIN
-========================================= */
-
-function redirectToLogin(){
-
-    sessionStorage.removeItem(
-        "adminCsrfToken"
-    );
-
-    localStorage.removeItem(
-        "adminPanelLoggedIn"
-    );
-
-    localStorage.removeItem(
-        "adminPanelUsername"
-    );
-
-    window.location.href =
-        "./index.html";
-
-}
-
-
-/* =========================================
    LOGOUT
 ========================================= */
 
@@ -894,28 +831,7 @@ async function logoutAdmin(event){
 
     }
 
-
     try{
-
-        const csrfToken =
-            sessionStorage.getItem(
-                "adminCsrfToken"
-            );
-
-
-        const headers={
-            "Accept":
-                "application/json"
-        };
-
-
-        if(csrfToken){
-
-            headers["X-CSRF-Token"] =
-                csrfToken;
-
-        }
-
 
         await fetch(
             API_URL +
@@ -923,7 +839,7 @@ async function logoutAdmin(event){
             {
                 method:"POST",
                 credentials:"include",
-                headers:headers
+                headers:adminHeaders(true)
             }
         );
 
@@ -936,22 +852,7 @@ async function logoutAdmin(event){
 
     }
 
-
-    sessionStorage.removeItem(
-        "adminCsrfToken"
-    );
-
-    localStorage.removeItem(
-        "adminPanelLoggedIn"
-    );
-
-    localStorage.removeItem(
-        "adminPanelUsername"
-    );
-
-
-    window.location.href =
-        "./index.html";
+    redirectToLogin();
 
 }
 
@@ -983,7 +884,6 @@ function toggleDropdown(){
 
 }
 
-
 window.onclick=function(event){
 
     if(
@@ -993,9 +893,7 @@ window.onclick=function(event){
     ){
 
         document
-            .getElementById(
-                "dropdownMenu"
-            )
+            .getElementById("dropdownMenu")
             .classList
             .remove("active");
 
@@ -1012,26 +910,21 @@ function switchTab(tab,btn){
 
     currentTab = tab;
 
-
     document
         .querySelectorAll(".tab-btn")
-        .forEach(
-            function(button){
+        .forEach(function(button){
 
-                button.classList.remove(
-                    "active"
-                );
+            button.classList.remove(
+                "active"
+            );
 
-            }
-        );
-
+        });
 
     if(btn){
 
         btn.classList.add("active");
 
     }
-
 
     renderDepositTypes();
 
@@ -1048,11 +941,9 @@ function openAddModal(){
         "typeName"
     ).value = "";
 
-
     document.getElementById(
         "typeDetails"
     ).value = "";
-
 
     document
         .getElementById(
@@ -1091,29 +982,19 @@ async function loadDepositTypes(){
             "depositTypesTableBody"
         );
 
-
     tbody.innerHTML=`
-
         <tr>
-
-            <td
-                colspan="4"
+            <td colspan="4"
                 class="no-data">
-
                 Loading...
-
             </td>
-
         </tr>
-
     `;
-
 
     try{
 
         const sessionOK =
             await checkAdminSession();
-
 
         if(!sessionOK){
 
@@ -1123,7 +1004,6 @@ async function loadDepositTypes(){
 
         }
 
-
         const response =
             await fetch(
                 API_URL +
@@ -1131,14 +1011,10 @@ async function loadDepositTypes(){
                 {
                     method:"GET",
                     credentials:"include",
-                    headers:{
-                        "Accept":
-                            "application/json"
-                    },
+                    headers:adminHeaders(),
                     cache:"no-store"
                 }
             );
-
 
         if(
             response.status === 401 ||
@@ -1151,12 +1027,10 @@ async function loadDepositTypes(){
 
         }
 
-
         if(!response.ok){
 
             let message =
                 "Failed to load deposit types.";
-
 
             try{
 
@@ -1170,15 +1044,12 @@ async function loadDepositTypes(){
 
             }catch(e){}
 
-
             throw new Error(message);
 
         }
 
-
         const data =
             await response.json();
-
 
         if(
             !data.success ||
@@ -1194,13 +1065,10 @@ async function loadDepositTypes(){
 
         }
 
-
         depositTypes =
             data.depositTypes;
 
-
         renderDepositTypes();
-
 
     }catch(error){
 
@@ -1209,26 +1077,17 @@ async function loadDepositTypes(){
             error
         );
 
-
         tbody.innerHTML=`
-
             <tr>
-
-                <td
-                    colspan="4"
+                <td colspan="4"
                     class="error-message">
-
                     ${escapeHTML(
                         error.message ||
                         "Failed to load deposit types."
                     )}
-
                 </td>
-
             </tr>
-
         `;
-
 
         document.getElementById(
             "tableInfo"
@@ -1251,7 +1110,6 @@ function renderDepositTypes(){
             "depositTypesTableBody"
         );
 
-
     const searchQuery =
         document.getElementById(
             "searchInput"
@@ -1259,14 +1117,12 @@ function renderDepositTypes(){
         .toLowerCase()
         .trim();
 
-
     const limit =
         parseInt(
             document.getElementById(
                 "entriesSelect"
             ).value
         ) || 10;
-
 
     let filtered =
         depositTypes.filter(
@@ -1281,25 +1137,21 @@ function renderDepositTypes(){
 
                 }
 
-
                 if(!searchQuery){
 
                     return true;
 
                 }
 
-
                 const name =
                     String(
                         item.name || ""
                     ).toLowerCase();
 
-
                 const details =
                     String(
                         item.details || ""
                     ).toLowerCase();
-
 
                 return(
                     name.includes(
@@ -1313,46 +1165,33 @@ function renderDepositTypes(){
             }
         );
 
-
     const visible =
         filtered.slice(
             0,
             limit
         );
 
-
     if(visible.length===0){
 
         tbody.innerHTML=`
-
             <tr>
-
-                <td
-                    colspan="4"
+                <td colspan="4"
                     class="no-data">
-
                     No data found!
-
                 </td>
-
             </tr>
-
         `;
-
 
         document.getElementById(
             "tableInfo"
         ).innerText =
             "Showing 0 to 0 of 0 entries";
 
-
         return;
 
     }
 
-
     let html="";
-
 
     visible.forEach(
         function(item,index){
@@ -1360,21 +1199,17 @@ function renderDepositTypes(){
             const itemId =
                 escapeJS(item.id);
 
-
             const buttonText =
                 currentTab === "Active"
                 ? "Disable"
                 : "Enable";
-
 
             const buttonClass =
                 currentTab === "Active"
                 ? "btn-reject"
                 : "btn-approve";
 
-
             html += `
-
                 <tr>
 
                     <td>
@@ -1382,13 +1217,11 @@ function renderDepositTypes(){
                     </td>
 
                     <td>
-
                         <b>
                             ${escapeHTML(
                                 item.name
                             )}
                         </b>
-
                     </td>
 
                     <td>
@@ -1407,7 +1240,6 @@ function renderDepositTypes(){
 
                         </button>
 
-
                         <button
                             class="btn-action btn-reject"
                             onclick="deleteType('${itemId}')">
@@ -1419,16 +1251,13 @@ function renderDepositTypes(){
                     </td>
 
                 </tr>
-
             `;
 
         }
     );
 
-
     tbody.innerHTML =
         html;
-
 
     document.getElementById(
         "tableInfo"
@@ -1449,12 +1278,10 @@ async function saveDepositType(){
             "typeName"
         ).value.trim();
 
-
     const details =
         document.getElementById(
             "typeDetails"
         ).value.trim();
-
 
     if(!name || !details){
 
@@ -1466,14 +1293,17 @@ async function saveDepositType(){
 
     }
 
+    const token =
+        sessionStorage.getItem(
+            "adminSessionToken"
+        );
 
     const csrfToken =
         sessionStorage.getItem(
             "adminCsrfToken"
         );
 
-
-    if(!csrfToken){
+    if(!token || !csrfToken){
 
         alert(
             "Admin session expired. Please login again."
@@ -1485,7 +1315,6 @@ async function saveDepositType(){
 
     }
 
-
     try{
 
         const response =
@@ -1494,31 +1323,18 @@ async function saveDepositType(){
                 "/api/deposit-types",
                 {
                     method:"POST",
-
                     credentials:"include",
-
                     headers:{
+                        ...adminHeaders(true),
                         "Content-Type":
-                            "application/json",
-
-                        "Accept":
-                            "application/json",
-
-                        "X-CSRF-Token":
-                            csrfToken
+                            "application/json"
                     },
-
                     body:JSON.stringify({
-
                         name:name,
-
                         details:details
-
                     })
-
                 }
             );
-
 
         if(
             response.status === 401 ||
@@ -1535,17 +1351,11 @@ async function saveDepositType(){
 
         }
 
-
         const data =
             await response.json()
-            .catch(
-                function(){
-
-                    return {};
-
-                }
-            );
-
+            .catch(function(){
+                return {};
+            });
 
         if(
             !response.ok ||
@@ -1560,44 +1370,31 @@ async function saveDepositType(){
 
         }
 
-
         closeAddModal();
-
 
         currentTab =
             "Active";
 
+        document
+            .querySelectorAll(".tab-btn")
+            .forEach(function(button){
+
+                button.classList.remove(
+                    "active"
+                );
+
+            });
 
         document
-            .querySelectorAll(
-                ".tab-btn"
-            )
-            .forEach(
-                function(button){
-
-                    button.classList.remove(
-                        "active"
-                    );
-
-                }
-            );
-
-
-        document
-            .getElementById(
-                "activeTab"
-            )
+            .getElementById("activeTab")
             .classList
             .add("active");
 
-
         await loadDepositTypes();
-
 
         alert(
             "Deposit type added successfully!"
         );
-
 
     }catch(error){
 
@@ -1605,7 +1402,6 @@ async function saveDepositType(){
             "Add deposit type error:",
             error
         );
-
 
         alert(
             error.message ||
@@ -1633,7 +1429,6 @@ async function toggleStatus(id){
             }
         );
 
-
     if(!item){
 
         alert(
@@ -1644,18 +1439,15 @@ async function toggleStatus(id){
 
     }
 
-
     const newStatus =
         item.status === "Active"
         ? "Disabled"
         : "Active";
 
-
     const action =
         newStatus === "Active"
         ? "enable"
         : "disable";
-
 
     if(
         !confirm(
@@ -1667,14 +1459,17 @@ async function toggleStatus(id){
 
     }
 
+    const token =
+        sessionStorage.getItem(
+            "adminSessionToken"
+        );
 
     const csrfToken =
         sessionStorage.getItem(
             "adminCsrfToken"
         );
 
-
-    if(!csrfToken){
+    if(!token || !csrfToken){
 
         alert(
             "Admin session expired. Please login again."
@@ -1686,7 +1481,6 @@ async function toggleStatus(id){
 
     }
 
-
     try{
 
         const response =
@@ -1697,29 +1491,17 @@ async function toggleStatus(id){
                 "/status",
                 {
                     method:"PATCH",
-
                     credentials:"include",
-
                     headers:{
+                        ...adminHeaders(true),
                         "Content-Type":
-                            "application/json",
-
-                        "Accept":
-                            "application/json",
-
-                        "X-CSRF-Token":
-                            csrfToken
+                            "application/json"
                     },
-
                     body:JSON.stringify({
-
                         status:newStatus
-
                     })
-
                 }
             );
-
 
         if(
             response.status === 401 ||
@@ -1736,17 +1518,11 @@ async function toggleStatus(id){
 
         }
 
-
         const data =
             await response.json()
-            .catch(
-                function(){
-
-                    return {};
-
-                }
-            );
-
+            .catch(function(){
+                return {};
+            });
 
         if(
             !response.ok ||
@@ -1761,9 +1537,7 @@ async function toggleStatus(id){
 
         }
 
-
         await loadDepositTypes();
-
 
         alert(
             newStatus === "Active"
@@ -1771,14 +1545,12 @@ async function toggleStatus(id){
             : "Payment method disabled!"
         );
 
-
     }catch(error){
 
         console.error(
             "Status update error:",
             error
         );
-
 
         alert(
             error.message ||
@@ -1806,14 +1578,17 @@ async function deleteType(id){
 
     }
 
+    const token =
+        sessionStorage.getItem(
+            "adminSessionToken"
+        );
 
     const csrfToken =
         sessionStorage.getItem(
             "adminCsrfToken"
         );
 
-
-    if(!csrfToken){
+    if(!token || !csrfToken){
 
         alert(
             "Admin session expired. Please login again."
@@ -1825,7 +1600,6 @@ async function deleteType(id){
 
     }
 
-
     try{
 
         const response =
@@ -1835,20 +1609,12 @@ async function deleteType(id){
                 encodeURIComponent(id),
                 {
                     method:"DELETE",
-
                     credentials:"include",
-
                     headers:{
-                        "Accept":
-                            "application/json",
-
-                        "X-CSRF-Token":
-                            csrfToken
+                        ...adminHeaders(true)
                     }
-
                 }
             );
-
 
         if(
             response.status === 401 ||
@@ -1865,17 +1631,11 @@ async function deleteType(id){
 
         }
 
-
         const data =
             await response.json()
-            .catch(
-                function(){
-
-                    return {};
-
-                }
-            );
-
+            .catch(function(){
+                return {};
+            });
 
         if(
             !response.ok ||
@@ -1890,14 +1650,11 @@ async function deleteType(id){
 
         }
 
-
         await loadDepositTypes();
-
 
         alert(
             "Payment type deleted!"
         );
-
 
     }catch(error){
 
@@ -1905,7 +1662,6 @@ async function deleteType(id){
             "Delete error:",
             error
         );
-
 
         alert(
             error.message ||
@@ -1926,26 +1682,11 @@ function escapeHTML(value){
     return String(
         value == null ? "" : value
     )
-    .replace(
-        /&/g,
-        "&amp;"
-    )
-    .replace(
-        /</g,
-        "&lt;"
-    )
-    .replace(
-        />/g,
-        "&gt;"
-    )
-    .replace(
-        /"/g,
-        "&quot;"
-    )
-    .replace(
-        /'/g,
-        "&#039;"
-    );
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
@@ -1959,14 +1700,8 @@ function escapeJS(value){
     return String(
         value == null ? "" : value
     )
-    .replace(
-        /\\/g,
-        "\\\\"
-    )
-    .replace(
-        /'/g,
-        "\\'"
-    );
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'");
 
 }
 
@@ -1976,9 +1711,7 @@ function escapeJS(value){
 ========================================= */
 
 document
-    .getElementById(
-        "addDepositModal"
-    )
+    .getElementById("addDepositModal")
     .addEventListener(
         "click",
         function(e){
@@ -2004,7 +1737,6 @@ window.addEventListener(
         const sessionOK =
             await checkAdminSession();
 
-
         if(!sessionOK){
 
             redirectToLogin();
@@ -2012,7 +1744,6 @@ window.addEventListener(
             return;
 
         }
-
 
         await loadDepositTypes();
 
@@ -2031,6 +1762,17 @@ setInterval(
             document.visibilityState ===
             "visible"
         ){
+
+            const token =
+                sessionStorage.getItem(
+                    "adminSessionToken"
+                );
+
+            if(!token){
+
+                return;
+
+            }
 
             await loadDepositTypes();
 
