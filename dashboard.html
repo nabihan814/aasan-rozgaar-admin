@@ -621,28 +621,104 @@ let allWithdrawals = [];
 
 
 /* =========================
+   ADMIN AUTH HEADERS
+========================= */
+
+function adminHeaders(includeCsrf = false){
+
+    const token =
+        sessionStorage.getItem(
+            "adminSessionToken"
+        );
+
+    const csrfToken =
+        sessionStorage.getItem(
+            "adminCsrfToken"
+        );
+
+    const headers = {};
+
+    if(token){
+
+        headers["Authorization"] =
+            "Bearer " + token;
+    }
+
+    if(includeCsrf && csrfToken){
+
+        headers["X-CSRF-Token"] =
+            csrfToken;
+    }
+
+    return headers;
+}
+
+
+/* =========================
    AUTH CHECK
 ========================= */
 
 async function checkAdminSession(){
 
+    const token =
+        sessionStorage.getItem(
+            "adminSessionToken"
+        );
+
+    if(!token){
+
+        window.location.href =
+            "index.html";
+
+        return false;
+    }
+
     try{
 
         const response =
             await fetch(
-                BACKEND_URL + "/api/admin/me",
+                BACKEND_URL +
+                "/api/admin/me",
                 {
                     method:"GET",
+
+                    headers:
+                        adminHeaders(false),
+
                     credentials:"include"
                 }
             );
 
-        if(!response.ok){
+
+        if(
+            response.status === 401 ||
+            response.status === 403
+        ){
+
+            sessionStorage.removeItem(
+                "adminSessionToken"
+            );
+
+            sessionStorage.removeItem(
+                "adminCsrfToken"
+            );
+
+            sessionStorage.removeItem(
+                "adminPanelUsername"
+            );
 
             window.location.href =
                 "index.html";
 
             return false;
+        }
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "Admin authentication failed."
+            );
         }
 
 
@@ -660,12 +736,17 @@ async function checkAdminSession(){
 
 
         const adminName =
-            data.username || "Admin";
+            data.username ||
+            sessionStorage.getItem(
+                "adminPanelUsername"
+            ) ||
+            "Admin";
 
 
         document.getElementById(
             "adminName"
-        ).innerText = adminName;
+        ).innerText =
+            adminName;
 
 
         sessionStorage.setItem(
@@ -685,8 +766,9 @@ async function checkAdminSession(){
         );
 
 
-        window.location.href =
-            "index.html";
+        showError(
+            "Admin session verify nahi ho saki."
+        );
 
 
         return false;
@@ -754,22 +836,14 @@ async function logoutAdmin(event){
 
     try{
 
-        const csrfToken =
-            sessionStorage.getItem(
-                "adminCsrfToken"
-            );
-
-
         await fetch(
             BACKEND_URL +
             "/api/admin/logout",
             {
                 method:"POST",
 
-                headers:{
-                    "X-CSRF-Token":
-                        csrfToken || ""
-                },
+                headers:
+                    adminHeaders(true),
 
                 credentials:"include"
             }
@@ -785,6 +859,10 @@ async function logoutAdmin(event){
 
 
     }finally{
+
+        sessionStorage.removeItem(
+            "adminSessionToken"
+        );
 
         sessionStorage.removeItem(
             "adminCsrfToken"
@@ -850,6 +928,10 @@ async function fetchAdminData(url){
             BACKEND_URL + url,
             {
                 method:"GET",
+
+                headers:
+                    adminHeaders(false),
+
                 credentials:"include"
             }
         );
@@ -859,6 +941,19 @@ async function fetchAdminData(url){
         response.status === 401 ||
         response.status === 403
     ){
+
+        sessionStorage.removeItem(
+            "adminSessionToken"
+        );
+
+        sessionStorage.removeItem(
+            "adminCsrfToken"
+        );
+
+        sessionStorage.removeItem(
+            "adminPanelUsername"
+        );
+
 
         window.location.href =
             "index.html";
