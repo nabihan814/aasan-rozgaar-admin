@@ -397,7 +397,7 @@ th{
         <div class="dropdown-menu"
              id="dropdownMenu">
 
-            <a href="./login.html"
+            <a href="./index.html"
                onclick="adminPanelLogout()">
 
                 <i class="fa fa-power-off"></i>
@@ -632,7 +632,7 @@ async function checkAdminSession(){
             response.status === 403
         ){
 
-            window.location.href="./login.html";
+            window.location.href="./index.html";
             return false;
 
         }
@@ -659,7 +659,7 @@ async function checkAdminSession(){
 
         console.error(error);
 
-        window.location.href="./login.html";
+        window.location.href="./index.html";
 
         return false;
 
@@ -765,7 +765,7 @@ async function loadWithdrawReport(){
             response.status === 403
         ){
 
-            window.location.href="./login.html";
+            window.location.href="./index.html";
             return;
 
         }
@@ -1191,15 +1191,35 @@ function normalizeStatus(status){
     const value =
         String(
             status || "Pending"
-        );
+        ).trim().toLowerCase();
 
-    if(value === "Reject"){
+    if(value === "reject" || value === "rejected"){
 
         return "Rejected";
 
     }
 
-    return value;
+    if(value === "approve" || value === "approved"){
+
+        return "Approved";
+
+    }
+
+    if(value === "inprocess" || value === "in_process"){
+
+        return "Inprocess";
+
+    }
+
+    if(value === "pending"){
+
+        return "Pending";
+
+    }
+
+    return String(
+        status || "Pending"
+    );
 
 }
 
