@@ -344,42 +344,42 @@ body{
 <ul class="sidebar-menu">
 
     <li class="active">
-        <a href="./dashboard.html">
+        <a href="dashboard.html">
             <i class="fa fa-tachometer-alt"></i>
             Dashboard
         </a>
     </li>
 
     <li>
-        <a href="./withdraw.html">
+        <a href="withdraw.html">
             <i class="fa fa-file-invoice-dollar"></i>
             Withdraw Requests
         </a>
     </li>
 
     <li>
-        <a href="./deposit.html">
+        <a href="deposit.html">
             <i class="fa fa-money-bill-wave"></i>
             Deposit Requests
         </a>
     </li>
 
     <li>
-        <a href="./deposit-type.html">
+        <a href="deposit-type.html">
             <i class="fa fa-list"></i>
             Deposit Type List
         </a>
     </li>
 
     <li>
-        <a href="./deposit-report.html">
+        <a href="deposit-report.html">
             <i class="fa fa-chart-bar"></i>
             Deposit Report
         </a>
     </li>
 
     <li>
-        <a href="./withdraw-report.html">
+        <a href="withdraw-report.html">
             <i class="fa fa-chart-line"></i>
             Withdraw Report
         </a>
@@ -405,7 +405,7 @@ body{
             Change Password
         </a>
 
-        <a href="./login.html"
+        <a href="login.html"
            onclick="logoutAdmin(event)">
             <i class="fa fa-power-off"></i>
             Logout
@@ -597,7 +597,7 @@ async function checkAdminSession(){
         if(!response.ok){
 
             window.location.href =
-                "./login.html";
+                "login.html";
 
             return false;
         }
@@ -608,7 +608,7 @@ async function checkAdminSession(){
         if(!data.success){
 
             window.location.href =
-                "./login.html";
+                "login.html";
 
             return false;
         }
@@ -635,7 +635,7 @@ async function checkAdminSession(){
         );
 
         window.location.href =
-            "./login.html";
+            "login.html";
 
         return false;
     }
@@ -740,7 +740,7 @@ async function logoutAdmin(event){
         );
 
         window.location.href =
-            "./login.html";
+            "login.html";
     }
 }
 
@@ -795,7 +795,7 @@ async function fetchAdminData(url){
     ){
 
         window.location.href =
-            "./login.html";
+            "login.html";
 
         throw new Error(
             "Admin session expired."
